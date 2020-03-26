@@ -2,7 +2,7 @@
 
 session_start();
 
-require('includes/config.php'); 
+require('config.php'); 
 
 ?>
 <!DOCTYPE html>
@@ -15,18 +15,5 @@ require('includes/config.php');
 </head>
 <body>
 <?php include('header.php'); ?>
-<br></br>
-<?php
-if(isset($_POST['envoyer'])) {
-    $mdp = $_POST['mdp'];
-    $req = $bdd->prepare('UPDATE personnel SET pass = :pass WHERE id_personnel = 1');
-    $req->execute(array('pass' => mdp_hash($mdp)));
-}
-
-?>
-<form action="" method="post">
-<input type="text" name="mdp">
-<input type="submit" name="envoyer" value="test">
-</form>
 </body>
 </html>

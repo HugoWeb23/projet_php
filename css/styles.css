@@ -50,7 +50,7 @@ display: inline-block;
 
 .dropdown a {
 display: inline-block;
-width: 109px;
+width: 112px;
 text-decoration: none;
 font-size: 22px;
 color: #FFF;
@@ -67,7 +67,7 @@ display: none;
 .dropdown-child a {
 font-size: 20px;
 padding: 10px 5px;
-width: 149px;
+width: 152px;
 }
 
 .dropdown:hover .dropdown-child {
@@ -77,7 +77,7 @@ position: absolute;
 
 .connexion {
 float: right;
-margin-top: 25px;
+width: auto;
 margin-right: 10px;
 }
 
@@ -160,4 +160,46 @@ padding: 5px 20px;
 color: #FFF;
 cursor: pointer;
 text-decoration: none;
+}
+
+/* Conteneur */
+
+.conteneur {
+width: 884px;
+height: auto;
+margin-top: 30px;
+margin-left: auto;
+margin-right: auto;
+background: #FFF;
+border-radius: 8px;
+padding: 20px;
+}
+
+/* Contenu */
+
+.titre-page {
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.titre-page h1 {
+margin: 0;    
+}
+
+.contenu input, .contenu select {
+display: block;
+width: 264px;
+margin-bottom: 15px;
+}
+
+.contenu input[type="submit"] {
+margin: 20px 0;    
+width: 100%;    
+cursor: pointer;
+}
+
+.employe-flex {
+display: flex;
+justify-content: space-evenly;    
 }

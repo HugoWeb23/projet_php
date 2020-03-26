@@ -35,7 +35,7 @@ if(isset($_POST['deconnexion'])) {
 <div class="dropdown">
 <a href="#">Personnel</a>
 <div class="dropdown-child">
-<a href="">Créer un profil employé</a>
+<a href="creeremploye">Créer un profil employé</a>
 <a href="">Gestion des employés</a>
 </div>
 </div>
@@ -50,7 +50,13 @@ if(isset($_POST['deconnexion'])) {
 </nav>
 <form action="" method="post">
 <div class="connexion">
-<?= $_SESSION['id_personnel']; ?><input type="submit" name="deconnexion" value="Se déconnecter">
+<div class="dropdown">
+<a href="#">Mon compte</a>
+<div class="dropdown-child">
+<a href="">Gérer mes informations</a>
+<a href="">Déconnexion</a>
+</div>
+</div>
 </form>
 </div> 
 </div>
