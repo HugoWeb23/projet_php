@@ -36,7 +36,7 @@ if(isset($_POST['deconnexion'])) {
 <a href="#">Personnel</a>
 <div class="dropdown-child">
 <a href="creeremploye">Créer un profil employé</a>
-<a href="">Gestion des employés</a>
+<a href="gestionemployes">Gestion des employés</a>
 </div>
 </div>
 <div class="dropdown">

@@ -27,7 +27,7 @@ break;
 default: $pays='';
 }
 
-if(empty($nom) || empty($prenom) || empty($date_naissance) || empty($telephone) || empty($fonction) || empty($fonction_secondaire) || empty($rue) ||
+if(empty($nom) || empty($prenom) || empty($date_naissance) || empty($telephone) || empty($fonction) || empty($rue) ||
 empty($numero) || empty($ville) || empty($code_postal) || empty($pays) || empty($email) || empty($password)) {
 $erreur = 1;    
 } elseif($fonction == $fonction_secondaire) {
@@ -40,13 +40,13 @@ $req = $bdd->prepare('INSERT INTO personnel (nom, prenom, email, pass, date_nais
 $req->execute(array('nom' => $nom, 'prenom' => $prenom, 'email' => $email, 'pass' => mdp_hash($password), 'date_naissance' => $date_naissance, 'telephone' => $telephone, 'id_adresse' => $id_adresse)) or die(print_r($req->errorInfo(), TRUE));
 }
 switch($erreur) {
-    case 1:
-    $erreur = 'Merci de remplir tous les champs';
-    break;
-    case 2:
-    $erreur = 'La fonction secondaire ne peut pas être identique à la fonction principale';
-    break;
-    }
+case 1:
+$erreur = 'Merci de remplir tous les champs';
+break;
+case 2:
+$erreur = 'La fonction secondaire ne peut pas être identique à la fonction principale';
+break;
+}
 }
 ?>
 <!DOCTYPE html>
@@ -62,7 +62,7 @@ switch($erreur) {
 <div class="conteneur">
 <div class="titre-page">
 <h1>Créer un compte employé</h1>
-<a href="#">Gestion des employés</a>
+<a href="gestionemployes">Gestion des employés</a>
 <?php if(isset($_POST['valider'])) { echo '<h2>'.$erreur.'</h2>'; } ?>
 </div>
 <form action="" method="post">
