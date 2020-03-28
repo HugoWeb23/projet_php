@@ -4,7 +4,7 @@ if(empty($_SESSION['id_personnel'])) {
     header('location: connexion');
     exit;
 }
-if(isset($_POST['deconnexion'])) {
+if(isset($_GET['deconnexion'])) {
     session_destroy();
     header('location: connexion');
 }
@@ -48,15 +48,13 @@ if(isset($_POST['deconnexion'])) {
 </div>
 </ul>
 </nav>
-<form action="" method="post">
 <div class="connexion">
 <div class="dropdown">
 <a href="#">Mon compte</a>
 <div class="dropdown-child">
 <a href="">Gérer mes informations</a>
-<a href="">Déconnexion</a>
+<a href="?deconnexion">Déconnexion</a>
 </div>
 </div>
-</form>
 </div> 
 </div>

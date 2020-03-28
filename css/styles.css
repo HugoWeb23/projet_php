@@ -187,6 +187,26 @@ align-items: center;
 margin: 0;    
 }
 
+.message-erreur {
+display: block;    
+margin: 5px 0;
+background: #c13030;   
+width: 100%; 
+text-align: center;
+color: #FFF;
+border-radius: 8px;
+}
+
+.message-confirmation {
+display: block;    
+margin: 5px 0;
+background: #238c40;   
+width: 100%; 
+text-align: center;
+color: #FFF;
+border-radius: 8px;
+}
+
 .contenu input, .contenu select {
 display: block;
 width: 264px;

@@ -21,7 +21,8 @@ $password = isset($_POST['password']) ? $_POST['password'] : '';
 $confirm_password = isset($_POST['confirm_password']) ? $_POST['confirm_password'] : '';
 $id = $_GET['id'];
 $req = $bdd->prepare('SELECT * FROM personnel as a LEFT JOIN adresses as b ON a.id_adresse = b.id_adresse WHERE a.id_personnel = :id');
-$req->execute(array('id' => $id));
+$req->bindValue('id', $id, PDO::PARAM_INT);
+$req->execute();
 if($req->rowCount() > 0) {
 $afficher = $req->fetch(PDO::FETCH_ASSOC);
 if(isset($_POST['valider'])) {
@@ -34,44 +35,77 @@ default: $pays='';
 }
 if($nom == $afficher['nom'] && $prenom == $afficher['prenom'] && $date_naissance == $afficher['date_naissance'] && $telephone == $afficher['telephone'] &&
 $rue == $afficher['rue'] && $numero == $afficher['numero'] && $ville == $afficher['ville'] && $code_postal == $afficher['code_postal'] && $pays == $afficher['pays'] && $email == $afficher['email']) { 
-$message = null;
+$message_infosperso = null;
 } elseif(empty($nom) || empty($prenom) || empty($date_naissance) || empty($telephone) || empty($fonction) || empty($rue) ||
 empty($numero) || empty($ville) || empty($code_postal) || empty($pays) || empty($email)) {
-$message = 1;    
+$message_infosperso = 1;    
 } else {
+$checkemail = true;    
+if($email != $afficher['email']) {
+$req = $bdd->prepare('SELECT email FROM personnel WHERE email = :email');
+$req->bindValue('email', $email, PDO::PARAM_STR);
+$req->execute();
+$checkemail = $req->rowCount();
+if($checkemail > 0) {
+$message_infosperso = 6;
+$checkemail = false; 
+} else {
+$checkemail = true;
+}    
+}
+if($checkemail == true) {   
 $req = $bdd->prepare('UPDATE personnel as a LEFT JOIN adresses as b ON a.id_adresse = b.id_adresse SET a.nom = :nom, a.prenom = :prenom, a.email = :email, a.date_naissance = :date_naissance, a.telephone = :telephone,
 b.rue = :rue, b.numero = :numero, b.ville = :ville, b.code_postal = :code_postal, b.pays = :pays WHERE a.id_personnel = :id AND b.id_adresse = (SELECT id_adresse FROM personnel WHERE id_personnel = :id)');    
-$req->execute(array('nom' => $nom, 'prenom' => $prenom, 'email' => $email, 'date_naissance' => $date_naissance, 'telephone' => $telephone,
-'rue' => $rue, 'numero' => $numero, 'ville' => $ville, 'code_postal' => $code_postal, 'pays' => $pays, 'id' => $id, 'id' => $id)) or die(print_r($req->errorInfo(), TRUE));
-$message = 2;
-}    
+$req->bindValue('nom', $nom, PDO::PARAM_STR);
+$req->bindValue('prenom', $prenom, PDO::PARAM_STR);
+$req->bindValue('email', $email, PDO::PARAM_STR);
+$req->bindValue('date_naissance', $date_naissance, PDO::PARAM_STR);
+$req->bindValue('telephone', $telephone, PDO::PARAM_STR);
+$req->bindValue('rue', $rue, PDO::PARAM_STR);
+$req->bindValue('numero', $numero, PDO::PARAM_STR);
+$req->bindValue('ville', $ville, PDO::PARAM_STR);
+$req->bindValue('code_postal', $code_postal, PDO::PARAM_INT);
+$req->bindValue('pays', $pays, PDO::PARAM_STR);
+$req->bindValue('id', $id, PDO::PARAM_INT);
+$req->bindValue('id', $id, PDO::PARAM_INT);
+$req->execute() or die(print_r($req->errorInfo(), TRUE));
+$message_infosperso = 2;
+}   
+} 
 if(!empty($password) && !empty($confirm_password)) {
 if(strlen($password) < 5) {
-$message = 3;   
+$message_mdp = 1;   
 } elseif($password != $confirm_password) {
-$message = 4;
+$message_mdp = 2;
 } else {
 $req = $bdd->prepare('UPDATE personnel SET pass = :password WHERE id_personnel = :id');
-$req->execute(array('password' => mdp_hash($password), 'id' => $id));
-$message = 5;
+$req->bindValue('password', mdp_hash($password), PDO::PARAM_STR);
+$req->bindValue('id', $id, PDO::PARAM_INT);
+$req->execute();
+$message_mdp = 3;
+}
+switch($message_mdp) {
+case 1:
+$message_mdp = '<h2 class="message-erreur">Le mot de passe doit contenir au moins 5 caractères</h2>';
+break;  
+case 2:
+$message_mdp = '<h2 class="message-erreur">Les mots de passe ne sont pas identiques</h2>';
+break;     
+case 3:
+$message_mdp = '<h2 class="message-confirmation">Le mot de passe a bien été modifié</h2>';
+break;
 }
 }
 
-switch($message) {
+switch($message_infosperso) {
 case 1:
-$message = 'Saissiez toutes les informations personnelles demandées';
+$message_infosperso = '<h2 class="message-erreur">Saisissez toutes les informations personnelles demandées</h2>';
 break;
 case 2:
-$message = 'Les informations personnes ont été mises à jour';  
+$message_infosperso = '<h2 class="message-confirmation">Les informations personnelles ont été mises à jour</h2>';  
 break;
-case 3:
-$message = 'Le mot de passe doit contenir au moins 5 caractères';
-break;  
-case 4:
-$message = 'Les mots de passe ne sont pas identiques';
-break;     
-case 5:
-$message = 'Le mot de passe a bien été modifié';
+case 6:
+$message_infosperso = '<h2 class="message-erreur">L\'adresse email saisie est déjà utilisée</h2>';
 break;
 }
 }
@@ -95,8 +129,9 @@ exit;
 <div class="titre-page">
 <h1>Modifier un profil employé</h1>
 <a href="gestionemployes">Gestion des employés</a>
-<?php if(isset($_POST['valider'])) { echo '<h2>'.$message.'</h2>'; } ?>
 </div>
+<?php if(isset($message_infosperso)) { echo $message_infosperso; } ?>
+<?php if(isset($message_mdp)) { echo $message_mdp; } ?>
 <form action="" method="post">
 <div class="contenu">
 <div class="employe-flex">   
