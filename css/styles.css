@@ -224,6 +224,8 @@ display: flex;
 justify-content: space-evenly;    
 }
 
+/* Gestion des employés */
+
 table {
 width: 100%;
 border: 2px solid #000;
@@ -252,4 +254,23 @@ width: 176px;
 margin-right: auto;
 margin-left: auto;
 font-size: 1.2em;    
+}
+
+/* Création profil employé */
+
+.flex-fonctions {
+display: flex;
+flex-direction: row;
+flex-wrap: wrap;
+width: 243px;
+}
+
+.content-fonctions input {
+display: inline-block;
+width: 5px;
+text-align: right;
+}
+
+.content-fonctions label {
+margin-right: 10px;
 }

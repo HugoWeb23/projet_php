@@ -10,7 +10,8 @@ $email = isset($_POST['email']) ? $_POST['email'] : '';
 $mdp = isset($_POST['mdp']) ? $_POST['mdp'] : '';
 
 $req = $bdd->prepare('SELECT id_personnel, pass FROM personnel WHERE email = :email LIMIT 1');
-$req->execute(array('email' => $email));
+$req->bindValue('email', $email, PDO::PARAM_STR);
+$req->execute();
 $row = $req->fetch();
 $check = password_verify($mdp, $row['pass']);
 

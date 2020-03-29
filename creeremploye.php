@@ -10,7 +10,6 @@ $prenom = isset($_POST['prenom']) ? $_POST['prenom'] : '';
 $date_naissance = isset($_POST['date_naissance']) ? $_POST['date_naissance'] : '';    
 $telephone = isset($_POST['telephone']) ? $_POST['telephone'] : '';
 $fonction = isset($_POST['fonction']) ? $_POST['fonction'] : '';       
-$fonction_secondaire = isset($_POST['fonction_secondaire']) ? $_POST['fonction_secondaire'] : '';  
 $rue = isset($_POST['rue']) ? $_POST['rue'] : '';    
 $numero = isset($_POST['numero']) ? $_POST['numero'] : '';     
 $ville = isset($_POST['ville']) ? $_POST['ville'] : '';   
@@ -35,9 +34,7 @@ $checkemail = $req->rowCount();
 
 if(empty($nom) || empty($prenom) || empty($date_naissance) || empty($telephone) || empty($fonction) || empty($rue) ||
 empty($numero) || empty($ville) || empty($code_postal) || empty($pays) || empty($email) || empty($password)) {
-$message = 1;    
-} elseif($fonction == $fonction_secondaire) {
-$message = 2;
+$message = 1;  
 } elseif($checkemail > 0) {
 $message = 6;
 } elseif(strlen($password) < 5) {
@@ -63,23 +60,17 @@ $req->bindValue('telephone', $telephone, PDO::PARAM_STR);
 $req->bindValue('id_adresse', $id_adresse, PDO::PARAM_INT);
 $req->execute() or die(print_r($req->errorInfo(), TRUE));
 $id_personnel = $bdd->lastInsertID();
+foreach($fonction as $fonct) {
 $req = $bdd->prepare('INSERT INTO fonctions_personnel (id_fonction, id_personnel) VALUES (:id_fonction, :id_personnel)');
-$req->bindValue('id_fonction', $fonction, PDO::PARAM_INT);
+$req->bindValue('id_fonction', $fonct, PDO::PARAM_INT);
 $req->bindValue('id_personnel', $id_personnel, PDO::PARAM_INT);
 $req->execute() or die(print_r($req->errorInfo(), TRUE));
 $message = 3;
-if(strlen($fonction_secondaire) > 0) {
-$req->bindValue('id_fonction', $fonction_secondaire, PDO::PARAM_INT);
-$req->bindValue('id_personnel', $id_personnel, PDO::PARAM_INT);
-$req->execute();
 }
 }
 switch($message) {
 case 1:
 $message = '<h2 class="message-erreur">Merci de remplir tous les champs</h2>';
-break;
-case 2:
-$message = '<h2 class="message-erreur">La fonction secondaire ne peut pas être identique à la fonction principale</h2>';
 break;
 case 3:
 $message = '<h2 class="message-confirmation">Le profil employé a été créé</h2>';
@@ -128,25 +119,17 @@ break;
 <label for="pays">Pays :</label><select name="pays" id="pays"><option value="1">Belgique</option><option value="2">France</option></select>
 </div>
 <div class="identifiants">
-<h2>Fonction</h2>
-<label for="fonction">Fonction principale :</label> <select name="fonction" id="fonction">
+<h2>Attribuer des fonctions</h2>
+<div class="flex-fonctions">
 <?php $req = $bdd->prepare('SELECT id_fonction, nom FROM fonctions ORDER BY id_fonction');
 $req->execute();
 while($fonction = $req->fetch()) {
 ?>
-<option value="<?= $fonction['id_fonction']; ?>"><?= $fonction['nom']; ?></option>    
+<div class="content-fonctions">
+<input type="checkbox" name="fonction[]" id="<?= $fonction['id_fonction']; ?>" value="<?= $fonction['id_fonction']; ?>"><label for="<?= $fonction['id_fonction']; ?>"><?= $fonction['nom']; ?></label>  
+</div>
 <?php } ?>
-</select>
-<label for="fonction_secondaire">Fonction secondaire :</label> <select name="fonction_secondaire" id="fonction_secondaire">
-<option value="0">Aucune</option>    
-<?php
-$req = $bdd->prepare('SELECT id_fonction, nom FROM fonctions ORDER BY id_fonction');
-$req->execute();
-while($fonction = $req->fetch()) {
-?>
-<option value="<?= $fonction['id_fonction']; ?>"><?= $fonction['nom']; ?></option>    
-<?php } ?>
-</select>
+</div>
 <h2>Identifiants de connexion</h2>
 <label for="email">Adresse email :</label> <input type="email" id="email" name="email" placeholder="Saisissez une adresse email">
 <label for="password">Mot de passe :</label> <input type="password" id="password" name="password" placeholder="Saisissez un mot de passe">

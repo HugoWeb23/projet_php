@@ -9,9 +9,18 @@ if(isset($_POST['query'])) {
 $recherche = ($_POST['query']);    
 
 $req = $bdd->prepare('SELECT * FROM personnel as a LEFT JOIN adresses as b ON a.id_adresse = b.id_adresse WHERE a.nom LIKE :nom OR a.prenom LIKE :prenom OR
-a.email LIKE :email OR a.date_naissance LIKE :date_naissance OR a.telephone LIKE :telephone OR b.rue LIKE :rue OR ville LIKE :ville OR code_postal LIKE :code_postal OR pays LIKE :pays');
-$req->execute(array('nom' => '%'.$recherche.'%', 'prenom' => '%'.$recherche.'%', 'email' => '%'.$recherche.'%', 'date_naissance' => '%'.$recherche.'%', 'telephone' => '%'.$recherche.'%', 'rue' => '%'.$recherche.'%',
-'ville' => '%'.$recherche.'%', 'code_postal' => '%'.$recherche.'%', 'pays' => '%'.$recherche.'%'));
+a.email LIKE :email OR a.date_naissance LIKE :date_naissance OR a.telephone LIKE :telephone OR b.rue LIKE :rue OR numero LIKE :numero OR ville LIKE :ville OR code_postal LIKE :code_postal OR pays LIKE :pays');
+$req->bindValue('nom', '%'.$recherche.'%', PDO::PARAM_STR);
+$req->bindValue('prenom', '%'.$recherche.'%', PDO::PARAM_STR);
+$req->bindValue('email', '%'.$recherche.'%', PDO::PARAM_STR);
+$req->bindValue('date_naissance', '%'.$recherche.'%', PDO::PARAM_STR);
+$req->bindValue('telephone', '%'.$recherche.'%', PDO::PARAM_STR);
+$req->bindValue('rue', '%'.$recherche.'%', PDO::PARAM_STR);
+$req->bindValue('numero', '%'.$recherche.'%', PDO::PARAM_STR);
+$req->bindValue('ville', '%'.$recherche.'%', PDO::PARAM_STR);
+$req->bindValue('code_postal', '%'.$recherche.'%', PDO::PARAM_STR);
+$req->bindValue('pays', '%'.$recherche.'%', PDO::PARAM_STR);
+$req->execute();
 if($req->rowCount() < 1) {
     echo 'Aucun résultat';
 } else {

@@ -10,7 +10,6 @@ $prenom = isset($_POST['prenom']) ? $_POST['prenom'] : '';
 $date_naissance = isset($_POST['date_naissance']) ? $_POST['date_naissance'] : '';    
 $telephone = isset($_POST['telephone']) ? $_POST['telephone'] : '';
 $fonction = isset($_POST['fonction']) ? $_POST['fonction'] : '';       
-$fonction_secondaire = isset($_POST['fonction_secondaire']) ? $_POST['fonction_secondaire'] : '';  
 $rue = isset($_POST['rue']) ? $_POST['rue'] : '';    
 $numero = isset($_POST['numero']) ? $_POST['numero'] : '';     
 $ville = isset($_POST['ville']) ? $_POST['ville'] : '';   
@@ -33,10 +32,7 @@ case 2: $pays='France';
 break;
 default: $pays='';
 }
-if($nom == $afficher['nom'] && $prenom == $afficher['prenom'] && $date_naissance == $afficher['date_naissance'] && $telephone == $afficher['telephone'] &&
-$rue == $afficher['rue'] && $numero == $afficher['numero'] && $ville == $afficher['ville'] && $code_postal == $afficher['code_postal'] && $pays == $afficher['pays'] && $email == $afficher['email']) { 
-$message_infosperso = null;
-} elseif(empty($nom) || empty($prenom) || empty($date_naissance) || empty($telephone) || empty($fonction) || empty($rue) ||
+if(empty($nom) || empty($prenom) || empty($date_naissance) || empty($telephone) || empty($rue) ||
 empty($numero) || empty($ville) || empty($code_postal) || empty($pays) || empty($email)) {
 $message_infosperso = 1;    
 } else {
@@ -53,7 +49,10 @@ $checkemail = false;
 $checkemail = true;
 }    
 }
-if($checkemail == true) {   
+if($checkemail == true) {
+if(empty($fonction)) {
+$message_infosperso = 3;   
+} else {
 $req = $bdd->prepare('UPDATE personnel as a LEFT JOIN adresses as b ON a.id_adresse = b.id_adresse SET a.nom = :nom, a.prenom = :prenom, a.email = :email, a.date_naissance = :date_naissance, a.telephone = :telephone,
 b.rue = :rue, b.numero = :numero, b.ville = :ville, b.code_postal = :code_postal, b.pays = :pays WHERE a.id_personnel = :id AND b.id_adresse = (SELECT id_adresse FROM personnel WHERE id_personnel = :id)');    
 $req->bindValue('nom', $nom, PDO::PARAM_STR);
@@ -69,7 +68,19 @@ $req->bindValue('pays', $pays, PDO::PARAM_STR);
 $req->bindValue('id', $id, PDO::PARAM_INT);
 $req->bindValue('id', $id, PDO::PARAM_INT);
 $req->execute() or die(print_r($req->errorInfo(), TRUE));
+
+$req = $bdd->prepare('DELETE FROM fonctions_personnel WHERE id_personnel = :id_personnel');
+$req->bindValue('id_personnel', $id, PDO::PARAM_INT);
+$req->execute();
+
+foreach($fonction as $fonct) {
+$req = $bdd->prepare('INSERT INTO fonctions_personnel (id_fonction, id_personnel) VALUES (:id_fonction, :id_personnel)');
+$req->bindValue('id_fonction', $fonct, PDO::PARAM_INT);
+$req->bindValue('id_personnel', $id, PDO::PARAM_INT);
+$req->execute() or die(print_r($req->errorInfo(), TRUE));
+}
 $message_infosperso = 2;
+}
 }   
 } 
 if(!empty($password) && !empty($confirm_password)) {
@@ -104,6 +115,9 @@ break;
 case 2:
 $message_infosperso = '<h2 class="message-confirmation">Les informations personnelles ont été mises à jour</h2>';  
 break;
+case 3:
+$message_infosperso = '<h2 class="message-erreur">Sélectionnez au minimum une fonction</h2>';
+break;
 case 6:
 $message_infosperso = '<h2 class="message-erreur">L\'adresse email saisie est déjà utilisée</h2>';
 break;
@@ -137,38 +151,43 @@ exit;
 <div class="employe-flex">   
 <div class="infos-perso">
 <h2>Informations personnelles</h2>
-<label for="nom">Nom :</label> <input type="text" id="nom" name="nom" value="<?= $afficher['nom']; ?>">
-<label for="prenom">Prenom :</label> <input type="text" id="prenom" name="prenom" value="<?= $afficher['prenom']; ?>">
-<label for="date_naissance">Date de naissance :</label> <input type="date" id="date_naissance" name="date_naissance" value="<?= $afficher['date_naissance']; ?>">
-<label for="telephone">Numéro de téléphone :</label> <input type="text" id="telephone" name="telephone" value="<?= $afficher['telephone']; ?>">
-<label for="rue">Rue :</label> <input type="text" id="rue" name="rue" value="<?= $afficher['rue']; ?>">
-<label for="numero">Numéro :</label> <input type="text" id="numero" name="numero" value="<?= $afficher['numero']; ?>">
-<label for="ville">Ville :</label> <input type="text" id="ville" name="ville" value="<?= $afficher['ville']; ?>">
-<label for="code_postal">Code postal :</label> <input type="text" id="code_postal" name="code_postal" value="<?= $afficher['code_postal']; ?>">
-<label for="pays">Pays :</label><select name="pays" id="pays"><option value="1">Belgique</option><option value="2">France</option></select>
+<label for="nom">Nom :</label> <input type="text" id="nom" name="nom" value="<?= $afficher['nom']; ?>" required>
+<label for="prenom">Prenom :</label> <input type="text" id="prenom" name="prenom" value="<?= $afficher['prenom']; ?>" required>
+<label for="date_naissance">Date de naissance :</label> <input type="date" id="date_naissance" name="date_naissance" value="<?= $afficher['date_naissance']; ?>" required>
+<label for="telephone">Numéro de téléphone :</label> <input type="text" id="telephone" name="telephone" value="<?= $afficher['telephone']; ?>" required>
+<label for="rue">Rue :</label> <input type="text" id="rue" name="rue" value="<?= $afficher['rue']; ?>" required>
+<label for="numero">Numéro :</label> <input type="text" id="numero" name="numero" value="<?= $afficher['numero']; ?>" required>
+<label for="ville">Ville :</label> <input type="text" id="ville" name="ville" value="<?= $afficher['ville']; ?>" required>
+<label for="code_postal">Code postal :</label> <input type="text" id="code_postal" name="code_postal" value="<?= $afficher['code_postal']; ?>" required>
+<label for="pays">Pays :</label><select name="pays" id="pays" required><option value="1">Belgique</option><option value="2">France</option></select>
 </div>
 <div class="identifiants">
-<h2>Poste</h2>
-<label for="fonction">Fonction principale :</label> <select name="fonction" id="fonction">
-<?php $req = $bdd->prepare('SELECT id_fonction, nom FROM fonctions ORDER BY id_fonction');
-$req->execute();
-while($fonction = $req->fetch()) {
-?>
-<option value="<?= $fonction['id_fonction']; ?>"><?= $fonction['nom']; ?></option>    
-<?php } ?>
-</select>
-<label for="fonction_secondaire">Fonction secondaire :</label> <select name="fonction_secondaire" id="fonction_secondaire">
-<option value="0">Aucune</option>    
-<?php
+<h2>Gestion des fonctions</h2>
+<div class="flex-fonctions">
+<?php 
 $req = $bdd->prepare('SELECT id_fonction, nom FROM fonctions ORDER BY id_fonction');
 $req->execute();
+$nb = $req->rowCount();
 while($fonction = $req->fetch()) {
+
+$req0 = $bdd->prepare('SELECT id_fonction, id_personnel FROM fonctions_personnel WHERE id_personnel = :id AND id_fonction = :id_fonction ORDER BY id_fonction');
+$req0->bindValue('id', $id, PDO::PARAM_INT);
+$req0->bindValue('id_fonction', $fonction['id_fonction'], PDO::PARAM_INT);
+$req0->execute() or die(print_r($req->errorInfo(), TRUE));
+   
+if($req0->rowCount() > 0) {
+$checked = ' checked';
+} else {
+$checked = null;
+}
 ?>
-<option value="<?= $fonction['id_fonction']; ?>"><?= $fonction['nom']; ?></option>    
+<div class="content-fonctions">
+<input type="checkbox" name="fonction[]" id="<?= $fonction['id_fonction']; ?>" value="<?= $fonction['id_fonction']; ?>"<?= $checked; ?>><label for="<?= $fonction['id_fonction']; ?>"><?= $fonction['nom']; ?></label>  
+</div>
 <?php } ?>
-</select>
+</div>
 <h2>Identifiants de connexion</h2>
-<label for="email">Adresse email :</label> <input type="email" id="email" name="email" value="<?= $afficher['email']; ?>">
+<label for="email">Adresse email :</label> <input type="email" id="email" name="email" value="<?= $afficher['email']; ?>" required>
 <label for="password">Nouveau mot de passe :</label> <input type="password" id="password" name="password" placeholder="Saisissez un nouveau mot de passe">
 <label for="confirm_password">Confirmation :</label> <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirmez le mot de passe">
 </div>
