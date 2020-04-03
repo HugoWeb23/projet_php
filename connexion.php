@@ -4,7 +4,6 @@ session_start();
 
 require_once('config.php');
 
-
 if(isset($_POST['connexion'])) {
 $email = isset($_POST['email']) ? $_POST['email'] : '';
 $mdp = isset($_POST['mdp']) ? $_POST['mdp'] : '';
@@ -40,9 +39,9 @@ if($check == true) {
 <div class="connexion-nom"><?= $nom_site ?> : Accéder à mon compte employé</div>
 <?php
 switch(isset($erreur)) {
-    case 1:
-    echo "Vos identifiants sont incorrects !";   
-    break; 
+case 1:
+echo "Vos identifiants sont incorrects !";   
+break; 
 }
 ?>
 <div class="email">
