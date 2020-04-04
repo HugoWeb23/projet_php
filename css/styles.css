@@ -306,6 +306,10 @@ margin-bottom: 15px;
 z-index: auto;
 }
 
+.apercuproduit:hover {
+border: 2px solid red;    
+}
+
 .apercuproduit img {
 max-width: 100%; 
 }
@@ -324,3 +328,18 @@ width: 100%;
 max-width: 25px;
 height: auto;
 }
+
+/* Création d'un menu */
+
+.apercuproduit input[type="checkbox"] {
+position: absolute;
+left: 0;
+width: 0;
+margin: 2px;
+}
+
+.apercuproduit label {
+display: inline-block;    
+height: 100%;    
+}
+

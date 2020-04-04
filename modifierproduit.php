@@ -104,10 +104,17 @@ switch($message) {
     $message = '<h2 class="message-erreur">Il y a eu un problème de téléchargement de votre fichier. Veuillez réessayer</h2>';
     break;
     case 6:
-    $message = '<h2 class="message-confirmation">Le produit a bien été ajouté</h2>';
+    $message = '<h2 class="message-confirmation">Le produit a bien été modifié</h2>';
     break;    
 }
 }
+}
+if(isset($_POST['supprimer'])) {
+$req = $bdd->prepare('DELETE FROM produits WHERE id_produit = :id');
+$req->bindValue('id', $id, PDO::PARAM_INT);
+$req->execute();
+unlink($produit['photo']);
+header('location: gestionproduits.php');    
 }
 ?>
 <!DOCTYPE html>
@@ -156,6 +163,7 @@ $checked = null;
 <input type="checkbox" name="categories[]" id="<?= $categ['id_categorie']; ?>" value="<?= $categ['id_categorie']; ?>"<?= $checked; ?>><label for="<?= $categ['id_categorie']; ?>"><?= $categ['nom']; ?></label>  
 </div>
 <?php } ?>
+<input class="boutton-delete" type="submit" name="supprimer" value="Supprimer le produit">
 </div>
 </div>
 </div>
