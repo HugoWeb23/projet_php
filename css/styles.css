@@ -359,15 +359,49 @@ line-height: 1.8em;
 
 .flex-menu {
 display: flex;
+flex-direction: row-reverse;
 }
 
 .menu-categories {
-flex-grow: 2;
+margin-right: 5px;
 }
 
 .menu-apercu {
-margin-left: 3px;    
-flex-grow: 1;
+width: 273px;
+padding: 5px; 
 border: 3px solid #000;
 }
 
+.apercu-produits {
+display: block;
+float: left;
+width: 100%;
+margin-bottom: 10px;
+background: #ebebeb;
+box-sizing: border-box;
+}
+
+.apercu-produits:hover {
+background: #8e8e8e;
+}
+
+.menu-apercu .libelle {
+float: left;
+display: block;
+width: 70%;
+}
+
+.menu-apercu .prix {
+float: right;
+}
+
+.menu-apercu .supprimer {
+text-decoration: none;
+margin-left: 5px;
+}
+
+.menu-apercu .total {
+float: right;
+font-size: 20px;
+font-weight: bold;
+}

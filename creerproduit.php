@@ -45,8 +45,8 @@ if(isset($_POST["valider"])){
     $filetype='png';
     break;   
     }
-    $time = time();
-    $nom_image = $time.'.'.$filetype;
+    
+    $nom_image = nom_aleatoire().'.'.$filetype;
           
            
     move_uploaded_file($_FILES["photo"]["tmp_name"], "uploads/" . $nom_image);

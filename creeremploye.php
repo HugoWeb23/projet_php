@@ -34,13 +34,13 @@ $checkemail = $req->rowCount();
 
 if(empty($nom) || empty($prenom) || empty($date_naissance) || empty($telephone) || empty($fonction) || empty($rue) ||
 empty($numero) || empty($ville) || empty($code_postal) || empty($pays) || empty($email) || empty($password)) {
-$message = 1;  
+$type = 1;  
 } elseif($checkemail > 0) {
-$message = 6;
+$type = 6;
 } elseif(strlen($password) < 5) {
-$message = 5;    
+$type = 5;    
 } elseif($password != $confirm_password) {
-$message = 4;    
+$type = 4;    
 } else {
 $req = $bdd->prepare('INSERT INTO adresses (rue, numero, ville, code_postal, pays) VALUES (:rue, :numero, :ville, :code_postal, :pays)');
 $req->bindValue('rue', $rue, PDO::PARAM_STR);
@@ -65,10 +65,10 @@ $req = $bdd->prepare('INSERT INTO fonctions_personnel (id_fonction, id_personnel
 $req->bindValue('id_fonction', $fonct, PDO::PARAM_INT);
 $req->bindValue('id_personnel', $id_personnel, PDO::PARAM_INT);
 $req->execute() or die(print_r($req->errorInfo(), TRUE));
-$message = 3;
+$type = 3;
 }
 }
-switch($message) {
+switch($type) {
 case 1:
 $message = '<h2 class="message-erreur">Merci de remplir tous les champs</h2>';
 break;
@@ -108,30 +108,30 @@ break;
 <div class="employe-flex">   
 <div class="infos-perso">
 <h2>Informations personnelles</h2>
-<label for="nom">Nom :</label> <input type="text" id="nom" name="nom" placeholder="Saisissez un nom">
-<label for="prenom">Prenom :</label> <input type="text" id="prenom" name="prenom" placeholder="Saisissez un prenom">
-<label for="date_naissance">Date de naissance :</label> <input type="date" id="date_naissance" name="date_naissance">
-<label for="telephone">Numéro de téléphone :</label> <input type="text" id="telephone" name="telephone" placeholder="Saisissez un numéro de téléphone">
-<label for="rue">Rue :</label> <input type="text" id="rue" name="rue" placeholder="Saisissez un nom de rue">
-<label for="numero">Numéro :</label> <input type="text" id="numero" name="numero" placeholder="Saisissez un numéro d'habitation">
-<label for="ville">Ville :</label> <input type="text" id="ville" name="ville" placeholder="Saisissez un nom de ville">
-<label for="code_postal">Code postal :</label> <input type="text" id="code_postal" name="code_postal" placeholder="Saisissez un code postal">
-<label for="pays">Pays :</label><select name="pays" id="pays"><option value="1">Belgique</option><option value="2">France</option></select>
+<label for="nom">Nom :</label> <input type="text" id="nom" name="nom"<?php if(isset($nom) && $type != 3) { echo ' value="'.$nom.'"'; } ?> placeholder="Saisissez un nom">
+<label for="prenom">Prénom :</label> <input type="text" id="prenom" name="prenom"<?php if(isset($prenom) && $type != 3) { echo ' value="'.$prenom.'"'; } ?> placeholder="Saisissez un prenom">
+<label for="date_naissance">Date de naissance :</label> <input type="date" id="date_naissance" name="date_naissance"<?php if(isset($date_naissance) && $type != 3) { echo ' value="'.$date_naissance.'"'; } ?>>
+<label for="telephone">Numéro de téléphone :</label> <input type="text" id="telephone" name="telephone"<?php if(isset($telephone) && $type != 3) { echo ' value="'.$telephone.'"'; } ?> placeholder="Saisissez un numéro de téléphone">
+<label for="rue">Rue :</label> <input type="text" id="rue" name="rue"<?php if(isset($rue) && $type != 3) { echo ' value="'.$rue.'"'; } ?> placeholder="Saisissez un nom de rue">
+<label for="numero">Numéro :</label> <input type="text" id="numero" name="numero"<?php if(isset($numero) && $type != 3) { echo ' value="'.$numero.'"'; } ?> placeholder="Saisissez un numéro d'habitation">
+<label for="ville">Ville :</label> <input type="text" id="ville" name="ville"<?php if(isset($ville) && $type != 3) { echo ' value="'.$ville.'"'; } ?> placeholder="Saisissez un nom de ville">
+<label for="code_postal">Code postal :</label> <input type="text" id="code_postal" name="code_postal"<?php if(isset($code_postal) && $type != 3) { echo ' value="'.$code_postal.'"'; } ?> placeholder="Saisissez un code postal">
+<label for="pays">Pays :</label><select name="pays" id="pays"><option value="1"<?php if(isset($pays) && $pays == 'Belgique' && $type != 3) echo ' selected'; ?>>Belgique</option><option value="2"<?php if(isset($pays) && $pays == 'France' && $type != 3) echo ' selected'; ?>>France</option></select>
 </div>
 <div class="identifiants">
 <h2>Attribuer des fonctions</h2>
 <div class="flex-fonctions">
 <?php $req = $bdd->prepare('SELECT id_fonction, nom FROM fonctions ORDER BY id_fonction');
 $req->execute();
-while($fonction = $req->fetch()) {
+while($fonctions = $req->fetch()) {
 ?>
 <div class="content-fonctions">
-<input type="checkbox" name="fonction[]" id="<?= $fonction['id_fonction']; ?>" value="<?= $fonction['id_fonction']; ?>"><label for="<?= $fonction['id_fonction']; ?>"><?= $fonction['nom']; ?></label>  
+<input type="checkbox" name="fonction[]" id="<?= $fonctions['id_fonction']; ?>" value="<?= $fonctions['id_fonction']; ?>"><label for="<?= $fonctions['id_fonction']; ?>"><?= $fonctions['nom']; ?></label>  
 </div>
 <?php } ?>
 </div>
 <h2>Identifiants de connexion</h2>
-<label for="email">Adresse email :</label> <input type="email" id="email" name="email" placeholder="Saisissez une adresse email">
+<label for="email">Adresse email :</label> <input type="email" id="email" name="email"<?php if(isset($email) && $type != 3) { echo ' value="'.$email.'"'; } ?> placeholder="Saisissez une adresse email">
 <label for="password">Mot de passe :</label> <input type="password" id="password" name="password" placeholder="Saisissez un mot de passe">
 <label for="confirm_password">Confirmation :</label> <input type="password" id="confirm_password" name="confirm_password" placeholder="Répétez le mot de passe">
 </div>

@@ -54,8 +54,7 @@ if(isset($_POST["modifier"])){
     $filetype='png';
     break;   
     }
-    $time = time();
-    $nom_image = $time.'.'.$filetype;
+    $nom_image = nom_aleatoire().'.'.$filetype;
     unlink($produit['photo']);          
     move_uploaded_file($_FILES["photo"]["tmp_name"], "uploads/" . $nom_image);
     $req = $bdd->prepare('UPDATE produits SET photo = :photo WHERE id_produit = :id');
