@@ -127,6 +127,8 @@ break;
 header('location: gestionemployes');
 exit;    
 }
+} else {
+header('location: gestionemployes'); 
 }
 if(isset($_POST['supprimer'])) {
 $req = $bdd->prepare('DELETE a, b FROM personnel as a LEFT JOIN adresses as b ON a.id_adresse = b.id_adresse WHERE a.id_personnel = :id');
@@ -165,7 +167,7 @@ header('location: gestionemployes');
 <label for="numero">Numéro :</label> <input type="text" id="numero" name="numero" value="<?= $afficher['numero']; ?>" required>
 <label for="ville">Ville :</label> <input type="text" id="ville" name="ville" value="<?= $afficher['ville']; ?>" required>
 <label for="code_postal">Code postal :</label> <input type="text" id="code_postal" name="code_postal" value="<?= $afficher['code_postal']; ?>" required>
-<label for="pays">Pays :</label><select name="pays" id="pays" required><option value="1">Belgique</option><option value="2">France</option></select>
+<label for="pays">Pays :</label><select name="pays" id="pays" required><option value="1"<?php if($afficher['pays'] == 'Belgique') { echo ' selected'; } ?>>Belgique</option><option value="2"<?php if($afficher['pays'] == 'France') { echo ' selected'; } ?>>France</option></select>
 </div>
 <div class="identifiants">
 <h2>Gestion des fonctions</h2>

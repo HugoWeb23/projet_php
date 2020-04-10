@@ -31,6 +31,8 @@ if(isset($_GET['deconnexion'])) {
 <div class="dropdown-child">
 <a href="creerclient">Créer un compte client</a>
 <a href="gestionclients">Gestion des clients</a>
+<a href="creercarte">Créer une carte de fidélité</a>
+<a href="gestioncartes">Gestion des cartes de fidélité</a>
 </div>
 </div>
 <div class="dropdown">
