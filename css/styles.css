@@ -405,3 +405,20 @@ float: right;
 font-size: 20px;
 font-weight: bold;
 }
+
+/* Gestion compte client */
+
+.carte-fidelite {
+border: 1px solid #000;
+width: 100%;
+padding: 5px;
+}
+
+.carte-fidelite:hover {
+box-shadow: 0 0 5px #8a8a8a
+}
+
+.carte-fidelite p {
+display: block;
+margin: 10px;
+}

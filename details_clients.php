@@ -144,8 +144,13 @@ if($req->rowCount() == 0) {
 echo 'Ce client ne possède pas de carte de fidélité';
 } else {
 while($carte = $req->fetch()) {
-echo '
-Numéro de carte: '.$carte['id_carte'];'<br>';
+?>
+<div class="carte-fidelite">
+<p>Numéro : <?= $carte['id_carte']; ?></p>
+<p>Points : <?= $carte['points']; ?></p>
+<p>Date d'expiration : <?= $carte['expire']; ?></p>
+</div>
+<?php
 }
 }
 ?>
