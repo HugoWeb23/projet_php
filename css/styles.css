@@ -331,13 +331,6 @@ height: auto;
 
 /* Création d'un menu */
 
-.apercuproduit input[type="checkbox"] {
-position: absolute;
-left: 0;
-width: 0;
-margin: 2px;
-}
-
 .apercuproduit label {
 display: inline-block;    
 height: 100%;    
@@ -398,6 +391,12 @@ float: right;
 .menu-apercu .supprimer {
 text-decoration: none;
 margin-left: 5px;
+}
+
+.menu-apercu .quantite {
+display: block;
+font-weight: 600;
+margin-top: 10px;
 }
 
 .menu-apercu .total {

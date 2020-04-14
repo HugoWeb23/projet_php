@@ -10,5 +10,4 @@ function nom_aleatoire() {
 $nom = str_shuffle(uniqid());
 return $nom;
 }
-
 ?>
