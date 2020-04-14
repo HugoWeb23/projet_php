@@ -331,6 +331,10 @@ height: auto;
 
 /* Création d'un menu */
 
+.infos-menu {
+border: 2px solid #000;
+}
+
 .apercuproduit label {
 display: inline-block;    
 height: 100%;    
@@ -348,6 +352,25 @@ display: inline;
 padding-left: 5px;
 font-size: 1.5em;
 line-height: 1.8em; 
+}
+
+.menu-apercu h3 {
+margin: 0 0 10px 0;
+}
+
+.quantite_saisie {
+width: 40%!important;
+}
+
+#resultat {
+display: block;    
+background: #238c40;   
+width: 100%;
+margin-bottom: 10px; 
+text-align: center;
+color: #FFF;
+border-radius: 8px;
+font-size: 18px;
 }
 
 .flex-menu {
@@ -394,7 +417,7 @@ margin-left: 5px;
 }
 
 .menu-apercu .quantite {
-display: block;
+display: flex;
 font-weight: 600;
 margin-top: 10px;
 }

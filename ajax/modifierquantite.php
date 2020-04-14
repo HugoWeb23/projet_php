@@ -36,6 +36,7 @@ array_splice($_SESSION['menu'], $chercher, 1);
 if($_SESSION['menu'] == null) {
 unset($_SESSION['menu']);
 }
+echo 'Produit supprimé';
 }
 
 ?>

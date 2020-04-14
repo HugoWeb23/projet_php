@@ -69,7 +69,8 @@ $(document).ready(function(){
 				data: 'produit=' + produit + '&prod_quantite=' + quantite + '&quantite_saisie=' + quantite_saisie,
 				success:function(data)
 				{
-					$('#resultat').html(data);
+					$('#resultat').html(data).fadeIn('slow');
+					$('#resultat').delay(1000).fadeOut('slow');
 				}
 			});
 
@@ -84,7 +85,8 @@ $(document).ready(function(){
 				data:{delete:id_produit},
 				success:function(data)
 				{
-					$('#result').html(data);
+					$('#resultat').html(data).fadeIn('slow');
+					$('#resultat').delay(1000).fadeOut('slow');
 				}
 			});
 			

@@ -4,10 +4,56 @@ session_start();
 
 require('config.php');
 
-if(isset($_POST['supprimer'])) {
-$test = array_search($_POST['id_produit'], $_SESSION['menu']);
-for($i = 0; $i < $_POST['prod_quantite']; $i++) {
-array_splice($_SESSION['menu'], $test, 1);
+if(isset($_POST['creer'])) {
+$nom = isset($_POST['nom']) ? $_POST['nom'] : '';
+$prix = isset($_POST['prix']) ? $_POST['prix'] : '';
+$etat = isset($_POST['etat']) ? $_POST['etat'] : '';
+
+if(empty($nom) || empty($prix) || empty($etat)) {
+$type = 1;
+} elseif($prix < 1) {
+$type = 2;
+} elseif(isset($_SESSION['menu']) == null || !isset($_SESSION['menu'])) {
+$type = 3;
+} else {
+switch($etat) {
+case 1:
+$etat = 1;
+break;
+case 2:
+$etat = 2;
+break;
+default:
+$etat = '';
+break;
+}
+$req = $bdd->prepare('INSERT INTO menus (nom, prix, etat) VALUES (:nom, :prix, :etat)');
+$req->bindValue('nom', $nom, PDO::PARAM_STR);
+$req->bindValue('prix', $prix, PDO::PARAM_INT);
+$req->bindValue('etat', $etat, PDO::PARAM_INT);
+$req->execute();
+$lastId = $bdd->lastInsertId();
+$req = $bdd->prepare('INSERT INTO menus_produits (id_menu, id_produit) VALUES (:id_menu, :id_produit)');
+foreach($_SESSION['menu'] as $menu) {
+$req->bindValue('id_menu', $lastId, PDO::PARAM_INT);
+$req->bindValue('id_produit', $menu, PDO::PARAM_INT);
+$req->execute();
+}
+$type = 4;
+}
+switch($type) {
+case 1:
+$message = '<h2 class="message-erreur">Merci de remplir tous les champs</h2>';
+break;
+case 2:
+$message = '<h2 class="message-erreur">Le prix ne peut pas être inférieur à 1</h2>';
+break;
+case 3:
+$message = '<h2 class="message-erreur">Sélectionnez au moins un produit</h2>';    
+break;
+case 4:
+$message = '<h2 class="message-confirmation">Le menu a été créé</h2>';
+break;
 }
 }
 ?>
@@ -38,10 +84,19 @@ $_SESSION['menu'] = array();
 $_SESSION['menu'][] = $id_produit;
 }
 ?>
+<div class="infos-menu">
+<?php if(isset($type)) { echo $message; } ?>
+<form action="" method="post">
+<label for="nom">Nom : </label><input type="text" name="nom" id="nom"<?php if(isset($nom) && $type != 4) { echo ' value='.$nom.''; } ?>>
+<label for="prix">Prix : </label><input type="number" name="prix" id="prix"<?php if(isset($prix) && $type != 4) { echo ' value='.$prix.''; } ?>>
+<input type="radio" name="etat" id="etat-1" value="1" checked><label for="etat-1">Actif<label><input type="radio" name="etat" id="etat-2" value="1" checked><label for="etat-2">Inactif<label>
+<input type="submit" class="boutton-rouge" name="creer" value="Créer le menu">
+</form>
+</div>
 <div class="flex-menu">
 <div class="menu-apercu">
-<div id="resultat"></div>
 <h3>Composition du menu</h3>
+<div id="resultat"></div>
 <?php
 if(isset($_SESSION['menu'])) {
 $in = str_repeat('?,', count($_SESSION['menu']) - 1) . '?';
@@ -57,7 +112,12 @@ $quantite = $k;
 }
 ?>
 <div class="apercu-produits">
-<div class="libelle"><?= $afficher['libelle']; ?><div class="quantite">Quantité : <input type="text" class="quantite_saisie" value="<?= $quantite ?>"></div><input type="button" class="ok" data-produit="<?= $afficher['id_produit']; ?>" data-quantite="<?= $quantite ?>" value="Valider quantité"></div>
+<div class="libelle"><?= $afficher['libelle']; ?>
+<div class="quantite">Quantité : 
+<input type="text" class="quantite_saisie" value="<?= $quantite ?>">
+</div>
+<input type="button" class="ok" data-produit="<?= $afficher['id_produit']; ?>" data-quantite="<?= $quantite ?>" value="Valider quantité">
+</div>
 <div class="prix"><?= $afficher['prix']; ?> €</div>
 <input type="button" class="supprimer" data-produit="<?= $afficher['id_produit']; ?>" value="supprimer">
 </div>
@@ -99,24 +159,6 @@ while($produit = $req2->fetch()) {
 <?php } ?>
 </div>
 <?php } ?>
-<script type="text/javascript">
-
-       
-   
-        $(document).ready(function() {
-            var counter = 0;
-           
-            $(".addMe").click(function(){
-                $(this).parents(".test").find(".addMe")
-                
-                counter++;
-   
-                $(".theCount").text(counter);
-                $(this).parents(".test").find(".theCount")
-            });
-   
-        });
-    </script>
 </div>
 </div>
 </div>
