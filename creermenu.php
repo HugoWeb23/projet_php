@@ -4,31 +4,15 @@ session_start();
 
 require('config.php');
 
-if(isset($_POST['creer'])) {
-$nom = $_POST['nom'] ? $_POST['nom'] : '';
-$prix = $_POST['prix'] ? $_POST['prix'] : '';
 
-if(empty($nom) || empty($prix)) {
-$message = 'Saisissez toutes les informations demandées';
-} else {
-$req = $bdd->prepare('INSERT INTO menus (nom, prix) VALUES (:nom, :prix)');
-$req->bindValue('nom', $nom, PDO::PARAM_STR);
-$req->bindValue('prix', $prix, PDO::PARAM_STR);
-$req->execute();
-$last_id = $bdd->lastInsertId();
-header('location: ?id='.$last_id.'');
-}
-}
-
-if(isset($_POST['valider'])) {
-$produit = $_POST['produit'];    
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="js/functions.js"></script>
 <link href="css/styles.css" rel="stylesheet">
 <title><?= $nom_site ?></title>
 </head>
@@ -36,72 +20,63 @@ $produit = $_POST['produit'];
 <?php include('header.php'); ?>
 <div class="conteneur">
 <div class="titre-page">
-<h1>Gestion des menus</h1>
-<a href="creerproduit">Gestion des menus</a>
+<h1>Créer un menu</h1>
+<a href="gestionmenus">Gestion des menus</a>
 </div>
 <div class="contenu">
-<?php 
-if(!isset($_GET['id'])) {
-?>
-<form action="" method="post">
-<?php if(isset($message)) { ?><h2 class="message-erreur"><?= $message; ?></h2> <?php } ?>
-<label for="nom">Nom :</label> <input type="text" id="nom" name="nom" placeholder="Nom du menu">
-<label for="nom">Prix :</label> <input type="text" id="prix" name="prix" placeholder="Prix du menu">
-<input class="boutton-rouge" type="submit" name="creer" value="Sélectionner les produits">
-</form>
-<?php } ?>
 <?php
-if(isset($_GET['id'])) {
-$id = $_GET['id'];
-
-if(isset($_GET['supprimer'])) {
-$req = $bdd->prepare('DELETE FROM menus_produits WHERE id = :id');
-$req->bindValue('id', $_GET['supprimer'], PDO::PARAM_INT);
-$req->execute();
-}
-
 if(isset($_GET['ajouter'])) {
-$req = $bdd->prepare('INSERT INTO menus_produits (id_menu, id_produit) VALUES (:id_menu, :id_produit)');
-$req->bindValue('id_menu', $id, PDO::PARAM_INT);
-$req->bindValue('id_produit', $_GET['ajouter'], PDO::PARAM_INT);
-$req->execute();
+$id_produit = $_GET['ajouter'];
+if(!isset($_SESSION['menu'])) {
+$_SESSION['menu'] = array();
+}
+$_SESSION['menu'][] = $id_produit;
 }
 ?>
-<form action="" method="post">
+<div class="infos-menu">
+<div id="resultat-menu"></div>
+<div class="loader" style="display: none"><img src="images/loader.gif"></div>
+<span class="titre-menu">Informations sur le menu</span>
+<form id="creerMenu" action="" method="post">
+<label for="nom">Nom : </label><input type="text" class="lol" name="nom" id="nom"<?php if(isset($nom) && $type != 4) { echo ' value='.$nom.''; } ?>>
+<label for="prix">Prix : </label><input type="number" name="prix" id="prix"<?php if(isset($prix) && $type != 4) { echo ' value='.$prix.''; } ?>>
+<input type="radio" name="etat" id="etat-1" value="1" checked><label for="etat-1">Actif</label><input type="radio" name="etat" id="etat-2" value="0"><label for="etat-2">Inactif</label>
+<input type="submit" class="boutton-rouge" name="creer" value="Créer le menu">
+</form>
+</div>
 <div class="flex-menu">
 <div class="menu-apercu">
 <h3>Composition du menu</h3>
+<div id="resultat"></div>
 <?php
-$id_menu = $_GET['id'];
-$req = $bdd->prepare('SELECT id_menu, prix FROM menus WHERE id_menu = :id');
-$req->bindValue('id', $id_menu, PDO::PARAM_INT);
-$req->execute();
-$menu = $req->fetch();
-if($req->rowCount() == 0) {
-header('location: creermenu');
-}
-$req = $bdd->prepare('SELECT b.id as id, a.libelle as libelle, a.prix as prix FROM produits as a INNER JOIN menus_produits as b ON a.id_produit = b.id_produit WHERE b.id_menu = :id ORDER BY id ASC');
-$req->bindValue('id', $id_menu, PDO::PARAM_INT);
-$req->execute();
+if(isset($_SESSION['menu'])) {
+$in = str_repeat('?,', count($_SESSION['menu']) - 1) . '?';
+$sql = "SELECT id_produit, libelle, prix FROM produits WHERE id_produit IN ($in)";
+$req = $bdd->prepare($sql);
+$req->execute($_SESSION['menu']) or die(print_r($req->errorInfo(), TRUE));
 while($afficher = $req->fetch()) {
+$count = array_count_values($_SESSION['menu']);
+foreach($count as $j => $k) {
+if($afficher['id_produit'] == $j) {
+$quantite = $k;
+}
+}
 ?>
 <div class="apercu-produits">
-<div class="libelle"><?= $afficher['libelle']; ?><a class="supprimer" href="creermenu?id=<?= $id; ?>&supprimer=<?= $afficher['id']; ?>">X</a></div>
-<div class="prix"><?= $afficher['prix']; ?> €</div>
+<div class="libelle"><?= $afficher['libelle']; ?>
+<div class="quantite">Quantité : 
+<input type="text" class="quantite_saisie" value="<?= $quantite ?>">
 </div>
-<?php 
-}
-$req = $bdd->prepare('SELECT SUM(a.prix) as total_produits FROM produits as a INNER JOIN menus_produits as b ON a.id_produit = b.id_produit WHERE b.id_menu = :id');
-$req->bindValue('id', $id, PDO::PARAM_INT);
-$req->execute();
-$total = $req->fetch(PDO::FETCH_ASSOC);
-?>
+<input type="button" class="ok" data-produit="<?= $afficher['id_produit']; ?>" data-quantite="<?= $quantite ?>" value="Valider quantité">
+</div>
+<div class="prix"><?= $afficher['prix']; ?> €</div>
+<input type="button" class="supprimer" data-produit="<?= $afficher['id_produit']; ?>" value="supprimer">
+</div>
 <?php
-if($total['total_produits'] > 0) { ?>
-<div class="total">Différence : <?php $diff = $total['total_produits'] - $menu['prix']; echo $diff; ?> €</div>
-<div class="total">Total produits : <?= $total['total_produits']; ?> €</div>
-<?php } ?>
-<div class="total">Prix menu : <?= $menu['prix']; ?> €</div>
+}
+}
+?>
+
 </div>
 <div class="menu-categories">
 <?php 
@@ -124,14 +99,12 @@ echo 'Aucun produit';
 while($produit = $req2->fetch()) {
 ?>
 <div class="apercuproduit">
-<input type="checkbox" name="produit[]" value="<?= $produit['id_produit']; ?>" id="produit<?= $produit['id_produit']; ?>">
 <label for="produit<?= $produit['id_produit']; ?>">
 <img src="<?= $produit['photo']; ?>">
 <div class="details-produit">
 <p>Nom : <?= $produit['libelle']; ?></p>
 <p>Prix : <?= $produit['prix']; ?></p>
-<a href="creermenu?id=<?= $id; ?>&ajouter=<?= $produit['id_produit']; ?>">Ajouter</a>
-</label>
+<a href="creermenu?ajouter=<?= $produit['id_produit']; ?>">Ajouter</a>
 </div>
 </div>
 <?php } ?>
@@ -140,8 +113,6 @@ while($produit = $req2->fetch()) {
 </div>
 </div>
 </div>
-<?php } ?>
-</form>
 </div>
 </body>
 </html>

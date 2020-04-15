@@ -92,6 +92,31 @@ $(document).ready(function(){
 			
 
 		});
+
+		$('#creerMenu').submit(function() {
+		var nom = $(this).find('input[name=nom]').val();
+		var prix = $(this).find('input[name=prix]').val();
+		var etat = $(this).find('input[name=etat]:checked').val();
+			$(this).css('opacity', '0.3');
+			$('.loader').show();
+		$.ajax({
+			url:"ajax/creermenu.php",
+			method:"post",
+			data:{nom:nom, prix:prix, etat:etat},
+			success:function(data)
+			{
+				$('#resultat-menu').html(data).fadeIn('slow');
+				$('#resultat-menu').delay(3000).fadeOut('slow');
+				$('#creerMenu').css('opacity', '1');
+				$('.loader').hide();
+				$('.apercu-produits').fadeOut(0);
+				$('#creerMenu').val('');
+			}
+		});
+		
+		return false;
+		});
+		
 	});
 
 	

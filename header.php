@@ -47,7 +47,7 @@ if(isset($_GET['deconnexion'])) {
 <div class="dropdown-child">
 <a href="gestionproduits">Gestion des produits</a>
 <a href="creerproduit">Créer un produit</a>
-<a href="creermenu">Gestion des menus</a>
+<a href="creermenu">Créer un menu</a>
 <a href="gestioncategories">Gestion des catégories</a>
 </div>
 </div>

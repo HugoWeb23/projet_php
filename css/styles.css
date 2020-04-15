@@ -222,7 +222,7 @@ color: #FFF;
 border-radius: 8px;
 }
 
-.contenu input, .contenu select {
+.employe-flex input, .employe-flex select {
 display: block;
 width: 264px;
 margin-bottom: 15px;
@@ -332,7 +332,22 @@ height: auto;
 /* Création d'un menu */
 
 .infos-menu {
+position: relative;
 border: 2px solid #000;
+margin-bottom: 10px;
+padding: 5px;
+}
+
+.titre-menu {
+display: block;
+font-size: 1.4em;
+margin-bottom: 10px;
+}
+
+.loader img {
+position: absolute;
+margin-left: 50%;
+top: 40px;
 }
 
 .apercuproduit label {
