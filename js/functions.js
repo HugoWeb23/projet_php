@@ -56,21 +56,39 @@ $(document).ready(function(){
 
 $(document).ready(function(){
 
-	$('.ok').on('click', function(){
+	$('.ajouterProduit').on('click', function() {
+
+		var id_produit = $(this).data('id');
+
+		$.ajax({
+			url:"ajax/modifierquantite.php",
+			method:"post",
+			data: {id_produit:id_produit},
+			success:function(data)
+			{
+				location.reload();
+			}
+		});
+
+	});
+
+	$('.validerQuantite').on('click', function(){
 		
 			var produit = $(this).data('produit');
-			var quantite = $(this).data('quantite');
-			var quantite_saisie = $(this).parent().find('.quantite').find('.quantite_saisie').val();
+			var quantite_saisie = $(this).parent().find('.quantite_saisie').val();
   
 		
 			$.ajax({
 				url:"ajax/modifierquantite.php",
 				method:"post",
-				data: 'produit=' + produit + '&prod_quantite=' + quantite + '&quantite_saisie=' + quantite_saisie,
+				data: {produit:produit, quantite_saisie:quantite_saisie},
 				success:function(data)
 				{
+					if(quantite_saisie == 0) {
+					$('.validerQuantite').parent().parent().fadeOut(0);
+					}
 					$('#resultat').html(data).fadeIn('slow');
-					$('#resultat').delay(1000).fadeOut('slow');
+					$('#resultat').delay(2000).fadeOut('slow');
 				}
 			});
 
@@ -86,7 +104,7 @@ $(document).ready(function(){
 				success:function(data)
 				{
 					$('#resultat').html(data).fadeIn('slow');
-					$('#resultat').delay(1000).fadeOut('slow');
+					$('#resultat').delay(2000).fadeOut('slow');
 				}
 			});
 			

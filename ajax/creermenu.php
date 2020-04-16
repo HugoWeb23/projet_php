@@ -17,11 +17,11 @@ $type = 2;
 $type = 3;
 } else {
 switch($etat) {
+case 0:
+$etat = 0;
+break;
 case 1:
 $etat = 1;
-break;
-case 2:
-$etat = 2;
 break;
 default:
 $etat = '';

@@ -4,7 +4,6 @@ session_start();
 
 require('config.php');
 
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,22 +23,13 @@ require('config.php');
 <a href="gestionmenus">Gestion des menus</a>
 </div>
 <div class="contenu">
-<?php
-if(isset($_GET['ajouter'])) {
-$id_produit = $_GET['ajouter'];
-if(!isset($_SESSION['menu'])) {
-$_SESSION['menu'] = array();
-}
-$_SESSION['menu'][] = $id_produit;
-}
-?>
 <div class="infos-menu">
 <div id="resultat-menu"></div>
 <div class="loader" style="display: none"><img src="images/loader.gif"></div>
 <span class="titre-menu">Informations sur le menu</span>
 <form id="creerMenu" action="" method="post">
-<label for="nom">Nom : </label><input type="text" class="lol" name="nom" id="nom"<?php if(isset($nom) && $type != 4) { echo ' value='.$nom.''; } ?>>
-<label for="prix">Prix : </label><input type="number" name="prix" id="prix"<?php if(isset($prix) && $type != 4) { echo ' value='.$prix.''; } ?>>
+<label for="nom">Nom : </label><input type="text" class="lol" name="nom" id="nom">
+<label for="prix">Prix : </label><input type="number" name="prix" id="prix">
 <input type="radio" name="etat" id="etat-1" value="1" checked><label for="etat-1">Actif</label><input type="radio" name="etat" id="etat-2" value="0"><label for="etat-2">Inactif</label>
 <input type="submit" class="boutton-rouge" name="creer" value="Créer le menu">
 </form>
@@ -50,6 +40,9 @@ $_SESSION['menu'][] = $id_produit;
 <div id="resultat"></div>
 <?php
 if(isset($_SESSION['menu'])) {
+if($_SESSION['menu'] == null) {
+unset($_SESSION['menu']);
+} else {
 $in = str_repeat('?,', count($_SESSION['menu']) - 1) . '?';
 $sql = "SELECT id_produit, libelle, prix FROM produits WHERE id_produit IN ($in)";
 $req = $bdd->prepare($sql);
@@ -67,12 +60,13 @@ $quantite = $k;
 <div class="quantite">Quantité : 
 <input type="text" class="quantite_saisie" value="<?= $quantite ?>">
 </div>
-<input type="button" class="ok" data-produit="<?= $afficher['id_produit']; ?>" data-quantite="<?= $quantite ?>" value="Valider quantité">
+<input type="button" class="validerQuantite" data-produit="<?= $afficher['id_produit']; ?>" value="Valider quantité">
 </div>
 <div class="prix"><?= $afficher['prix']; ?> €</div>
 <input type="button" class="supprimer" data-produit="<?= $afficher['id_produit']; ?>" value="supprimer">
 </div>
 <?php
+}
 }
 }
 ?>
@@ -104,7 +98,7 @@ while($produit = $req2->fetch()) {
 <div class="details-produit">
 <p>Nom : <?= $produit['libelle']; ?></p>
 <p>Prix : <?= $produit['prix']; ?></p>
-<a href="creermenu?ajouter=<?= $produit['id_produit']; ?>">Ajouter</a>
+<input type="button" data-id="<?= $produit['id_produit']; ?>" class="ajouterProduit" value="Ajouter">
 </div>
 </div>
 <?php } ?>

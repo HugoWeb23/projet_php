@@ -377,11 +377,22 @@ margin: 0 0 10px 0;
 width: 40%!important;
 }
 
-#resultat {
+.erreur-menu {
 display: block;    
-background: #238c40;   
+background: #c13030; 
 width: 100%;
-margin-bottom: 10px; 
+margin-bottom: 10px;
+padding: 3px;
+color: #FFF;
+border-radius: 8px;
+font-size: 18px;
+}
+
+.validation-menu {
+display: block;    
+margin: 5px 0;
+background: #238c40;   
+width: 100%; 
 text-align: center;
 color: #FFF;
 border-radius: 8px;
