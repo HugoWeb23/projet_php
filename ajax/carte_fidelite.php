@@ -4,7 +4,7 @@ session_start();
 
 require('../config.php');
 
-if(isset($_POST['action']) == 'prolonger') {
+if(isset($_POST['action']) && $_POST['action'] == 'prolonger') {
 
 $mois = $_POST['mois'];
 $id_carte = $_POST['id_carte'];
@@ -36,6 +36,23 @@ $req->bindValue('id_client', $id_client, PDO::PARAM_INT);
 $req->execute() or die(print_r($req->errorInfo(), TRUE));
 
 echo 'La carte a été prolongée jusqu\'au '.$date.'';
+}
+}
 
+if(isset($_POST['action']) && $_POST['action'] == 'supprimer') {
+
+$id_carte = $_POST['id_carte'];
+$id_client = $_POST['id_client'];
+
+$req = $bdd->prepare('SELECT id_carte FROM cartes_fidelite WHERE id_client = :id_client AND id_carte = :id_carte');
+$req->bindValue('id_client', $id_client, PDO::PARAM_INT);
+$req->bindValue('id_carte', $id_carte, PDO::PARAM_INT);
+$req->execute();
+if($req->rowCount() == 0) {
+echo 'Cette carte n\'est pas associée à ce client';
+} else {
+$req = $bdd->prepare('DELETE FROM cartes_fidelite WHERE id_carte = :id_carte');
+$req->bindValue('id_carte', $id_carte, PDO::PARAM_INT);
+$req->execute();
 }
 }

@@ -134,32 +134,6 @@ $(document).ready(function(){
 		return false;
 		});
 
-		function recherche_client_carte(query)
-		{
-		
-			$.ajax({
-				url:"ajax/recherche_client_carte.php",
-				method:"post",
-				data:{recherche:query},
-				success:function(data)
-				{
-					$('#clients').html(data);
-				}
-			});
-		}
-			$('#client_id').keyup(function(){
-				var search = $(this).val();
-				if(search != '')
-				{
-					recherche_client_carte(search);
-				}
-				else
-				{
-					recherche_client_carte();			
-				}
-			});	
-
-
 			$('#prolongerCarte').change(function(){ 
 				var mois = $(this).val();
 				var id_client = $('#id_client').val();
@@ -176,8 +150,28 @@ $(document).ready(function(){
 				});
 			}
 			});
+
+			function supprimer_carte(id_client, id_carte) {
+				$.ajax({
+					url:"ajax/carte_fidelite.php",
+					method:"post",
+					data:{action:'supprimer', id_client:id_client, id_carte:id_carte},
+					success:function()
+					{
+						location.reload();
+					}
+				});
+			}
 		
-		
+		$('#supprimerCarteFidelite').on('click', function() { 
+			var id_client = $('#id_client').val();
+			var id_carte = $('#id_carte').val();
+			if(id_client > 0 && id_carte > 0) {
+				if(confirm('Voulez-vous vraiment supprimer cette carte ?')) {
+					supprimer_carte(id_client, id_carte);
+				}
+			}
+		});
 	});
 
 	
