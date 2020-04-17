@@ -106,6 +106,8 @@ break;
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="js/functions.js"></script>
 <link href="css/styles.css" rel="stylesheet">
 <title><?= $nom_site ?></title>
 </head>
@@ -146,9 +148,15 @@ echo 'Ce client ne possède pas de carte de fidélité';
 while($carte = $req->fetch()) {
 ?>
 <div class="carte-fidelite">
+<div id="resultat"></div>
 <p>Numéro : <?= $carte['id_carte']; ?></p>
-<p>Points : <?= $carte['points']; ?></p>
+<p>Points : <?= $carte['points']; ?> <button id="pointsUp">+</button> <button id="pointsDown">-</button></p>
 <p>Date d'expiration : <?= $carte['expire']; ?></p>
+<input type="hidden" id="id_client" value="<?= $id; ?>">
+<input type="hidden" id="id_carte" value="<?= $carte['id_carte']; ?>">
+<p><label for="prolongerCarte">Prolonger :</label> <select name="mois" id="prolongerCarte"><option value="0">Non</option><option value="1">1 mois</option><option value="2">2 mois</option><option value="3">3 mois</option>
+<option value="6">6 mois</option><option value="12">1 an</option><option value="24">2 ans</option></select>
+<p><label for="supprimerCarteFidelite">Supprimer :</label> <input type="button" id="supprimerCarteFidelite" value="Supprimer">
 </div>
 <?php
 }

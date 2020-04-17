@@ -4,12 +4,21 @@ session_start();
 
 require('config.php');
 
+if(isset($_POST['valider'])) {
+$expiration = $_POST['expiration'];
+$id_client = $_POST['id_client'];
+
+echo $id_client;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="js/functions.js"></script>
 <link href="css/styles.css" rel="stylesheet">
 <title><?= $nom_site ?></title>
 </head>
@@ -22,28 +31,20 @@ require('config.php');
 </div>
 <div class="contenu">
 <form action='' method='post'>
-<input type="text" name="txtCountry" id="txtCountry" class="typeahead">
-    </form>
-<script type="text/javascript">
-$(document).ready(function () {
-        $('#txtCountry').typeahead({
-            source: function (query, result) {
-                $.ajax({
-                    url: "ajax/clients_cartes.php",
-					data: 'query=' + query,            
-                    dataType: "json",
-                    type: "POST",
-                    success: function (data) {
-						result($.map(data, function (item) {
-							return item;
-                        }));
-                    }
-                });
-            }
-        });
-    });
-        </script>
+<div class="carte-flex">
+<div class="expiration">
+<select name="expiration">
+<option value="1">6 mois</option>
+<option value="2">1 an</option>
+</select>
+</div>
+<div class="clients">
+<input type="text" name="client" id="client_id" class="typeahead">
+<div id="clients"></div>
+</div>
+</div>
 <input class="boutton-rouge" type="submit" name="valider" value="Créer la carte">
+</form>
 </div>
 </body>
 </html>

@@ -29,6 +29,7 @@ $(document).ready(function(){
 $(document).ready(function(){
 	function load_clients(query)
 	{
+	
 		$.ajax({
 			url:"ajax/recherche_clients.php",
 			method:"post",
@@ -51,8 +52,6 @@ $(document).ready(function(){
 			}
 		});	
 });
-
-
 
 $(document).ready(function(){
 
@@ -134,6 +133,50 @@ $(document).ready(function(){
 		
 		return false;
 		});
+
+		function recherche_client_carte(query)
+		{
+		
+			$.ajax({
+				url:"ajax/recherche_client_carte.php",
+				method:"post",
+				data:{recherche:query},
+				success:function(data)
+				{
+					$('#clients').html(data);
+				}
+			});
+		}
+			$('#client_id').keyup(function(){
+				var search = $(this).val();
+				if(search != '')
+				{
+					recherche_client_carte(search);
+				}
+				else
+				{
+					recherche_client_carte();			
+				}
+			});	
+
+
+			$('#prolongerCarte').change(function(){ 
+				var mois = $(this).val();
+				var id_client = $('#id_client').val();
+				var id_carte = $('#id_carte').val();
+				if(mois > 0) {
+				$.ajax({
+					url:"ajax/carte_fidelite.php",
+					method:"post",
+					data:{action:'prolonger', mois:mois, id_client:id_client, id_carte:id_carte},
+					success:function(data)
+					{
+						$('#resultat').html(data);
+					}
+				});
+			}
+			});
+		
 		
 	});
 

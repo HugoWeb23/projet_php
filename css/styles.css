@@ -470,3 +470,10 @@ box-shadow: 0 0 5px #8a8a8a
 display: block;
 margin: 10px;
 }
+
+/* Création d'une carte de fidélité */
+
+.carte-flex {
+display: flex;
+justify-content: space-evenly;
+}

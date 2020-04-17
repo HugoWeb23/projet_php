@@ -67,8 +67,6 @@ if($req->rowCount() < 1) {
         <td>'.$adresse.'</td>
         <td><a href="details_clients?id='.$afficher['id_client'].'">Détails</a></td></tr>
         ';
-            
-            
             }
 }
 }

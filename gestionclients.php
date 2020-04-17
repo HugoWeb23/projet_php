@@ -4,6 +4,10 @@ session_start();
 
 require('config.php');
 
+if(isset($_POST['test'])) {
+   var_dump($_POST['id']);
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +28,9 @@ require('config.php');
 <div class="recherche-employe">
 <label for="rechercher">Chercher un client :</label> <input type="text" name="rechercher" id="rechercher_client" placeholder="Rechercher un nom, un prénom, une adresse, ...">
 </div>
+<form action="" method="post">
 <div id="result"></div>
+</form>
 </div>
 </body>
 </html>
