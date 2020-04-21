@@ -471,6 +471,11 @@ display: block;
 margin: 10px;
 }
 
+input[type="checkbox"] {
+display: inline;
+width: 5px;
+}
+
 /* Création d'une carte de fidélité */
 
 .carte-flex {

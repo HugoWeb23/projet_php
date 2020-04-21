@@ -8,17 +8,34 @@ if(isset($_POST['connexion'])) {
 $email = isset($_POST['email']) ? $_POST['email'] : '';
 $mdp = isset($_POST['mdp']) ? $_POST['mdp'] : '';
 
+if(empty($email) || empty($mdp)) {
+$erreur = 2;
+} else {
+   
 $req = $bdd->prepare('SELECT id_personnel, pass FROM personnel WHERE email = :email LIMIT 1');
 $req->bindValue('email', $email, PDO::PARAM_STR);
 $req->execute();
 $row = $req->fetch();
+if($req->rowCount() == 0) {
+$erreur = 1;
+} else {
 $check = password_verify($mdp, $row['pass']);
 
 if($check == true) {
-   $_SESSION['id_personnel'] = $row['id_personnel'];
-   header('location: index');
+$_SESSION['id_personnel'] = $row['id_personnel'];
+header('location: index');
 } else {
-   $erreur = 1;
+$erreur = 1;
+}
+}
+}
+switch($erreur) {
+case 1:
+$erreur = "Identifiants incorrects !";
+break;      
+case 2:
+$erreur = "Merci de remplir tous les champs !";   
+break; 
 }
 }
 ?>
@@ -38,12 +55,7 @@ if($check == true) {
 </div>
 <div class="connexion-nom"><?= $nom_site ?> : Accéder à mon compte employé</div>
 <?php
-switch(isset($erreur)) {
-case 1:
-echo "Vos identifiants sont incorrects !";   
-break; 
-}
-?>
+if(isset($_POST['connexion'])) { echo $erreur; } ?>
 <div class="email">
 <label for="email">Adresse email :</label>
 <input type="email" name="email" id="email">

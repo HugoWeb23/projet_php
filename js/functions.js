@@ -151,6 +151,36 @@ $(document).ready(function(){
 			}
 			});
 
+			function points(count, id_client, id_carte) {
+				$.ajax({
+					url:"ajax/carte_fidelite.php",
+					method:"post",
+					data:{action:'points', points:count, id_client:id_client, id_carte:id_carte},
+				});
+			}
+
+			var count = $('#count').data('count');
+
+			$('#pointsUp').on('click', function() { 
+				var id_client = $('#id_client').val();
+				var id_carte = $('#id_carte').val();
+				if(count < 100) {
+				count++;
+				}
+				$("#count").text(count);
+				points(count, id_client, id_carte);
+			});
+
+			$('#pointsDown').on('click', function() { 
+				var id_client = $('#id_client').val();
+				var id_carte = $('#id_carte').val();
+				if(count > 0) {
+					count--;
+					}
+				$("#count").text(count);
+				points(count, id_client, id_carte);
+			});
+
 			function supprimer_carte(id_client, id_carte) {
 				$.ajax({
 					url:"ajax/carte_fidelite.php",
@@ -162,6 +192,25 @@ $(document).ready(function(){
 					}
 				});
 			}
+
+			function creer_carte(id_client, points, duree) {
+				$.ajax({
+					url:"ajax/carte_fidelite.php",
+					method:"post",
+					data:{action:'creer', id_client:id_client, points:points, duree:duree},
+					success:function()
+					{
+						location.reload();
+					}
+				});
+			}
+
+			$('#creerCarte').on('click', function() {
+				var id_client = $(this).data('client');
+				var points = $('#points').val();
+				var duree = $('#duree').val();
+				creer_carte(id_client, points, duree);
+			});
 		
 		$('#supprimerCarteFidelite').on('click', function() { 
 			var id_client = $('#id_client').val();

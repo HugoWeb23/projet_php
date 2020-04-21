@@ -94,9 +94,16 @@ $message = '<h2 class="message-erreur">L\'adresse email saisie est déjà utilis
 break;    
 }
 }
+if(isset($_POST['supprimer'])) {
+    $req = $bdd->prepare('DELETE a, b, c FROM clients as a LEFT JOIN adresses as b ON a.id_adresse = b.id_adresse LEFT JOIN cartes_fidelite as c ON a.id_client = c.id_client WHERE a.id_client = :id');
+    $req->bindValue('id', $id, PDO::PARAM_INT);
+    $req->execute() or die(print_r($req->errorInfo(), TRUE));
+    header('location: gestionclients');
+    }
 } else {
     header('location: gestionclients');
 }
+
 } else {
     header('location: gestionclients');
 }
@@ -143,14 +150,31 @@ $req = $bdd->prepare('SELECT * FROM cartes_fidelite WHERE id_client = :id');
 $req->bindValue('id', $id, PDO::PARAM_INT);
 $req->execute();
 if($req->rowCount() == 0) {
-echo 'Ce client ne possède pas de carte de fidélité';
+?>
+<p>Ce client ne possède pas de carte de fidélité</p>
+<h3>Créer une carte :</h3>
+<label for="points">Points :</label>
+<input type="text" id="points" value="0">
+<label for="duree">Durée de validité</label>
+<select id="duree">
+<option value="1">1 mois</option>
+<option value="2">2 mois</option>
+<option value="3">3 mois</option>
+<option value="4">4 mois</option>
+<option value="5">5 mois</option>
+<option value="6" selected>6 mois</option>
+<option value="12">1 an</option>
+<option value="24">2 ans</option>
+</select>
+<input type="button" id="creerCarte" data-client="<?= $id; ?>" value="Créer la carte">
+<?php
 } else {
 while($carte = $req->fetch()) {
 ?>
 <div class="carte-fidelite">
 <div id="resultat"></div>
 <p>Numéro : <?= $carte['id_carte']; ?></p>
-<p>Points : <?= $carte['points']; ?> <button id="pointsUp">+</button> <button id="pointsDown">-</button></p>
+<p>Points : <span id="count" data-count="<?= $carte['points']; ?>"><?= $carte['points']; ?></span> <a href="#" id="pointsUp">+</a> <a href="#" id="pointsDown">-</a></p>
 <p>Date d'expiration : <?= $carte['expire']; ?></p>
 <input type="hidden" id="id_client" value="<?= $id; ?>">
 <input type="hidden" id="id_carte" value="<?= $carte['id_carte']; ?>">
@@ -162,6 +186,7 @@ while($carte = $req->fetch()) {
 }
 }
 ?>
+<input class="boutton-delete" type="submit" name="supprimer" value="Supprimer le compte">
 </div>
 </div>
 <input class="boutton-rouge" type="submit" name="valider" value="Valider les modifications">

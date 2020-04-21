@@ -198,9 +198,7 @@ $checked = null;
 <label for="email">Adresse email :</label> <input type="email" id="email" name="email" value="<?= $afficher['email']; ?>" required>
 <label for="password">Nouveau mot de passe :</label> <input type="password" id="password" name="password" placeholder="Saisissez un nouveau mot de passe">
 <label for="confirm_password">Confirmation :</label> <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirmez le mot de passe">
-<form action="" method="post">
 <input class="boutton-delete" type="submit" name="supprimer" value="Supprimer le compte">
-</form>
 </div>
 </div>
 <input class="boutton-rouge" type="submit" name="valider" value="Appliquer les modifications">

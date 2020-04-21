@@ -15,7 +15,15 @@ $rue = isset($_POST['rue']) ? $_POST['rue'] : '';
 $numero = isset($_POST['numero']) ? $_POST['numero'] : '';     
 $ville = isset($_POST['ville']) ? $_POST['ville'] : '';   
 $code_postal = isset($_POST['code_postal']) ? $_POST['code_postal'] : '';    
-$pays = isset($_POST['pays']) ? $_POST['pays'] : '';                     
+$pays = isset($_POST['pays']) ? $_POST['pays'] : '';                   
+$points_carte = isset($_POST['points']) ? $_POST['points'] : '0';  
+$expiration_carte = isset($_POST['expire']) ? $_POST['expire'] : '6';
+
+$year = date('y');
+$day = date('d');
+$month = date('m');
+
+$date_expiration = date("Y-m-d", mktime(0, 0, 0, $month+$expiration_carte, $day, $year));
 
 $req = $bdd->prepare('SELECT email FROM personnel WHERE email = :email');
 $req->bindValue('email', $email, PDO::PARAM_STR);
@@ -46,6 +54,14 @@ $req->bindValue('gsm', $gsm, PDO::PARAM_STR);
 $req->bindValue('id_adresse', $id_adresse, PDO::PARAM_INT);
 $req->execute() or die(print_r($req->errorInfo(), TRUE));
 $id_client = $bdd->lastInsertID();
+if(isset($_POST['creercarte'])) {
+$req = $bdd->prepare('INSERT INTO cartes_fidelite (date_creation, points, expire, id_client) VALUES (:date_creation, :points, :expire, :id_client)');
+$req->bindValue('date_creation', date('Y-m-d'), PDO::PARAM_STR);
+$req->bindValue('points', $points_carte, PDO::PARAM_INT);
+$req->bindValue('expire', $date_expiration, PDO::PARAM_STR);
+$req->bindValue('id_client', $id_client, PDO::PARAM_INT);
+$req->execute();
+}
 $type = 3;
 }
 switch($type) {
@@ -67,6 +83,14 @@ break;
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="css/styles.css" rel="stylesheet">
+<script>
+function toggleSelect()
+{
+  var isChecked = document.getElementById("creercarte").checked;
+  document.getElementById("expiration").disabled = !isChecked;
+  document.getElementById("points").disabled = !isChecked;
+}
+</script>
 <title><?= $nom_site ?></title>
 </head>
 <body>
@@ -93,6 +117,18 @@ break;
 <label for="ville">Ville :</label> <input type="text" id="ville" name="ville"<?php if(isset($ville) && $type != 3) { echo ' value="'.$ville.'"'; } ?> placeholder="Saisissez un nom de ville">
 <label for="code_postal">Code postal :</label> <input type="text" id="code_postal" name="code_postal"<?php if(isset($code_postal) && $type != 3) { echo ' value="'.$code_postal.'"'; } ?> placeholder="Saisissez un code postal">
 <label for="pays">Pays :</label><select name="pays" id="pays"><option value="Belgique"<?php if(isset($pays) && $pays == 'Belgique' && $type != 3) { echo ' selected'; } ?>>Belgique</option><option value="France"<?php if(isset($pays) && $pays == 'France' && $type != 3) { echo ' selected'; } ?>>France</option></select>
+</div>
+<div class="identifiants">
+<h2>Carte de fidélité</h2>
+<input type="checkbox" id="creercarte" name="creercarte" onClick="toggleSelect()" checked><label for="creercarte">Créer une carte de fidélité</label>
+<br />
+<label for="points">Nombre de points : <label>
+<input type="number" id="points" name="points" value="0">
+<label for="expiration">Durée de validité<label>
+<select id="expiration" name="expire">
+<option value="6" selected>6 mois</option>
+<option value="12">1 an</option>
+</select>
 </div>
 </div>
 <input class="boutton-rouge" type="submit" name="valider" value="Créer le compte">
