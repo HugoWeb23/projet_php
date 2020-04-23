@@ -300,14 +300,15 @@ flex-wrap: wrap;
 position: relative;    
 width: 151px;
 height: 250px;    
-border: 2px solid blue;
+border: 2px solid #dadada;
 margin-right: 15px;
 margin-bottom: 15px;
 z-index: auto;
 }
 
 .apercuproduit:hover {
-border: 2px solid red;    
+box-shadow: 2px 2px 5px;
+transition-duration: 0.1s;
 }
 
 .apercuproduit img {
@@ -406,6 +407,7 @@ flex-direction: row-reverse;
 
 .menu-categories {
 margin-right: 5px;
+width: 100%;
 }
 
 .menu-apercu {
@@ -454,6 +456,20 @@ font-size: 20px;
 font-weight: bold;
 }
 
+.boutton-ajouter-produit {
+display: block;
+border: 2px solid #ab4a4a;
+padding: 5px;
+width: 151px;
+color: #ab4a4a;
+margin-left: -3px;
+}
+
+.boutton-ajouter-produit:hover {
+background-color: #ab4a4a;
+color: #FFF;
+}
+
 /* Gestion compte client */
 
 .carte-fidelite {
@@ -472,7 +488,8 @@ margin: 10px;
 }
 
 input[type="checkbox"] {
-display: inline;
+display: inline-block;
+margin-right: 8px;
 width: 5px;
 }
 

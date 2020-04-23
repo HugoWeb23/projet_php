@@ -17,20 +17,21 @@ $type = 2;
 $type = 3;
 } else {
 switch($etat) {
-case 0:
-$etat = 0;
+case 2:
+$etat = 2;
 break;
 case 1:
 $etat = 1;
 break;
 default:
-$etat = '';
+$etat = 1;
 break;
 }
-$req = $bdd->prepare('INSERT INTO menus (nom, prix, etat) VALUES (:nom, :prix, :etat)');
+$req = $bdd->prepare('INSERT INTO menus (nom, prix, etat, date_creation) VALUES (:nom, :prix, :etat, :date_creation)');
 $req->bindValue('nom', $nom, PDO::PARAM_STR);
 $req->bindValue('prix', $prix, PDO::PARAM_INT);
 $req->bindValue('etat', $etat, PDO::PARAM_INT);
+$req->bindValue('date_creation', date('Y-m-d'), PDO::PARAM_STR);
 $req->execute();
 $lastId = $bdd->lastInsertId();
 $req = $bdd->prepare('INSERT INTO menus_produits (id_menu, id_produit) VALUES (:id_menu, :id_produit)');

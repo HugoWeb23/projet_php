@@ -55,7 +55,7 @@ $(document).ready(function(){
 
 $(document).ready(function(){
 
-	$('.ajouterProduit').on('click', function() {
+	$('.boutton-ajouter-produit').on('click', function() {
 
 		var id_produit = $(this).data('id');
 
@@ -122,12 +122,12 @@ $(document).ready(function(){
 			data:{nom:nom, prix:prix, etat:etat},
 			success:function(data)
 			{
-				$('#resultat-menu').html(data).fadeIn('slow');
-				$('#resultat-menu').delay(3000).fadeOut('slow');
-				$('#creerMenu').css('opacity', '1');
-				$('.loader').hide();
-				$('.apercu-produits').fadeOut(0);
-				$('#creerMenu').val('');
+					$('#resultat-menu').html(data).fadeIn('slow');
+					$('#resultat-menu').delay(3000).fadeOut('slow');
+					$('#creerMenu').css('opacity', '1');
+					$('.loader').hide();
+					$('.apercu-produits').fadeOut(0);
+					$('#creerMenu').val('');
 			}
 		});
 		
@@ -219,6 +219,22 @@ $(document).ready(function(){
 				if(confirm('Voulez-vous vraiment supprimer cette carte ?')) {
 					supprimer_carte(id_client, id_carte);
 				}
+			}
+		});
+
+		function supprimer_menu(id_menu) {
+			$.ajax({
+				url:"ajax/supprimer_menu.php",
+				method:"post",
+				data:{action:'delete_menu', id_menu:id_menu},
+			});
+		}
+
+		$('.supprimer-menu').on('click', function() { 
+			var id_menu = $(this).data('id');
+			if(confirm('Voulez-vous vraiment supprimer ce menu ?')) {
+				supprimer_menu(id_menu);
+				$(this).closest('tr').remove();
 			}
 		});
 	});
