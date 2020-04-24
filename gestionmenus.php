@@ -86,19 +86,22 @@ if(isset($_GET['id'])) {
 <div class="flex-menu">
 <div class="menu-apercu">
 <h3>Composition du menu</h3>
+<div id="resultat"></div>
 <?php
-$req = $bdd->prepare('SELECT COUNT(*) as compteur, b.id as id, a.libelle as libelle, a.prix as prix FROM produits as a INNER JOIN menus_produits as b ON a.id_produit = b.id_produit WHERE b.id_menu = :id GROUP BY b.id_produit ORDER BY id ASC');
+$req = $bdd->prepare('SELECT COUNT(*) as compteur, b.id_produit as id, a.libelle as libelle, a.prix as prix FROM produits as a INNER JOIN menus_produits as b ON a.id_produit = b.id_produit WHERE b.id_menu = :id GROUP BY b.id_produit ORDER BY id ASC');
 $req->bindValue('id', $id_menu, PDO::PARAM_INT);
 $req->execute();
 while($afficher = $req->fetch()) {
 ?>
 <div class="apercu-produits">
-<div class="libelle"><?= $afficher['libelle']; ?><a class="supprimer" href="#">X</a>
+<div class="libelle"><?= $afficher['libelle']; ?>
 <div class="quantite">Quantité : 
 <input type="text" class="quantite_saisie" value="<?= $afficher['compteur']; ?>">
 </div>
+<input type="button" class="produit_quantite" data-produit="<?= $afficher['id']; ?>" data-menu="<?= $menu['id_menu']; ?>" value="Valider quantité">
 </div>
 <div class="prix"><?= $afficher['prix']; ?> €</div>
+<input type="button" class="supprimer_produit" data-produit="<?= $afficher['id']; ?>" data-menu="<?= $menu['id_menu']; ?>" value="supprimer">
 </div>
 <?php 
 }
@@ -135,14 +138,11 @@ echo 'Aucun produit';
 while($produit = $req2->fetch()) {
 ?>
 <div class="apercuproduit">
-<input type="checkbox" name="produit[]" value="<?= $produit['id_produit']; ?>" id="produit<?= $produit['id_produit']; ?>">
-<label for="produit<?= $produit['id_produit']; ?>">
 <img src="<?= $produit['photo']; ?>">
 <div class="details-produit">
 <p>Nom : <?= $produit['libelle']; ?></p>
 <p>Prix : <?= $produit['prix']; ?></p>
 <a href="creermenu?id=<?= $id; ?>&ajouter=<?= $produit['id_produit']; ?>">Ajouter</a>
-</label>
 </div>
 </div>
 <?php } ?>

@@ -116,6 +116,7 @@ $(document).ready(function(){
 		var etat = $(this).find('input[name=etat]:checked').val();
 			$(this).css('opacity', '0.3');
 			$('.loader').show();
+			$('#creer_menu').val('Patientez ...');
 		$.ajax({
 			url:"ajax/creermenu.php",
 			method:"post",
@@ -127,7 +128,7 @@ $(document).ready(function(){
 					$('#creerMenu').css('opacity', '1');
 					$('.loader').hide();
 					$('.apercu-produits').fadeOut(0);
-					$('#creerMenu').val('');
+					$('#creer_menu').val('Créer le menu');
 			}
 		});
 		
@@ -236,6 +237,45 @@ $(document).ready(function(){
 				supprimer_menu(id_menu);
 				$(this).closest('tr').remove();
 			}
+		});
+
+		$('.produit_quantite').on('click', function(){
+		
+			var produit = $(this).data('produit');
+			var id_menu = $(this).data('menu');
+			var quantite_saisie = $(this).parent().find('.quantite_saisie').val();
+  
+			$.ajax({
+				url:"ajax/modifiermenu.php",
+				method:"post",
+				data: {action:'modif_quantite', produit:produit, quantite_saisie:quantite_saisie, id_menu:id_menu},
+				success:function(data)
+				{
+					if(quantite_saisie == 0) {
+					}
+					$('#resultat').html(data).fadeIn('slow');
+					$('#resultat').delay(2000).fadeOut('slow');
+				}
+			});
+
+		});
+		
+		$('.supprimer_produit').on('click', function(){ 
+			var produit = $(this).data('produit');
+			var id_menu = $(this).data('menu');
+
+			$(this).parent().fadeOut(0);
+
+			$.ajax({
+				url:"ajax/modifiermenu.php",
+				method:"post",
+				data: {action:'supprimer_produit', produit:produit, id_menu:id_menu},
+				success:function(data)
+				{
+					$('#resultat').html(data).fadeIn('slow');
+					$('#resultat').delay(2000).fadeOut('slow');
+				}
+			});
 		});
 	});
 

@@ -31,7 +31,7 @@ require('config.php');
 <label for="nom">Nom : </label><input type="text" class="lol" name="nom" id="nom">
 <label for="prix">Prix : </label><input type="number" name="prix" id="prix">
 <input type="radio" name="etat" id="etat-1" value="1" checked><label for="etat-1">Actif</label><input type="radio" name="etat" id="etat-2" value="2"><label for="etat-2">Inactif</label>
-<input type="submit" class="boutton-rouge" name="creer" value="Créer le menu">
+<input type="submit" class="boutton-rouge" name="creer" id="creer_menu" value="Créer le menu">
 </form>
 </div>
 <div class="flex-menu">
