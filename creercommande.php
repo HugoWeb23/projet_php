@@ -10,7 +10,12 @@ require('config.php');
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<!-- Script -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<!-- jQuery UI -->
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script src="js/functions.js"></script>
 <link href="css/styles.css" rel="stylesheet">
 <title><?= $nom_site ?></title>
@@ -19,36 +24,59 @@ require('config.php');
 <?php include('header.php'); ?>
 <div class="conteneur">
 <div class="titre-page">
-<h1>Créer un menu</h1>
-<a href="gestionmenus">Gestion des menus</a>
+<h1>Créer une commande</h1>
+<a href="gestioncommandes">Gestion des commandes</a>
 </div>
 <div class="contenu">
 <div class="infos-menu">
 <div id="resultat-menu"></div>
 <div class="loader" style="display: none"><img src="images/loader.gif"></div>
-<span class="titre-menu">Informations sur le menu</span>
-<form id="creerMenu" action="" method="post">
-<label for="nom">Nom : </label><input type="text" class="lol" name="nom" id="nom">
-<label for="prix">Prix : </label><input type="number" name="prix" id="prix">
-<input type="radio" name="etat" id="etat-1" value="1" checked><label for="etat-1">Actif</label><input type="radio" name="etat" id="etat-2" value="2"><label for="etat-2">Inactif</label>
-<input type="submit" class="boutton-rouge" name="creer" id="creer_menu" value="Créer le menu">
+<span class="titre-menu">Informations commande</span>
+<form id="creerCommande" action="" method="post">
+<div class="commande-infos-client">
+<label for="client">Chercher un client : </label><input type="text" name="client" id="nom_client" placeholder="Tapez un nom"><input type="text" id="selectuser_id" name="client_id" disabled><input type="button" id="viderclient" value="Supprimer">
+</div>
+<div class="commande-type">
+<label for="type_commande">Type de commande :</label><input type="radio" name="type" value="1" id="1" checked><label for="1">Livraison</label> <input type="radio" name="type" value="2" id="2"><label for="2">Sur place</label>
+</div>
+<div class="commande-adresse">
+<span class="titre-menu">Adresse de livraison</span>
+<input type="text" id="rue" name="rue" placeholder="Rue">
+<input type="text" id="numero" name="numéro" placeholder="Numéro">
+<input type="text" id="code_postal" name="code_postal" placeholder="Code postal">
+<input type="text" id="ville" name="ville" placeholder="Ville">
+<input type="text" id="pays" name="pays" placeholder="Pays">
+</div>
+<?php
+$req = $bdd->prepare('SELECT * FROM tables ORDER BY nb_places');
+$req->execute();
+?>
+<label for="table">Table : </label><select name="table" id="table" disabled>
+<option value="0">Aucune</option>
+<?php
+while ($table = $req->fetch()) {
+echo '<option value="'.$table['id_table'].'">Table '.$table['id_table'].' ['.$table['nb_places'].' places]</option>';
+}
+?>
+</select>
+<input type="submit" class="boutton-rouge" name="creer" id="creer_menu" value="Créer la commande">
 </form>
 </div>
 <div class="flex-menu">
 <div class="menu-apercu">
-<h3>Composition du menu</h3>
+<h3>Détails commande</h3>
 <div id="resultat"></div>
 <?php
-if(isset($_SESSION['menu'])) {
-if($_SESSION['menu'] == null) {
-unset($_SESSION['menu']);
+if(isset($_SESSION['commande'])) {
+if($_SESSION['commande'] == null) {
+unset($_SESSION['commande']);
 } else {
-$in = str_repeat('?,', count($_SESSION['menu']) - 1) . '?';
+$in = str_repeat('?,', count($_SESSION['commande']) - 1) . '?';
 $sql = "SELECT id_produit, libelle, prix FROM produits WHERE id_produit IN ($in)";
 $req = $bdd->prepare($sql);
-$req->execute($_SESSION['menu']) or die(print_r($req->errorInfo(), TRUE));
+$req->execute($_SESSION['commande']) or die(print_r($req->errorInfo(), TRUE));
 while($afficher = $req->fetch()) {
-$count = array_count_values($_SESSION['menu']);
+$count = array_count_values($_SESSION['commande']);
 foreach($count as $j => $k) {
 if($afficher['id_produit'] == $j) {
 $quantite = $k;

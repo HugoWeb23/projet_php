@@ -32,7 +32,14 @@ header('location: gestionmenus');
 <div class="conteneur">
 <div class="titre-page">
 <h1>Gestion des menus</h1>
-<a href="creerproduit">Gestion des menus</a>
+<?php
+if(isset($_GET['id'])) {
+echo '<a href="gestionmenus">Gestion des menus</a>';
+
+} else {
+    echo '<a href="creermenu">Créer un menu</a>';
+}
+?>
 </div>
 <div class="contenu">
 <?php
@@ -74,15 +81,14 @@ if(isset($_GET['id'])) {
 <div id="resultat-menu"></div>
 <div class="loader" style="display: none"><img src="images/loader.gif"></div>
 <span class="titre-menu">Informations sur le menu</span>
-<form id="creerMenu" action="" method="post">
+<form id="modifierMenu" action="" method="post">
 <label for="nom">Nom : </label><input type="text" class="lol" name="nom" id="nom" value="<?= $menu['nom']; ?>">
 <label for="prix">Prix : </label><input type="number" name="prix" id="prix" value="<?= $menu['prix']; ?>">
-<input type="radio" name="etat" id="etat-1" value="1" checked><label for="etat-1">Actif</label><input type="radio" name="etat" id="etat-2" value="0"><label for="etat-2">Inactif</label>
-<input type="submit" class="boutton-rouge" name="creer" value="Modifier les informations du menu">
+<input type="radio" name="etat" id="etat-1" value="1" <?php if($menu['etat'] == 1) { echo 'checked'; } ?>><label for="etat-1">Actif</label><input type="radio" name="etat" id="etat-2" value="2" <?php if($menu['etat'] == 2) { echo 'checked'; } ?>><label for="etat-2">Inactif</label>
+<input type="submit" class="boutton-rouge" name="modifier" id="modifier_menu" value="Modifier les informations du menu" data-menu_id="<?= $id_menu; ?>">
 </form>
 </div>
 <div class="contenu">
-<form action="" method="post">
 <div class="flex-menu">
 <div class="menu-apercu">
 <h3>Composition du menu</h3>
@@ -142,7 +148,7 @@ while($produit = $req2->fetch()) {
 <div class="details-produit">
 <p>Nom : <?= $produit['libelle']; ?></p>
 <p>Prix : <?= $produit['prix']; ?></p>
-<a href="creermenu?id=<?= $id; ?>&ajouter=<?= $produit['id_produit']; ?>">Ajouter</a>
+<button data-id_produit="<?= $produit['id_produit']; ?>" data-id_menu="<?= $id_menu; ?>" class="modifiermenu-ajouter-produit">Ajouter</button>
 </div>
 </div>
 <?php } ?>
@@ -151,7 +157,6 @@ while($produit = $req2->fetch()) {
 </div>
 </div>
 </div>
-</form>
 <?php } ?>
 </div>
 </body>

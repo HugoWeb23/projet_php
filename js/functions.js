@@ -55,7 +55,7 @@ $(document).ready(function(){
 
 $(document).ready(function(){
 
-	$('.boutton-ajouter-produit').on('click', function() {
+	$('.creermenu-ajouter-produit').on('click', function() {
 
 		var id_produit = $(this).data('id');
 
@@ -134,6 +134,52 @@ $(document).ready(function(){
 		
 		return false;
 		});
+
+		$('#modifierMenu').submit(function() {
+			var nom = $(this).find('input[name=nom]').val();
+			var prix = $(this).find('input[name=prix]').val();
+			var etat = $(this).find('input[name=etat]:checked').val();
+			var id_menu = $(this).find('#modifier_menu').data('menu_id');
+		if(nom.length < 1 || prix < 1) {
+			$('#resultat-menu').html("<h2 class=\"message-erreur\">Merci de compléter tous les champs</h2>");
+		} else {
+				$(this).css('opacity', '0.3');
+				$('.loader').show();
+				$('#modifier_menu').val('Patientez ...');
+			$.ajax({
+				url:"ajax/modifiermenu.php",
+				method:"post",
+				data:{action:'modifier_menu', nom:nom, prix:prix, etat:etat, id_menu:id_menu},
+				success:function(data)
+				{
+						$('#resultat-menu').html(data).fadeIn('slow');
+						$('#resultat-menu').delay(3000).fadeOut('slow');
+						$('#modifierMenu').css('opacity', '1');
+						$('.loader').hide();
+						$('#modifier_menu').val('Modifier les informations du menu');
+				}
+			});
+			 }
+			
+			return false;
+			});
+
+			$('.modifiermenu-ajouter-produit').on('click', function() {
+
+				var id_produit = $(this).data('id_produit');
+				var id_menu = $(this).data('id_menu');
+		
+				$.ajax({
+					url:"ajax/modifiermenu.php",
+					method:"post",
+					data:{action:'ajouter_produit', id_produit:id_produit, id_menu:id_menu},
+					success:function(data)
+					{
+						location.reload();
+					}
+				});
+		
+			});
 
 			$('#prolongerCarte').change(function(){ 
 				var mois = $(this).val();
@@ -277,6 +323,115 @@ $(document).ready(function(){
 				}
 			});
 		});
+
+	
+		  
+			// Initialize jQuery UI autocomplete
+			$('#nom_client').autocomplete({
+			 source: function( request, reponse ) {
+			  $.ajax({
+			   url: "ajax/clients_commandes.php",
+			   type: 'post',
+			   dataType: "json",
+			   data: {
+				recherche: request.term,action:1
+			   },
+			   success: function(data) {
+				reponse(data);
+			   }
+			  });
+			 },
+			 select: function (event, ui) {
+			  $(this).val(ui.item.label); // display the selected text
+			  var userid = ui.item.value; // selected value
+			  $('#selectuser_id').val(ui.item.value);
+		  
+			  // AJAX
+			  $.ajax({
+			   url: 'ajax/clients_commandes.php',
+			   type: 'post',
+			   data: {userid:userid,action:2},
+			   dataType: 'json',
+			   success:function(reponse){
+		   
+				var len = reponse.length;
+		  
+				if(len > 0){
+				 var id = reponse[0]['id'];
+				 var rue = reponse[0]['rue'];
+				 var numero = reponse[0]['numero'];
+				 var code_postal = reponse[0]['code_postal'];
+				 var ville = reponse[0]['ville'];
+				 var pays = reponse[0]['pays'];
+		  
+				 // Set value to textboxes
+				 $('#rue').val(rue);
+				 $('#numero').val(numero);
+				 $('#code_postal').val(code_postal);
+				 $('#ville').val(ville);
+				 $('#pays').val(pays);
+		   
+				}
+		   
+			   }
+			  });
+		  
+			  return false;
+			 }
+			});
+
+			$(function() {
+				$('#rue').autocomplete({
+				 source: function(request, reponse) {
+				  $.ajax({
+				   url:"ajax/clients_commandes.php",
+				   type:"post",
+				   dataType:"json",
+				   data: {
+					action:3, rue:request.term
+				   },
+				   success: function(data) {
+					reponse(data);
+				   }
+				  });
+				 },
+				 select: function (event, ui) {
+				
+				  $('#rue').val(ui.item.label);
+				  return false;
+				 }
+				});
+			   });
+
+		   function disableinput(type, argument) {
+			if(type == 'adresse') {
+				$("#rue").prop("disabled", argument);
+				$("#ville").prop("disabled", argument);
+				$("#numero").prop("disabled", argument);
+				$("#code_postal").prop("disabled", argument);
+				$("#pays").prop("disabled", argument);
+			}
+			if(type == 'table') {
+				$("#table").prop("disabled", argument);
+			}
+		   }
+
+
+		   $('#viderclient').on('click', function() { 
+			$('#nom_client').val('');
+			$('#selectuser_id').val('');
+		   });
+
+		   $("input[name='type']").change(function(){
+			if($(this).val() == 2) {
+				disableinput('adresse', true);
+				disableinput('table', false);
+			}
+			if($(this).val() == 1) {
+				disableinput('adresse', false);
+				disableinput('table', true);
+			}
+		   });
 	});
 
 	

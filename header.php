@@ -23,7 +23,8 @@ if(isset($_GET['deconnexion'])) {
 <div class="dropdown">
 <a href="#">Commandes</a>
 <div class="dropdown-child">
-<a href="">Créer une nouvelle commande</a>
+<a href="creercommande">Créer une nouvelle commande</a>
+<a href="gestioncommandes">Gestion des commandes</a>
 </div>
 </div>
 <div class="dropdown">
@@ -43,9 +44,10 @@ if(isset($_GET['deconnexion'])) {
 <div class="dropdown">
 <a href="gestionproduits">Produits</a>
 <div class="dropdown-child">
-<a href="gestionproduits">Gestion des produits</a>
 <a href="creerproduit">Créer un produit</a>
+<a href="gestionproduits">Gestion des produits</a>
 <a href="creermenu">Créer un menu</a>
+<a href="gestionmenus">Gestion des menus</a>
 <a href="gestioncategories">Gestion des catégories</a>
 </div>
 </div>

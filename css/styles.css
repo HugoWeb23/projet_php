@@ -456,16 +456,17 @@ font-size: 20px;
 font-weight: bold;
 }
 
-.boutton-ajouter-produit {
+.creermenu-ajouter-produit, .modifiermenu-ajouter-produit {
 display: block;
 border: 2px solid #ab4a4a;
 padding: 5px;
 width: 151px;
 color: #ab4a4a;
 margin-left: -3px;
+transition-duration: 0.5s;
 }
 
-.boutton-ajouter-produit:hover {
+.creermenu-ajouter-produit:hover, .modifiermenu-ajouter-produit:hover {
 background-color: #ab4a4a;
 color: #FFF;
 }
