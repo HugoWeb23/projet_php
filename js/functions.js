@@ -68,7 +68,6 @@ $(document).ready(function(){
 				location.reload();
 			}
 		});
-
 	});
 
 	$('.validerQuantite').on('click', function(){
@@ -90,7 +89,6 @@ $(document).ready(function(){
 					$('#resultat').delay(2000).fadeOut('slow');
 				}
 			});
-
 		});	
 
 		$('.supprimer').on('click', function() {
@@ -106,8 +104,6 @@ $(document).ready(function(){
 					$('#resultat').delay(2000).fadeOut('slow');
 				}
 			});
-			
-
 		});
 
 		$('#creerMenu').submit(function() {
@@ -178,7 +174,6 @@ $(document).ready(function(){
 						location.reload();
 					}
 				});
-		
 			});
 
 			$('#prolongerCarte').change(function(){ 
@@ -303,7 +298,6 @@ $(document).ready(function(){
 					$('#resultat').delay(2000).fadeOut('slow');
 				}
 			});
-
 		});
 		
 		$('.supprimer_produit').on('click', function(){ 
@@ -324,9 +318,6 @@ $(document).ready(function(){
 			});
 		});
 
-	
-		  
-			// Initialize jQuery UI autocomplete
 			$('#nom_client').autocomplete({
 			 source: function( request, reponse ) {
 			  $.ajax({
@@ -342,11 +333,10 @@ $(document).ready(function(){
 			  });
 			 },
 			 select: function (event, ui) {
-			  $(this).val(ui.item.label); // display the selected text
-			  var userid = ui.item.value; // selected value
+			  $(this).val(ui.item.label);
+			  var userid = ui.item.value;
 			  $('#selectuser_id').val(ui.item.value);
 		  
-			  // AJAX
 			  $.ajax({
 			   url: 'ajax/clients_commandes.php',
 			   type: 'post',
@@ -364,7 +354,6 @@ $(document).ready(function(){
 				 var ville = reponse[0]['ville'];
 				 var pays = reponse[0]['pays'];
 		  
-				 // Set value to textboxes
 				 $('#rue').val(rue);
 				 $('#numero').val(numero);
 				 $('#code_postal').val(code_postal);
@@ -372,7 +361,6 @@ $(document).ready(function(){
 				 $('#pays').val(pays);
 		   
 				}
-		   
 			   }
 			  });
 		  
@@ -415,7 +403,6 @@ $(document).ready(function(){
 				$("#table").prop("disabled", argument);
 			}
 		   }
-
 
 		   $('#viderclient').on('click', function() { 
 			$('#nom_client').val('');
