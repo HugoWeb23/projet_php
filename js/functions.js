@@ -348,12 +348,18 @@ $(document).ready(function(){
 		  
 				if(len > 0){
 				 var id = reponse[0]['id'];
+				 var tel_fixe = reponse[0]['tel_fixe'];
+				 var gsm = reponse[0]['gsm'];
+				 var email = reponse[0]['email'];
 				 var rue = reponse[0]['rue'];
 				 var numero = reponse[0]['numero'];
 				 var code_postal = reponse[0]['code_postal'];
 				 var ville = reponse[0]['ville'];
 				 var pays = reponse[0]['pays'];
 		  
+				 $('#tel_fixe').val(tel_fixe);
+				 $('#gsm').val(gsm);
+				 $('#email').val(email);
 				 $('#rue').val(rue);
 				 $('#numero').val(numero);
 				 $('#code_postal').val(code_postal);
@@ -368,27 +374,49 @@ $(document).ready(function(){
 			 }
 			});
 
-			$(function() {
-				$('#rue').autocomplete({
-				 source: function(request, reponse) {
-				  $.ajax({
-				   url:"ajax/clients_commandes.php",
-				   type:"post",
-				   dataType:"json",
-				   data: {
-					action:3, rue:request.term
-				   },
-				   success: function(data) {
-					reponse(data);
+			$('#rue').autocomplete({
+				source: function( request, reponse ) {
+				 $.ajax({
+				  url: "ajax/clients_commandes.php",
+				  type: 'post',
+				  dataType: "json",
+				  data: {
+				   rue: request.term,action:3
+				  },
+				  success: function(data) {
+				   reponse(data);
+				  }
+				 });
+				},
+				select: function (event, ui) {
+				 $(this).val(ui.item.label);
+				 var rue = ui.item.value;
+				 $('#rue').val(ui.item.value);
+			 
+				 $.ajax({
+				  url: 'ajax/clients_commandes.php',
+				  type: 'post',
+				  data: {rue:rue,action:4},
+				  dataType: 'json',
+				  success:function(reponse){
+			  
+				   var len = reponse.length;
+			 
+				   if(len > 0){
+					var id = reponse[0]['id'];
+					var code_postal = reponse[0]['code_postal'];
+					var ville = reponse[0]['ville'];
+					var pays = reponse[0]['pays'];
+			 
+					$('#code_postal').val(code_postal);
+					$('#ville').val(ville);
+					$('#pays').val(pays);
 				   }
-				  });
-				 },
-				 select: function (event, ui) {
-				
-				  $('#rue').val(ui.item.label);
-				  return false;
-				 }
-				});
+				  }
+				 });
+			 
+				 return false;
+				}
 			   });
 
 		   function disableinput(type, argument) {
@@ -402,23 +430,146 @@ $(document).ready(function(){
 			if(type == 'table') {
 				$("#table").prop("disabled", argument);
 			}
+			if(type == 'contact') {
+				$("#tel_fixe").prop("disabled", argument);
+				$("#gsm").prop("disabled", argument);
+				$("#email").prop("disabled", argument);
+			}
 		   }
 
 		   $('#viderclient').on('click', function() { 
 			$('#nom_client').val('');
 			$('#selectuser_id').val('');
+			$('#tel_fixe').val('');
+			$('#gsm').val('');
+			$('#email').val('');
+			$('#rue').val('');
+			$('#numero').val('');
+			$('#code_postal').val('');
+			$('#ville').val('');
+			$('#pays').val('');
+
 		   });
 
 		   $("input[name='type']").change(function(){
 			if($(this).val() == 2) {
 				disableinput('adresse', true);
 				disableinput('table', false);
+				disableinput('contact', true);
 			}
 			if($(this).val() == 1) {
 				disableinput('adresse', false);
 				disableinput('table', true);
+				disableinput('contact', false);
+			}
+			if($(this).val() == 3) {
+				disableinput('adresse', true);
+				disableinput('table', true);
+				disableinput('contact', false);
 			}
 		   });
+
+		   $('.commandeAjouterMenu').on('click', function() {
+
+			var id_menu = $(this).data('menu_id');
+	
+			$.ajax({
+				url:"ajax/creercommande.php",
+				method:"post",
+				data: {action:'ajouter_menu', id_menu:id_menu},
+				success:function(data)
+				{
+					location.reload();
+				}
+			});
+		});
+
+		$('.commandeAjouterProduit').on('click', function() {
+
+			var id_produit = $(this).data('produit_id');
+	
+			$.ajax({
+				url:"ajax/creercommande.php",
+				method:"post",
+				data: {action:'ajouter_produit', id_produit:id_produit},
+				success:function(data)
+				{
+					location.reload();
+				}
+			});
+		});
+
+		   $('.menuCommandeQuantite').on('click', function(){
+		
+			var menu = $(this).data('produit');
+			var quantite_saisie = $(this).parent().find('.quantite_saisie').val();
+  
+		
+			$.ajax({
+				url:"ajax/creercommande.php",
+				method:"post",
+				data: {action:'menu_quantite', menu:menu, quantite_saisie:quantite_saisie},
+				success:function(data)
+				{
+					if(quantite_saisie == 0) {
+					$('.menuCommandeQuantite').parent().parent().fadeOut(0);
+					}
+					$('#resultat').html(data).fadeIn('slow');
+					$('#resultat').delay(2000).fadeOut('slow');
+				}
+			});
+		});
+
+		$('.commandeProduitQuantite').on('click', function(){
+		
+			var id_produit = $(this).data('produit');
+			var quantite_saisie = $(this).parent().find('.quantite_saisie').val();
+
+		$.ajax({
+			url:"ajax/creercommande.php",
+			method:"post",
+			data: {action:'produit_quantite', id_produit:id_produit, quantite_saisie:quantite_saisie},
+			success:function(data)
+			{
+				if(quantite_saisie == 0) {
+				$('.commandeProduitQuantite').parent().parent().fadeOut(0);
+				}
+				$('#resultat').html(data).fadeIn('slow');
+				$('#resultat').delay(2000).fadeOut('slow');
+			}
+		});
+	});
+		
+		$('.supprimerMenuCommande').on('click', function() {
+			var id_menu = $(this).data('produit');
+			$(this).parent().fadeOut(0);
+			$.ajax({
+				url:"ajax/creercommande.php",
+				method:"post",
+				data:{action:'supprimer_menu', delete:id_menu},
+				success:function(data)
+				{
+					$('#resultat').html(data).fadeIn('slow');
+					$('#resultat').delay(2000).fadeOut('slow');
+				}
+			});
+		});
+
+
+		$('.commandeSupprimerProduit').on('click', function() {
+			var produit = $(this).data('produit');
+			$(this).parent().fadeOut(0);
+			$.ajax({
+				url:"ajax/creercommande.php",
+				method:"post",
+				data:{action:'supprimer_produit', delete:produit},
+				success:function(data)
+				{
+					$('#resultat').html(data).fadeIn('slow');
+					$('#resultat').delay(2000).fadeOut('slow');
+				}
+			});
+		});
 	});
 
 	

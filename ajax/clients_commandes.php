@@ -21,7 +21,7 @@ if(isset($_POST['action']) && $_POST['action'] == 1){
    $req->bindValue('ville', '%'.$recherche.'%', PDO::PARAM_STR);
    $req->bindValue('code_postal', '%'.$recherche.'%', PDO::PARAM_STR);
    $req->bindValue('pays', '%'.$recherche.'%', PDO::PARAM_STR);
-    $req->execute() or die(print_r($req->errorInfo(), TRUE));
+   $req->execute() or die(print_r($req->errorInfo(), TRUE));
 
     $reponse = array();
     while($result = $req->fetch()) {
@@ -35,12 +35,12 @@ if(isset($_POST['action']) && $_POST['action'] == 1){
     $userid = $_POST['userid'];
 
     $req = $bdd->prepare('SELECT * FROM clients as a LEFT JOIN adresses as b ON a.id_adresse = b.id_adresse WHERE a.id_client = :id_client');
-   $req->bindValue('id_client', $userid, PDO::PARAM_INT);
+    $req->bindValue('id_client', $userid, PDO::PARAM_INT);
     $req->execute() or die(print_r($req->errorInfo(), TRUE));
 
     $reponse = array();
     while($result = $req->fetch()) {
-    $reponse[] = array("id"=>$result['id_client'],"rue"=>$result['rue'], "numero"=>$result['numero'], "code_postal"=>$result['code_postal'], "ville"=>$result['ville'], "pays"=>$result['pays']);
+    $reponse[] = array("id"=>$result['id_client'], "tel_fixe"=>$result['telephone_fixe'], "gsm"=>$result['gsm'], "email"=>$result['email'], "rue"=>$result['rue'], "numero"=>$result['numero'], "code_postal"=>$result['code_postal'], "ville"=>$result['ville'], "pays"=>$result['pays']);
     }
     echo json_encode($reponse);
    }
@@ -56,6 +56,21 @@ if(isset($_POST['action']) && $_POST['action'] == 1){
     $reponse = array();
     while($result = $req->fetch()) {
     $reponse[] = array("label"=>$result['rue']);
+    }
+    echo json_encode($reponse);
+   }
+
+   if(isset($_POST['action']) && $_POST['action'] == 4){
+
+    $rue = $_POST['rue'];
+
+    $req = $bdd->prepare('SELECT * FROM adresses WHERE rue = :rue');
+    $req->bindValue('rue', $rue, PDO::PARAM_STR);
+    $req->execute() or die(print_r($req->errorInfo(), TRUE));
+
+    $reponse = array();
+    while($result = $req->fetch()) {
+    $reponse[] = array("rue"=>$result['rue'], "code_postal"=>$result['code_postal'], "ville"=>$result['ville'], "pays"=>$result['pays']);
     }
     echo json_encode($reponse);
    }

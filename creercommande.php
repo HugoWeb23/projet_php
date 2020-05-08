@@ -4,6 +4,8 @@ session_start();
 
 require('config.php');
 
+//$_SESSION['produits_commande'] = array(19,19,19,20,20,20);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,19 +35,16 @@ require('config.php');
 <div class="loader" style="display: none"><img src="images/loader.gif"></div>
 <span class="titre-menu">Informations commande</span>
 <form id="creerCommande" action="" method="post">
-<div class="commande-infos-client">
-<label for="client">Chercher un client : </label><input type="text" name="client" id="nom_client" placeholder="Tapez un nom"><input type="text" id="selectuser_id" name="client_id" disabled><input type="button" id="viderclient" value="Supprimer">
-</div>
-<div class="commande-type">
-<label for="type_commande">Type de commande :</label><input type="radio" name="type" value="1" id="1" checked><label for="1">Livraison</label> <input type="radio" name="type" value="2" id="2"><label for="2">Sur place</label>
-</div>
-<div class="commande-adresse">
-<span class="titre-menu">Adresse de livraison</span>
-<input type="text" id="rue" name="rue" placeholder="Rue">
-<input type="text" id="numero" name="numéro" placeholder="Numéro">
-<input type="text" id="code_postal" name="code_postal" placeholder="Code postal">
-<input type="text" id="ville" name="ville" placeholder="Ville">
-<input type="text" id="pays" name="pays" placeholder="Pays">
+<div class="commande-flex">
+<div class="commande-infos">
+<label for="client">Associer la commande  à un client : </label><input type="text" name="client" id="nom_client" placeholder="Tapez un nom, une adresse, ...">
+<input type="text" id="selectuser_id" name="client_id" disabled>
+<input type="button" id="viderclient" value="Supprimer">
+<div class="type_commande">
+<label for="type_commande">Type de commande :</label>
+<input type="radio" name="type" value="1" id="1" checked><label for="1">Livraison</label> 
+<input type="radio" name="type" value="2" id="2"><label for="2">Sur place</label>
+<input type="radio" name="type" value="3" id="3"><label for="3">À emporter</label> 
 </div>
 <?php
 $req = $bdd->prepare('SELECT * FROM tables ORDER BY nb_places');
@@ -59,6 +58,22 @@ echo '<option value="'.$table['id_table'].'">Table '.$table['id_table'].' ['.$ta
 }
 ?>
 </select>
+</div>
+<div class="commande-contact">
+<span class="titre-menu">Moyens de contact</span>
+<input type="text" id="tel_fixe" name="tel_fixe" placeholder="Téléphone fixe">
+<input type="text" id="gsm" name="gsm" placeholder="Numéro de gsm">
+<input type="text" id="email" name="email" placeholder="Adresse e-mail">
+</div>
+<div class="commande-adresse">
+<span class="titre-menu">Adresse de livraison</span>
+<input type="text" id="rue" name="rue" placeholder="Rue">
+<input type="text" id="numero" name="numéro" placeholder="Numéro">
+<input type="text" id="code_postal" name="code_postal" placeholder="Code postal">
+<input type="text" id="ville" name="ville" placeholder="Ville">
+<input type="text" id="pays" name="pays" placeholder="Pays">
+</div>
+</div>
 <input type="submit" class="boutton-rouge" name="creer" id="creer_menu" value="Créer la commande">
 </form>
 </div>
@@ -67,16 +82,46 @@ echo '<option value="'.$table['id_table'].'">Table '.$table['id_table'].' ['.$ta
 <h3>Détails commande</h3>
 <div id="resultat"></div>
 <?php
-if(isset($_SESSION['commande'])) {
-if($_SESSION['commande'] == null) {
-unset($_SESSION['commande']);
+if(isset($_SESSION['menus_commande'])) {
+if($_SESSION['menus_commande'] == null) {
+unset($_SESSION['menus_commande']);
 } else {
-$in = str_repeat('?,', count($_SESSION['commande']) - 1) . '?';
+$in = str_repeat('?,', count($_SESSION['menus_commande']) - 1) . '?';
+$sql = "SELECT * FROM menus WHERE id_menu IN ($in)";
+$req = $bdd->prepare($sql);
+$req->execute($_SESSION['menus_commande']) or die(print_r($req->errorInfo(), TRUE));
+while($menu = $req->fetch()) {
+    $count = array_count_values($_SESSION['menus_commande']);
+    foreach($count as $j => $k) {
+    if($menu['id_menu'] == $j) {
+    $quantite = $k;
+    }
+    }
+    ?>
+    <div class="apercu-produits">
+    <div class="libelle"><?= $menu['nom']; ?>
+    <div class="quantite">Quantité : 
+    <input type="text" class="quantite_saisie" value="<?= $quantite ?>">
+    </div>
+    <input type="button" class="menuCommandeQuantite" data-produit="<?= $menu['id_menu']; ?>" value="Valider quantité">
+    </div>
+    <div class="prix"><?= $menu['prix']; ?> €</div>
+    <input type="button" class="supprimerMenuCommande" data-produit="<?= $menu['id_menu']; ?>" value="supprimer">
+    </div>
+    <?php
+}
+}
+}
+if(isset($_SESSION['produits_commande'])) {
+if($_SESSION['produits_commande'] == null) {
+unset($_SESSION['produits_commande']);
+} else {
+$in = str_repeat('?,', count($_SESSION['produits_commande']) - 1) . '?';
 $sql = "SELECT id_produit, libelle, prix FROM produits WHERE id_produit IN ($in)";
 $req = $bdd->prepare($sql);
-$req->execute($_SESSION['commande']) or die(print_r($req->errorInfo(), TRUE));
+$req->execute($_SESSION['produits_commande']) or die(print_r($req->errorInfo(), TRUE));
 while($afficher = $req->fetch()) {
-$count = array_count_values($_SESSION['commande']);
+$count = array_count_values($_SESSION['produits_commande']);
 foreach($count as $j => $k) {
 if($afficher['id_produit'] == $j) {
 $quantite = $k;
@@ -88,10 +133,10 @@ $quantite = $k;
 <div class="quantite">Quantité : 
 <input type="text" class="quantite_saisie" value="<?= $quantite ?>">
 </div>
-<input type="button" class="validerQuantite" data-produit="<?= $afficher['id_produit']; ?>" value="Valider quantité">
+<input type="button" class="commandeProduitQuantite" data-produit="<?= $afficher['id_produit']; ?>" value="Valider quantité">
 </div>
 <div class="prix"><?= $afficher['prix']; ?> €</div>
-<input type="button" class="supprimer" data-produit="<?= $afficher['id_produit']; ?>" value="supprimer">
+<input type="button" class="commandeSupprimerProduit" data-produit="<?= $afficher['id_produit']; ?>" value="supprimer">
 </div>
 <?php
 }
@@ -101,6 +146,24 @@ $quantite = $k;
 
 </div>
 <div class="menu-categories">
+<div class="nom-categorie">
+<h2>Menus</h2>
+</div>
+<div class="flex-produits">
+<?php
+$req = $bdd->prepare('SELECT * FROM menus WHERE etat = 1');
+$req->execute();
+while($menu = $req->fetch()) {
+?>
+<div class="apercuproduit">
+<div class="details-produit">
+<p>Nom : <?= $menu['nom']; ?></p>
+<p>Prix : <?= $menu['prix']; ?></p>
+<button data-menu_id="<?= $menu['id_menu']; ?>" class="commandeAjouterMenu">Ajouter</button>
+</div>
+</div>
+<?php } ?>
+</div>
 <?php 
 $req = $bdd->prepare('SELECT * FROM categories');
 $req->execute();
@@ -126,7 +189,7 @@ while($produit = $req2->fetch()) {
 <div class="details-produit">
 <p>Nom : <?= $produit['libelle']; ?></p>
 <p>Prix : <?= $produit['prix']; ?></p>
-<button data-id="<?= $produit['id_produit']; ?>" class="creermenu-ajouter-produit">Ajouter</button>
+<button data-produit_id="<?= $produit['id_produit']; ?>" class="commandeAjouterProduit">Ajouter</button>
 </div>
 </div>
 <?php } ?>

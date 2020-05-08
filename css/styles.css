@@ -500,3 +500,42 @@ width: 5px;
 display: flex;
 justify-content: space-evenly;
 }
+
+/* Création d'une commande */
+
+.commande-flex {
+display: flex;
+justify-content: space-between;
+padding: 0 10px 0 10px;
+}
+
+.commande-infos input[type="text"] {
+display:block;
+padding: 3px;
+margin-top: 1.5px;
+width: 250px;
+font-size: 17px;
+padding: 3px;
+}
+
+#selectuser_id {
+display: inline-block;
+margin-bottom: 10px;
+}
+
+.commande-infos label[for="type_commande"], .commande-infos label[for="table"] {
+display: block;
+margin-bottom: 5px;
+}
+
+.type_commande {
+margin-bottom: 10px;
+}
+
+.commande-adresse input, .commande-contact input {
+display: block;
+font-size: 17px;
+width: 328px;
+padding: 3px;
+margin-bottom: 5px;
+}
