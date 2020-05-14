@@ -335,7 +335,7 @@ $(document).ready(function(){
 			 select: function (event, ui) {
 			  $(this).val(ui.item.label);
 			  var userid = ui.item.value;
-			  $('#selectuser_id').val(ui.item.value);
+			  $('#user_id').val(ui.item.value);
 		  
 			  $.ajax({
 			   url: 'ajax/clients_commandes.php',
@@ -390,13 +390,15 @@ $(document).ready(function(){
 				},
 				select: function (event, ui) {
 				 $(this).val(ui.item.label);
-				 var rue = ui.item.value;
-				 $('#rue').val(ui.item.value);
+				 var adresse = ui.item.value.split(',');
+				 var id_adresse = adresse[0];
+				 var rue = adresse[1];
+				 $('#rue').val(rue);
 			 
 				 $.ajax({
 				  url: 'ajax/clients_commandes.php',
 				  type: 'post',
-				  data: {rue:rue,action:4},
+				  data: {id_adresse:id_adresse,action:4},
 				  dataType: 'json',
 				  success:function(reponse){
 			  
@@ -439,7 +441,7 @@ $(document).ready(function(){
 
 		   $('#viderclient').on('click', function() { 
 			$('#nom_client').val('');
-			$('#selectuser_id').val('');
+			$('#user_id').val('');
 			$('#tel_fixe').val('');
 			$('#gsm').val('');
 			$('#email').val('');
@@ -569,6 +571,61 @@ $(document).ready(function(){
 					$('#resultat').delay(2000).fadeOut('slow');
 				}
 			});
+		});
+
+		$('#creerCommande').submit(function() { 
+		function message(type, message) { // type 1 = erreur, type 2 = validation
+		switch(type) {
+		case 1:
+		type = 'erreur';
+		break;
+		case 2:
+		type = 'confirmation';
+		}
+		$('#resultat-commande').html('<h2 class="message-'+type+'">'+message+'</h2>');
+		}
+		var check = null;
+		var id_client = $(this).find('#user_id').val();
+		var tel_fixe = $(this).find('#tel_fixe').val();
+		var gsm = $(this).find('#gsm').val();
+		var email = $(this).find('#email').val();
+		var type_commande = $(this).find('input[name=type]:checked').val();
+		var table = $(this).find('#table').val();
+		var rue = $(this).find('#rue').val();
+		var numero = $(this).find('#numero').val();
+		var code_postal = $(this).find('#code_postal').val();
+		var ville = $(this).find('#ville').val();
+		var pays = $(this).find('#pays').val();
+		if(type_commande == 1) {
+		if(rue.length < 1 || numero.length < 1 || code_postal.length < 1 || ville.length < 1 || pays.length < 1 || gsm.length < 1 && tel_fixe.length < 1) {
+		check = false;
+		message(1, 'Merci de remplir tous les champs');
+		}
+		} else if(type_commande == 2 && table == 0) {
+		check = false;
+		message(1, 'Merci de choisir une table');
+		} else if(type_commande == 3) {
+		if(gsm.length < 1 && tel_fixe.length < 1) {
+		check = false;
+		message(1, 'Les coordonnées de contact sont vides ou incomplètes');
+		}
+		}
+		if(check != false) {
+		$(this).css('opacity', '0.3');
+		$('.loader').show();
+		$.ajax({
+		url:"ajax/creercommande.php",
+		method:"post",
+		data:{action:'creer_commande', id_client:id_client, tel_fixe:tel_fixe, gsm:gsm, email:email, type_commande:type_commande, table:table, rue:rue, numero:numero, code_postal:code_postal, ville:ville, pays:pays},
+		success:function(data)
+		{
+		$('#resultat-commande').html(data).fadeIn('slow');
+		$('#creerCommande').css('opacity', '1');
+		$('.loader').hide();
+		}
+		});
+		}
+		return false;
 		});
 	});
 

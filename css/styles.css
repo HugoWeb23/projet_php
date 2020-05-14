@@ -456,7 +456,8 @@ font-size: 20px;
 font-weight: bold;
 }
 
-.creermenu-ajouter-produit, .modifiermenu-ajouter-produit {
+.creermenu-ajouter-produit, .modifiermenu-ajouter-produit,
+.commandeAjouterMenu, .commandeAjouterProduit {
 display: block;
 border: 2px solid #ab4a4a;
 padding: 5px;
@@ -466,7 +467,8 @@ margin-left: -3px;
 transition-duration: 0.5s;
 }
 
-.creermenu-ajouter-produit:hover, .modifiermenu-ajouter-produit:hover {
+.creermenu-ajouter-produit:hover, .modifiermenu-ajouter-produit:hover,
+.commandeAjouterMenu:hover, .commandeAjouterProduit:hover {
 background-color: #ab4a4a;
 color: #FFF;
 }
@@ -518,7 +520,7 @@ font-size: 17px;
 padding: 3px;
 }
 
-#selectuser_id {
+#user_id {
 display: inline-block;
 margin-bottom: 10px;
 }
@@ -538,4 +540,17 @@ font-size: 17px;
 width: 328px;
 padding: 3px;
 margin-bottom: 5px;
+}
+
+.apercu-menus {
+display: block;
+float: left;
+width: 100%;
+margin-bottom: 10px;
+background: #e18a77;
+box-sizing: border-box;
+}
+
+.apercu-menus:hover {
+background: #e75f42;
 }

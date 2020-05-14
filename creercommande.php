@@ -31,14 +31,14 @@ require('config.php');
 </div>
 <div class="contenu">
 <div class="infos-menu">
-<div id="resultat-menu"></div>
+<div id="resultat-commande"></div>
 <div class="loader" style="display: none"><img src="images/loader.gif"></div>
 <span class="titre-menu">Informations commande</span>
 <form id="creerCommande" action="" method="post">
 <div class="commande-flex">
 <div class="commande-infos">
 <label for="client">Associer la commande  à un client : </label><input type="text" name="client" id="nom_client" placeholder="Tapez un nom, une adresse, ...">
-<input type="text" id="selectuser_id" name="client_id" disabled>
+<input type="text" id="user_id" name="client_id" disabled>
 <input type="button" id="viderclient" value="Supprimer">
 <div class="type_commande">
 <label for="type_commande">Type de commande :</label>
@@ -98,7 +98,7 @@ while($menu = $req->fetch()) {
     }
     }
     ?>
-    <div class="apercu-produits">
+    <div class="apercu-menus">
     <div class="libelle"><?= $menu['nom']; ?>
     <div class="quantite">Quantité : 
     <input type="text" class="quantite_saisie" value="<?= $quantite ?>">

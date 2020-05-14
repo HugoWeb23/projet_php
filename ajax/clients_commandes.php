@@ -49,23 +49,23 @@ if(isset($_POST['action']) && $_POST['action'] == 1){
 
     $rue = $_POST['rue'];
 
-    $req = $bdd->prepare('SELECT rue FROM adresses WHERE rue LIKE :rue');
+    $req = $bdd->prepare('SELECT * FROM adresses WHERE rue LIKE :rue GROUP BY rue, ville, pays');
     $req->bindValue('rue', '%'.$rue.'%', PDO::PARAM_STR);
     $req->execute() or die(print_r($req->errorInfo(), TRUE));
 
     $reponse = array();
     while($result = $req->fetch()) {
-    $reponse[] = array("label"=>$result['rue']);
+    $reponse[] = array("value"=>$result['id_adresse']. ','.$result['rue'], "label"=>$result['rue']. ' ' .$result['code_postal']. ' ' .$result['ville']. ' ' .$result['pays']);
     }
     echo json_encode($reponse);
    }
 
    if(isset($_POST['action']) && $_POST['action'] == 4){
 
-    $rue = $_POST['rue'];
+    $id_adresse = $_POST['id_adresse'];
 
-    $req = $bdd->prepare('SELECT * FROM adresses WHERE rue = :rue');
-    $req->bindValue('rue', $rue, PDO::PARAM_STR);
+    $req = $bdd->prepare('SELECT * FROM adresses WHERE id_adresse = :id_adresse');
+    $req->bindValue('id_adresse', $id_adresse, PDO::PARAM_INT);
     $req->execute() or die(print_r($req->errorInfo(), TRUE));
 
     $reponse = array();
