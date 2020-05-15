@@ -4,6 +4,10 @@ session_start();
 
 require('config.php');
 
+if(isset($_POST['action']) && $_POST['action'] == 'test') {
+echo 'test';
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,6 +21,31 @@ require('config.php');
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script src="js/functions.js"></script>
+<script>
+$(document).ready(function() { 
+
+    afficher_commandes();
+
+   function afficher_commandes() {
+    $.ajax({
+				url:"ajax/affichercommandes.php",
+				method:"post",
+				data:{action:'afficher_commandes'},
+				success:function(data)
+				{
+					$('#commandes').html(data).fadeIn('slow');
+				}
+			});
+   }
+
+    setInterval(function(){ 
+
+        afficher_commandes();
+     }, 10000);
+    
+    
+});
+</script>
 <link href="css/styles.css" rel="stylesheet">
 <title><?= $nom_site ?></title>
 </head>
@@ -24,12 +53,9 @@ require('config.php');
 <?php include('header.php'); ?>
 <div class="conteneur">
 <div class="titre-page">
-<h1>Gestion des clients</h1>
+<h1>Gestion des commandes</h1>
 </div>
-<div class="recherche-employe">
-<label for="rechercher">Chercher un client :</label> <input type="text" name="rechercher" id="rechercher_client" placeholder="Rechercher un nom, un prénom, une adresse, ...">
-</div>
-<div id="result"></div>
+<div id="commandes"></div>
 </div>
 </body>
 </html>

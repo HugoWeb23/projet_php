@@ -90,6 +90,7 @@ $(document).ready(function(){
 				}
 			});
 		});	
+	 
 
 		$('.supprimer').on('click', function() {
 			var id_produit = $(this).data('produit');
@@ -627,6 +628,23 @@ $(document).ready(function(){
 		}
 		return false;
 		});
+
+		function cloturer_commande(id_commande) {
+			$.ajax({
+				url:"ajax/affichercommandes.php",
+				method:"post",
+				data:{action:'cloturer_commande', id_commande:id_commande},
+			});
+		}
+
+		$(document).on('click', '.cloturer_commande', function() { 
+			var id_commande = $(this).data('id_commande');
+			
+				cloturer_commande(id_commande);
+				$(this).closest('tr').remove();
+			
+		});
+		
 	});
 
 	
