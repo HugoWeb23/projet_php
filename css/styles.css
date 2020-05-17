@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100&display=swap');
+
 body {
 margin: 0;
 background: #e19d7d;
@@ -41,6 +43,8 @@ margin-top: 0px;
 z-index: 99;
 }
 
+@media all and (min-width: 1188px) {
+
 .dropdown a:hover {
 background: #521d06;
 }
@@ -81,6 +85,15 @@ position: absolute;
 float: right;
 width: auto;
 margin-right: 10px;
+}
+}
+@media all and (max-width: 1188px) {
+.dropdown-child {
+display: none;
+}
+.dropdown {
+display: none;
+}
 }
 
 /* Page connexion */
@@ -553,4 +566,79 @@ box-sizing: border-box;
 
 .apercu-menus:hover {
 background: #e75f42;
+}
+
+/* Affichage des commandes */
+
+.titre_commande {
+display: block;
+font-size: 1.4em;
+margin-bottom: 15px;
+}
+
+.contenu_commande {
+display: block;
+margin-bottom: 20px;
+padding: 0 10px 0 10px;
+}
+
+.contenu_commande:nth-child(odd) {
+background: #eeeeee;
+}
+
+.commande_produits {
+display: flex;
+justify-content: space-between;
+
+}
+
+.commande_produits > .produit {
+font-size: 1.2em;
+}
+
+.cloturer_commande {
+margin-left: 20px;
+padding: 2px;
+border: 3px solid #c92828;
+background: #c92828;
+color: #FFF;
+font-size: 1rem;
+border-radius: 3px;
+}
+
+.editer_commande {
+margin-left: 20px;
+padding: 2px;
+border: 3px solid #49763d;
+background: #49763d;
+color: #FFF;
+font-size: 1rem;
+border-radius: 3px;
+text-decoration: none;
+font-family: 'Noto Sans SC', sans-serif;
+}
+
+.cloturer_commande:hover {
+box-shadow: 1px 2px #000;
+}
+
+.commande_contact {
+    font-size: 1.2em;
+}
+
+.commande_livraison {
+    font-size: 1.2em;
+}
+
+.commande_contact span, .commande_livraison span {
+display: block;
+
+}
+
+.type {
+font-size: 14px;
+border: 2px solid #818181;
+padding: 1px;
+color: #818181;
+text-transform: uppercase;
 }

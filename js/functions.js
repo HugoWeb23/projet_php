@@ -644,6 +644,25 @@ $(document).ready(function(){
 				$(this).closest('tr').remove();
 			
 		});
+
+		$(document).on('click', '.cloturer_commande', function() { 
+			var id_commande = $(this).data('id_commande');
+			$(this).parent().parent().remove();
+
+		});
+
+		$(document).on('click', '.commande_etat', function() { 
+			var id_commande = $(this).data('id_commande');
+			var id_produit = $(this).data('id_produit');
+			$(this).parent().append('<font color="green">Prêt !</font>');
+			$(this).remove();
+			$.ajax({
+				url:"ajax/affichercommandes.php",
+				method:"post",
+				data:{action:'etat_produit', id_commande:id_commande, id_produit:id_produit},
+			});
+			
+		});
 		
 	});
 

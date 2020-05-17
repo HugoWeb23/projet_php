@@ -4,10 +4,6 @@ session_start();
 
 require('config.php');
 
-if(isset($_POST['action']) && $_POST['action'] == 'test') {
-echo 'test';
-}
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,15 +29,15 @@ $(document).ready(function() {
 				data:{action:'afficher_commandes'},
 				success:function(data)
 				{
-					$('#commandes').html(data).fadeIn('slow');
+					$('#liste_commandes').html(data).fadeIn('slow');
 				}
 			});
    }
 
-    setInterval(function(){ 
+    // setInterval(function(){ 
 
-        afficher_commandes();
-     }, 10000);
+    // afficher_commandes();
+    //   }, 10000);
     
     
 });
@@ -55,7 +51,7 @@ $(document).ready(function() {
 <div class="titre-page">
 <h1>Gestion des commandes</h1>
 </div>
-<div id="commandes"></div>
+<div id="liste_commandes"></div>
 </div>
 </body>
 </html>
