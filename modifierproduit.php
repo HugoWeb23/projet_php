@@ -25,7 +25,7 @@ if(isset($_POST["modifier"])){
 
       
     if(isset($_FILES["photo"]) && $_FILES["photo"]["error"] == 0){
-    $allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "png" => "image/png");
+    $allowed = array("jpg" => "image/jpg", "JPG" => "image/jpg", "jpeg" => "image/jpeg", "png" => "image/png");
     $filename = $_FILES["photo"]["name"];
     $filetype = $_FILES["photo"]["type"];
     $filesize = $_FILES["photo"]["size"];

@@ -27,18 +27,36 @@ break;
 ?>
 <div class="contenu_commande">
 <div class="titre_commande">
-Commande n° <?= $afficher['id_commande']; ?> <span class="type"><?= $type; ?></span><button class="cloturer_commande">Clôturer la commande</button><a class="editer_commande" href="#">Modifier la commande</a>
+Commande n° <?= $afficher['id_commande']; ?> <span class="type"><?= $type; ?></span><button class="cloturer_commande" data-id_commande="<?= $afficher['id_commande']; ?>">Clôturer la commande</button><a class="editer_commande" href="#">Modifier la commande</a>
 </div>
 <div class="commande_produits">
 <div class="produit">
 <?php
-$req2 = $bdd->prepare('SELECT a.libelle, a.id_produit, count(b.id_produit) as compteur, b.etat FROM produits as a INNER JOIN commandes_produits as b ON b.id_produit = a.id_produit AND b.id_commande = :commande GROUP BY b.id_produit ORDER BY compteur DESC');
+$req4 = $bdd->prepare('SELECT a.quantite, a.etat, b.nom, a.id_menu as id_menu FROM commandes_menus as a INNER JOIN menus as b ON a.id_menu = b.id_menu AND a.id_commande = :commande ORDER BY a.quantite DESC');
+$req4->bindValue('commande', $afficher['id_commande'], PDO::PARAM_INT);
+$req4->execute();
+while($menu = $req4->fetch()) {
+?>
+<div><?= $menu['quantite']; ?> x <?= $menu['nom']; ?> <?php if($menu['etat'] == 0) { ?><button class="commande_etat_menu" data-id_commande="<?= $afficher['id_commande']; ?>" data-id_menu="<?= $menu['id_menu']; ?>">Prêt</button><?php } else { echo '<font color="green">Prêt !</font>'; } ?></div>
+<div class="menus_produits">
+<?php
+$req5 = $bdd->prepare('SELECT * FROM menus_produits as a INNER JOIN produits as b ON a.id_produit = b.id_produit WHERE a.id_menu = :id_menu ORDER BY a.quantite DESC');
+$req5->bindValue('id_menu', $menu['id_menu'], PDO::PARAM_INT);
+$req5->execute();
+while($produitsmenu = $req5->fetch()) {
+?>
+<div class="details_menu"><?= $produitsmenu['quantite']; ?> x <?= $produitsmenu['libelle']; ?></div>
+
+<?php } ?>
+</div>
+<?php 
+}
+$req2 = $bdd->prepare('SELECT a.libelle, a.id_produit, b.quantite, b.etat FROM produits as a INNER JOIN commandes_produits as b ON b.id_produit = a.id_produit AND b.id_commande = :commande ORDER BY b.quantite DESC');
 $req2->bindValue('commande', $afficher['id_commande'], PDO::PARAM_INT);
 $req2->execute();
-$f = $req2->rowCount();
 while($commande = $req2->fetch()) {
 ?>
-<div><?= $commande['compteur']; ?> x <?= $commande['libelle']; ?> <?php if($commande['etat'] == 0) { ?><button class="commande_etat" data-id_commande="<?= $afficher['id_commande']; ?>" data-id_produit="<?= $commande['id_produit']; ?>">Prêt</button><?php } else { echo '<font color="green">Prêt !</font>'; } ?></div>
+<div class="commande_details_produit"><?= $commande['quantite']; ?> x <?= $commande['libelle']; ?> <?php if($commande['etat'] == 0) { ?><button class="commande_etat" data-id_commande="<?= $afficher['id_commande']; ?>" data-id_produit="<?= $commande['id_produit']; ?>">Prêt</button><?php } else { echo '<font color="green">Prêt !</font>'; } ?></div>
 <?php } ?>
 </div>
 <?php
@@ -72,6 +90,8 @@ Informations de contact
 }
 }
 
+// Modification de l'état d'un produit (prêt / pas prêt)
+
 if(isset($_POST['action']) && $_POST['action'] == 'etat_produit') {
 $id_commande = $_POST['id_commande'];
 $id_produit = $_POST['id_produit'];
@@ -81,6 +101,20 @@ $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
 $req->bindValue('id_produit', $id_produit, PDO::PARAM_INT);
 $req->execute() or die(print_r($req->errorInfo(), TRUE));
 }
+
+// Modification de l'état d'un menu (prêt / pas prêt)
+
+if(isset($_POST['action']) && $_POST['action'] == 'etat_menu') {
+$id_commande = $_POST['id_commande'];
+$id_menu = $_POST['id_menu'];
+    
+$req = $bdd->prepare('UPDATE commandes_menus SET etat = 1 WHERE id_commande = :id_commande AND id_menu = :id_menu');
+$req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
+$req->bindValue('id_menu', $id_menu, PDO::PARAM_INT);
+$req->execute() or die(print_r($req->errorInfo(), TRUE));
+}
+
+// Cloturer une commande
 
 if(isset($_POST['action']) && $_POST['action'] == 'cloturer_commande') {
 $id_commande = $_POST['id_commande'];

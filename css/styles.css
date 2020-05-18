@@ -592,6 +592,7 @@ justify-content: space-between;
 
 }
 
+
 .commande_produits > .produit {
 font-size: 1.2em;
 }
@@ -624,10 +625,12 @@ box-shadow: 1px 2px #000;
 
 .commande_contact {
     font-size: 1.2em;
+    margin-left: 30px;
 }
 
 .commande_livraison {
     font-size: 1.2em;
+    margin-left: auto;
 }
 
 .commande_contact span, .commande_livraison span {
@@ -641,4 +644,14 @@ border: 2px solid #818181;
 padding: 1px;
 color: #818181;
 text-transform: uppercase;
+}
+
+.menus_produits {
+margin-left: 20px;
+font-size: 0.9em;
+font-style: italic;
+}
+
+.details_menu, .commande_details_produit {
+margin-bottom: 3px;
 }

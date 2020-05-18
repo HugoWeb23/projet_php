@@ -663,6 +663,19 @@ $(document).ready(function(){
 			});
 			
 		});
+
+		$(document).on('click', '.commande_etat_menu', function() { 
+			var id_commande = $(this).data('id_commande');
+			var id_menu = $(this).data('id_menu');
+			$(this).parent().append('<font color="green">Prêt !</font>');
+			$(this).remove();
+			$.ajax({
+				url:"ajax/affichercommandes.php",
+				method:"post",
+				data:{action:'etat_menu', id_commande:id_commande, id_menu:id_menu},
+			});
+			
+		});
 		
 	});
 

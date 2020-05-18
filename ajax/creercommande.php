@@ -78,18 +78,24 @@ $req->bindValue('email', $email, PDO::PARAM_STR);
 $req->execute() or die(print_r($req->errorInfo(), TRUE));
 
 if(isset($_SESSION['menus_commande']) && count($_SESSION['menus_commande']) > 0) {
-$req = $bdd->prepare('INSERT INTO commandes_menus (id_commande, id_menu) VALUES (:id_commande, :id_menu)');
-foreach($_SESSION['menus_commande'] as $menu) {
+$req = $bdd->prepare('INSERT INTO commandes_menus (id_commande, id_menu, quantite, etat) VALUES (:id_commande, :id_menu, :quantite, :etat)');
+$count = array_count_values($_SESSION['menus_commande']);
+foreach($count as $key => $value) {
 $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);   
-$req->bindValue('id_menu', $menu, PDO::PARAM_INT);  
+$req->bindValue('id_menu', $key, PDO::PARAM_INT);
+$req->bindValue('quantite', $value, PDO::PARAM_INT);   
+$req->bindValue('etat', 0, PDO::PARAM_INT);  
 $req->execute();
 }
 }
 if(isset($_SESSION['produits_commande']) && count($_SESSION['produits_commande']) > 0) {
-$req = $bdd->prepare('INSERT INTO commandes_produits (id_commande, id_produit) VALUES (:id_commande, :id_produit)');
-foreach($_SESSION['produits_commande'] as $produit) {
+$req = $bdd->prepare('INSERT INTO commandes_produits (id_commande, id_produit, quantite, etat) VALUES (:id_commande, :id_produit, :quantite, :etat)');
+$count = array_count_values($_SESSION['produits_commande']);
+foreach($count as $key => $value) {
 $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);   
-$req->bindValue('id_produit', $produit, PDO::PARAM_INT);  
+$req->bindValue('id_produit', $key, PDO::PARAM_INT);
+$req->bindValue('quantite', $value, PDO::PARAM_INT);   
+$req->bindValue('etat', 0, PDO::PARAM_INT);  
 $req->execute();
 }
 }
@@ -111,18 +117,24 @@ $req->execute() or die(print_r($req->errorInfo(), TRUE));
 $id_commande = $bdd->lastInsertId();
 
 if(isset($_SESSION['menus_commande']) && count($_SESSION['menus_commande']) > 0) {
-$req = $bdd->prepare('INSERT INTO commandes_menus (id_commande, id_menu) VALUES (:id_commande, :id_menu)');
-foreach($_SESSION['menus_commande'] as $menu) {
+$req = $bdd->prepare('INSERT INTO commandes_menus (id_commande, id_menu, quantite, etat) VALUES (:id_commande, :id_menu, :quantite, :etat)');
+$count = array_count_values($_SESSION['menus_commande']);
+foreach($count as $key => $value) {
 $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);   
-$req->bindValue('id_menu', $menu, PDO::PARAM_INT);  
+$req->bindValue('id_menu', $key, PDO::PARAM_INT);
+$req->bindValue('quantite', $value, PDO::PARAM_INT);   
+$req->bindValue('etat', 0, PDO::PARAM_INT);  
 $req->execute();
 }
 }
 if(isset($_SESSION['produits_commande']) && count($_SESSION['produits_commande']) > 0) {
-$req = $bdd->prepare('INSERT INTO commandes_produits (id_commande, id_produit) VALUES (:id_commande, :id_produit)');
-foreach($_SESSION['produits_commande'] as $produit) {
+$req = $bdd->prepare('INSERT INTO commandes_produits (id_commande, id_produit, quantite, etat) VALUES (:id_commande, :id_produit, :quantite, :etat)');
+$count = array_count_values($_SESSION['produits_commande']);
+foreach($count as $key => $value) {
 $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);   
-$req->bindValue('id_produit', $produit, PDO::PARAM_INT);  
+$req->bindValue('id_produit', $key, PDO::PARAM_INT);
+$req->bindValue('quantite', $value, PDO::PARAM_INT);   
+$req->bindValue('etat', 0, PDO::PARAM_INT);  
 $req->execute();
 }
 }
@@ -143,18 +155,24 @@ $req->execute() or die(print_r($req->errorInfo(), TRUE));
 $id_commande = $bdd->lastInsertId();
 
 if(isset($_SESSION['menus_commande']) && count($_SESSION['menus_commande']) > 0) {
-$req = $bdd->prepare('INSERT INTO commandes_menus (id_commande, id_menu) VALUES (:id_commande, :id_menu)');
-foreach($_SESSION['menus_commande'] as $menu) {
+$req = $bdd->prepare('INSERT INTO commandes_menus (id_commande, id_menu, quantite, etat) VALUES (:id_commande, :id_menu, :quantite, :etat)');
+$count = array_count_values($_SESSION['menus_commande']);
+foreach($count as $key => $value) {
 $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);   
-$req->bindValue('id_menu', $menu, PDO::PARAM_INT);  
+$req->bindValue('id_menu', $key, PDO::PARAM_INT);
+$req->bindValue('quantite', $value, PDO::PARAM_INT);   
+$req->bindValue('etat', 0, PDO::PARAM_INT);  
 $req->execute();
 }
 }
 if(isset($_SESSION['produits_commande']) && count($_SESSION['produits_commande']) > 0) {
-$req = $bdd->prepare('INSERT INTO commandes_produits (id_commande, id_produit) VALUES (:id_commande, :id_produit)');
-foreach($_SESSION['produits_commande'] as $produit) {
+$req = $bdd->prepare('INSERT INTO commandes_produits (id_commande, id_produit, quantite, etat) VALUES (:id_commande, :id_produit, :quantite, :etat)');
+$count = array_count_values($_SESSION['produits_commande']);
+foreach($count as $key => $value) {
 $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);   
-$req->bindValue('id_produit', $produit, PDO::PARAM_INT);  
+$req->bindValue('id_produit', $key, PDO::PARAM_INT);
+$req->bindValue('quantite', $value, PDO::PARAM_INT);   
+$req->bindValue('etat', 0, PDO::PARAM_INT);  
 $req->execute();
 }
 }

@@ -34,10 +34,10 @@ $(document).ready(function() {
 			});
    }
 
-    // setInterval(function(){ 
+    setInterval(function(){ 
 
-    // afficher_commandes();
-    //   }, 10000);
+    afficher_commandes();
+       }, 10000);
     
     
 });

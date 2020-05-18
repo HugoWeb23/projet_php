@@ -10,28 +10,11 @@ $id_menu = $_POST['id_menu'];
 $id_produit = $_POST['produit'];
 $quantite_saisie = $_POST['quantite_saisie'];
 
-$req = $bdd->prepare('SELECT COUNT(*) as compteur FROM menus_produits WHERE id_produit = :id_produit AND id_menu = :id_menu');
+$req = $bdd->prepare('UPDATE menus_produits SET quantite = :quantite WHERE id_produit = :id_produit AND id_menu = :id_menu');
+$req->bindValue('quantite', $quantite_saisie, PDO::PARAM_INT);
 $req->bindValue('id_produit', $id_produit, PDO::PARAM_INT);
 $req->bindValue('id_menu', $id_menu, PDO::PARAM_INT);
-$req->execute() or die(print_r($req->errorInfo(), TRUE));
-$quantite = $req->fetch();
-
-if($quantite_saisie < $quantite['compteur']) {
-$calcul = $quantite['compteur'] - $quantite_saisie;
-$req = $bdd->prepare('DELETE FROM menus_produits WHERE id_produit = :id_produit AND id_menu = :id_menu LIMIT :limite');
-$req->bindValue('id_produit', $id_produit, PDO::PARAM_INT);
-$req->bindValue('id_menu', $id_menu, PDO::PARAM_INT);
-$req->bindValue('limite', $calcul, PDO::PARAM_INT);
-$req->execute() or die(print_r($req->errorInfo(), TRUE));
-} elseif($quantite_saisie > $quantite['compteur']) {
-$calcul = $quantite_saisie - $quantite['compteur'];
-$req = $bdd->prepare('INSERT INTO menus_produits (id_menu, id_produit) VALUES (:id_menu, :id_produit)');
-$req->bindValue('id_menu', $id_menu, PDO::PARAM_INT);
-$req->bindValue('id_produit', $id_produit, PDO::PARAM_INT);
-for($i = 0; $i < $calcul; $i++) {
 $req->execute();
-}
-}
 echo 'ok';
 }
 
@@ -83,10 +66,23 @@ $id_produit = $_POST['id_produit'];
 $req = $bdd->prepare('SELECT id_produit FROM produits WHERE id_produit = :id_produit');
 $req->bindValue('id_produit', $id_produit, PDO::PARAM_INT);
 $req->execute();
-if($req->rowCount() > 0)
-$req = $bdd->prepare('INSERT INTO menus_produits (id_menu, id_produit) VALUES (:id_menu, :id_produit)');
+if($req->rowCount() > 0) {
+$req = $bdd->prepare('SELECT id_produit FROM menus_produits WHERE id_produit = :id_produit AND id_menu = :id_menu');
+$req->bindValue('id_produit', $id_produit, PDO::PARAM_INT);
+$req->bindValue('id_menu', $id_menu, PDO::PARAM_INT);
+$req->execute();
+if($req->rowCount() == 0) {
+$req = $bdd->prepare('INSERT INTO menus_produits (id_menu, id_produit, quantite) VALUES (:id_menu, :id_produit, :quantite)');
 $req->bindValue('id_menu', $id_menu, PDO::PARAM_INT);
 $req->bindValue('id_produit', $id_produit, PDO::PARAM_INT);
+$req->bindValue('quantite', 1, PDO::PARAM_INT);
 $req->execute();
+} else {
+$req = $bdd->prepare('UPDATE menus_produits SET quantite = quantite+1 WHERE id_produit = :id_produit AND id_menu = :id_menu');
+$req->bindValue('id_produit', $id_produit, PDO::PARAM_INT);
+$req->bindValue('id_menu', $id_menu, PDO::PARAM_INT);
+$req->execute();
+}
+}
 }
 ?>

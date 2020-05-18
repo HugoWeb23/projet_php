@@ -4,8 +4,6 @@ session_start();
 
 require('config.php');
 
-//$_SESSION['produits_commande'] = array(19,19,19,20,20,20);
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

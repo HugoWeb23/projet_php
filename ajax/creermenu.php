@@ -33,11 +33,13 @@ $req->bindValue('prix', $prix, PDO::PARAM_INT);
 $req->bindValue('etat', $etat, PDO::PARAM_INT);
 $req->bindValue('date_creation', date('Y-m-d'), PDO::PARAM_STR);
 $req->execute();
-$lastId = $bdd->lastInsertId();
-$req = $bdd->prepare('INSERT INTO menus_produits (id_menu, id_produit) VALUES (:id_menu, :id_produit)');
-foreach($_SESSION['menu'] as $menu) {
-$req->bindValue('id_menu', $lastId, PDO::PARAM_INT);
-$req->bindValue('id_produit', $menu, PDO::PARAM_INT);
+$id_menu = $bdd->lastInsertId();
+$req = $bdd->prepare('INSERT INTO menus_produits (id_menu, id_produit, quantite) VALUES (:id_menu, :id_produit, :quantite)');
+$count = array_count_values($_SESSION['menu']);
+foreach($count as $key => $value) {
+$req->bindValue('id_menu', $id_menu, PDO::PARAM_INT);   
+$req->bindValue('id_produit', $key, PDO::PARAM_INT);
+$req->bindValue('quantite', $value, PDO::PARAM_INT);   
 $req->execute();
 }
 unset($_SESSION['menu']);
