@@ -1,0 +1,198 @@
+<?php
+
+session_start();
+
+require('config.php');
+
+if(isset($_GET['id'])) {
+$id_commande = $_GET['id'];
+$req = $bdd->prepare('SELECT * FROM commandes LEFT JOIN livraisons ON commandes.id_livraison = livraisons.id_livraison LEFT JOIN adresses ON livraisons.id_adresse = adresses.id_adresse LEFT JOIN commandes_contact ON commandes.id_commande = commandes_contact.id_commande WHERE commandes.id_commande = :id_commande AND commandes.etat = 0');
+$req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
+$req->execute();
+$commande = $req->fetch(PDO::FETCH_ASSOC);
+if($req->rowCount() == 0) {
+header('location: gestioncommandes');
+}
+} else {
+header('location: gestioncommandes');
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Script -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<!-- jQuery UI -->
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="js/functions.js"></script>
+<link href="css/styles.css" rel="stylesheet">
+<title><?= $nom_site ?></title>
+</head>
+<body>
+<?php include('header.php'); ?>
+<div class="conteneur">
+<div class="titre-page">
+<h1>Créer une commande</h1>
+<a href="gestioncommandes">Gestion des commandes</a>
+</div>
+<div class="contenu">
+<div class="infos-menu">
+<div id="resultat-commande"></div>
+<div class="loader" style="display: none"><img src="images/loader.gif"></div>
+<span class="titre-menu">Informations commande</span>
+<form id="creerCommande" action="" method="post">
+<div class="commande-flex">
+<div class="commande-infos">
+<label for="client">Associer la commande  à un client : </label><input type="text" name="client" id="nom_client" placeholder="Tapez un nom, une adresse, ...">
+<input type="text" id="user_id" name="client_id" value="<?= $commande['id_client']; ?>" disabled>
+<input type="button" id="viderclient" value="Supprimer">
+<div class="type_commande">
+<label for="type_commande">Type de commande :</label>
+
+<input type="radio" name="type" value="1" id="1" <?php if($commande['type'] == 1) { echo 'checked'; } ?>><label for="1">Livraison</label> 
+<input type="radio" name="type" value="2" id="2" <?php if($commande['type'] == 2) { echo 'checked'; } ?>><label for="2">Sur place</label>
+<input type="radio" name="type" value="3" id="3" <?php if($commande['type'] == 3) { echo 'checked'; } ?>><label for="3">À emporter</label> 
+</div>
+<?php
+$req = $bdd->prepare('SELECT * FROM tables ORDER BY nb_places');
+$req->execute();
+?>
+<label for="table">Table : </label><select name="table" id="table" disabled>
+<option value="0">Aucune</option>
+<?php
+while ($table = $req->fetch()) {
+echo '<option value="'.$table['id_table'].'">Table '.$table['id_table'].' ['.$table['nb_places'].' places]</option>';
+}
+?>
+</select>
+</div>
+<div class="commande-contact">
+<span class="titre-menu">Moyens de contact</span>
+<input type="text" id="tel_fixe" name="tel_fixe" value="<?= $commande['tel_fixe']; ?>" placeholder="Téléphone fixe">
+<input type="text" id="gsm" name="gsm" value="<?= $commande['gsm']; ?>" placeholder="Numéro de gsm">
+<input type="text" id="email" name="email" value="<?= $commande['email']; ?>" placeholder="Adresse e-mail">
+</div>
+<div class="commande-adresse">
+<span class="titre-menu">Adresse de livraison</span>
+<input type="text" id="rue" name="rue" value="<?= $commande['rue']; ?>" placeholder="Rue">
+<input type="text" id="numero" name="numéro" value="<?= $commande['numero']; ?>" placeholder="Numéro">
+<input type="text" id="code_postal" name="code_postal" value="<?= $commande['code_postal']; ?>" placeholder="Code postal">
+<input type="text" id="ville" name="ville" value="<?= $commande['ville']; ?>" placeholder="Ville">
+<input type="text" id="pays" name="pays" value="<?= $commande['pays']; ?>" placeholder="Pays">
+</div>
+</div>
+<input type="submit" class="boutton-rouge" name="creer" id="creer_menu" value="Créer la commande">
+</form>
+</div>
+<div class="flex-menu">
+<div class="menu-apercu">
+<h3>Détails commande</h3>
+<div id="resultat"></div>
+<?php
+$req = $bdd->prepare('SELECT b.quantite, b.id_menu as id_menu, a.nom, a.prix as prix FROM menus as a INNER JOIN commandes_menus as b ON a.id_menu = b.id_menu WHERE b.id_commande = :id GROUP BY id_menu ORDER BY id_menu ASC');
+$req->bindValue('id', $id_commande, PDO::PARAM_INT);
+$req->execute();
+while($menu = $req->fetch()) {
+?>
+<div class="apercu-menus">
+    <div class="libelle"><?= $menu['nom']; ?>
+    <div class="quantite">Quantité : 
+    <input type="text" class="quantite_saisie" value="<?= $menu['quantite']; ?>">
+    </div>
+    <input type="button" class="menuCommandeQuantite" data-produit="<?= $menu['id_menu']; ?>" value="Valider quantité">
+    </div>
+    <div class="prix"><?= $menu['prix']; ?> €</div>
+    <input type="button" class="supprimerMenuCommande" data-produit="<?= $menu['id_menu']; ?>" value="supprimer">
+    </div>
+
+<?php } ?>
+<?php
+$req = $bdd->prepare('SELECT b.quantite, b.id_produit as id, a.libelle as libelle, a.prix as prix FROM produits as a INNER JOIN commandes_produits as b ON a.id_produit = b.id_produit WHERE b.id_commande = :id GROUP BY b.id_produit ORDER BY id ASC');
+$req->bindValue('id', $id_commande, PDO::PARAM_INT);
+$req->execute();
+while($afficher = $req->fetch()) {
+?>
+<div class="apercu-produits">
+<div class="libelle"><?= $afficher['libelle']; ?>
+<div class="quantite">Quantité : 
+<input type="text" class="quantite_saisie" value="<?= $afficher['quantite']; ?>">
+</div>
+<input type="button" class="produit_quantite" data-produit="<?= $afficher['id']; ?>" data-menu="<?= $menu['id_menu']; ?>" value="Valider quantité">
+</div>
+<div class="prix"><?= $afficher['prix']; ?> €</div>
+<input type="button" class="supprimer_produit" data-produit="<?= $afficher['id']; ?>" data-menu="<?= $menu['id_menu']; ?>" value="supprimer">
+</div>
+<?php 
+}
+$req = $bdd->prepare('SELECT SUM(a.prix) as total_produits FROM produits as a INNER JOIN commandes_produits as b ON a.id_produit = b.id_produit WHERE b.id_commande = :id');
+$req->bindValue('id', $id_commande, PDO::PARAM_INT);
+$req->execute();
+$total = $req->fetch(PDO::FETCH_ASSOC);
+?>
+<?php
+if($total['total_produits'] > 0) { ?>
+<div class="total">Différence : </div>
+<div class="total">Total produits : <?= $total['total_produits']; ?> €</div>
+<?php } ?>
+<div class="total">Prix menu : </div>
+</div>
+<div class="menu-categories">
+<div class="nom-categorie">
+<h2>Menus</h2>
+</div>
+<div class="flex-produits">
+<?php
+$req = $bdd->prepare('SELECT * FROM menus WHERE etat = 1');
+$req->execute();
+while($menu = $req->fetch()) {
+?>
+<div class="apercuproduit">
+<div class="details-produit">
+<p>Nom : <?= $menu['nom']; ?></p>
+<p>Prix : <?= $menu['prix']; ?></p>
+<button data-menu_id="<?= $menu['id_menu']; ?>" class="commandeAjouterMenu">Ajouter</button>
+</div>
+</div>
+<?php } ?>
+</div>
+<?php 
+$req = $bdd->prepare('SELECT * FROM categories');
+$req->execute();
+while($categ = $req->fetch()) {
+?>
+<div class="nom-categorie">
+<h2><?= $categ['nom']; ?></h2>
+</div>
+<div class="flex-produits">
+
+<?php
+$req2 = $bdd->prepare('SELECT a.id_produit as id_produit, a.photo as photo, a.libelle as libelle, a.prix as prix FROM produits as a INNER JOIN produits_categories as b ON a.id_produit = b.id_produit WHERE b.id_categorie = :id');
+$req2->bindValue('id', $categ['id_categorie'], PDO::PARAM_INT);
+$req2->execute() or die(print_r($req->errorInfo(), TRUE));
+if($req2->rowCount() == 0) {
+echo 'Aucun produit';    
+}
+while($produit = $req2->fetch()) {
+?>
+<div class="apercuproduit">
+<label for="produit<?= $produit['id_produit']; ?>">
+<img src="<?= $produit['photo']; ?>">
+<div class="details-produit">
+<p>Nom : <?= $produit['libelle']; ?></p>
+<p>Prix : <?= $produit['prix']; ?></p>
+<button data-produit_id="<?= $produit['id_produit']; ?>" class="commandeAjouterProduit">Ajouter</button>
+</div>
+</div>
+<?php } ?>
+</div>
+<?php } ?>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

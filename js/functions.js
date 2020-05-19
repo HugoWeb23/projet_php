@@ -441,25 +441,39 @@ $(document).ready(function(){
 		   }
 
 		   $('#viderclient').on('click', function() { 
-			$('#nom_client').val('');
-			$('#user_id').val('');
-			$('#tel_fixe').val('');
-			$('#gsm').val('');
-			$('#email').val('');
-			$('#rue').val('');
-			$('#numero').val('');
-			$('#code_postal').val('');
-			$('#ville').val('');
-			$('#pays').val('');
+			$('#creerCommande').find("input[type='text']").each(function() {
+				$(this).val('');
+			});
 
 		   });
 
+		   $("input[name='type']").each(function(){
+			if($("input[id=2]").prop('checked') == true){ 
+			disableinput('adresse', true);
+			disableinput('table', false);
+			disableinput('contact', true);
+			}
+			if($("input[id=1]").prop('checked') == true){ 
+				disableinput('adresse', false);
+				disableinput('table', true);
+				disableinput('contact', false);
+			}
+			if($("input[id=3]").prop('checked') == true){ 
+				disableinput('adresse', true);
+				disableinput('table', true);
+				disableinput('contact', false);
+			}
+		
+	});
+
 		   $("input[name='type']").change(function(){
+
 			if($(this).val() == 2) {
 				disableinput('adresse', true);
 				disableinput('table', false);
 				disableinput('contact', true);
 			}
+			
 			if($(this).val() == 1) {
 				disableinput('adresse', false);
 				disableinput('table', true);
