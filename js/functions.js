@@ -441,7 +441,7 @@ $(document).ready(function(){
 		   }
 
 		   $('#viderclient').on('click', function() { 
-			$('#creerCommande').find("input[type='text']").each(function() {
+			$('#creerCommande, #modifierCommande').find("input[type='text']").each(function() {
 				$(this).val('');
 			});
 
@@ -689,6 +689,116 @@ $(document).ready(function(){
 				data:{action:'etat_menu', id_commande:id_commande, id_menu:id_menu},
 			});
 			
+		});
+
+		$('#modifierCommande').submit(function() { 
+			function message(type, message) { // type 1 = erreur, type 2 = validation
+			switch(type) {
+			case 1:
+			type = 'erreur';
+			break;
+			case 2:
+			type = 'confirmation';
+			}
+			$('#resultat-commande').html('<h2 class="message-'+type+'">'+message+'</h2>');
+			}
+			var check = null;
+			var id_commande = $(this).data('id_commande');
+			var id_client = $(this).find('#user_id').val();
+			var tel_fixe = $(this).find('#tel_fixe').val();
+			var gsm = $(this).find('#gsm').val();
+			var email = $(this).find('#email').val();
+			var type_commande = $(this).find('input[name=type]:checked').val();
+			var table = $(this).find('#table').val();
+			var rue = $(this).find('#rue').val();
+			var numero = $(this).find('#numero').val();
+			var code_postal = $(this).find('#code_postal').val();
+			var ville = $(this).find('#ville').val();
+			var pays = $(this).find('#pays').val();
+			if(type_commande == 1) {
+			if(rue.length < 1 || numero.length < 1 || code_postal.length < 1 || ville.length < 1 || pays.length < 1 || gsm.length < 1 && tel_fixe.length < 1) {
+			check = false;
+			message(1, 'Merci de remplir tous les champs');
+			}
+			} else if(type_commande == 2 && table == 0) {
+			check = false;
+			message(1, 'Merci de choisir une table');
+			} else if(type_commande == 3) {
+			if(gsm.length < 1 && tel_fixe.length < 1) {
+			check = false;
+			message(1, 'Les coordonnées de contact sont vides ou incomplètes');
+			}
+			}
+			if(check != false) {
+			$(this).css('opacity', '0.3');
+			$('.loader').show();
+			$.ajax({
+			url:"ajax/modifiercommande.php",
+			method:"post",
+			data:{action:'modifier_commande', id_commande:id_commande, id_client:id_client, tel_fixe:tel_fixe, gsm:gsm, email:email, type_commande:type_commande, table:table, rue:rue, numero:numero, code_postal:code_postal, ville:ville, pays:pays},
+			success:function(data)
+			{
+			$('#resultat-commande').html(data).fadeIn('slow');
+			$('#modifierCommande').css('opacity', '1');
+			$('.loader').hide();
+			}
+			});
+			}
+			return false;
+			});
+
+		$('.commandeMenuQuantite').on('click', function() {
+			var id_menu = $(this).data('menu');
+			var id_commande = $(this).data('commande');
+			var quantite = $(this).parent().find('.quantite_saisie').val();
+			$.ajax({
+				url:"ajax/modifiercommande.php",
+				method:"post",
+				data:{action:'commande_quantite_menu', id_menu:id_menu, id_commande:id_commande, quantite:quantite},
+				success:function(data)
+				{
+					$('#resultat').html(data).fadeIn('slow');
+					$('#resultat').delay(2000).fadeOut('slow');
+				}
+			});
+		});
+
+		$('.commandeSupprimerMenu').on('click', function() {
+			var id_menu = $(this).data('menu');
+			var id_commande = $(this).data('commande');
+			$.ajax({
+				url:"ajax/modifiercommande.php",
+				method:"post",
+				data:{action:'commande_supprimer_menu', id_menu:id_menu, id_commande:id_commande}
+			});
+			$(this).parent().remove();
+		});
+
+		$('.modifProduitQuantite').on('click', function() {
+			var id_produit = $(this).data('produit');
+			var id_commande = $(this).data('commande');
+			var quantite = $(this).parent().find('.quantite_saisie').val();
+			$.ajax({
+				url:"ajax/modifiercommande.php",
+				method:"post",
+				data:{action:'commande_quantite_produit', id_produit:id_produit, id_commande:id_commande, quantite:quantite},
+				success:function(data)
+				{
+					$('#resultat').html(data).fadeIn('slow');
+					$('#resultat').delay(2000).fadeOut('slow');
+				}
+			});
+		});
+
+		$('.supprimerMenu').on('click', function() {
+			var id_produit = $(this).data('produit');
+			var id_commande = $(this).data('commande');
+			$.ajax({
+				url:"ajax/modifiercommande.php",
+				method:"post",
+				data:{action:'commande_supprimer_produit', id_produit:id_produit, id_commande:id_commande}
+			});
+			$(this).parent().remove();
 		});
 		
 	});

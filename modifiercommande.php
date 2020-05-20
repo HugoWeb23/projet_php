@@ -6,7 +6,7 @@ require('config.php');
 
 if(isset($_GET['id'])) {
 $id_commande = $_GET['id'];
-$req = $bdd->prepare('SELECT * FROM commandes LEFT JOIN livraisons ON commandes.id_livraison = livraisons.id_livraison LEFT JOIN adresses ON livraisons.id_adresse = adresses.id_adresse LEFT JOIN commandes_contact ON commandes.id_commande = commandes_contact.id_commande WHERE commandes.id_commande = :id_commande AND commandes.etat = 0');
+$req = $bdd->prepare('SELECT *, commandes.id_commande as id_commande FROM commandes LEFT JOIN livraisons ON commandes.id_livraison = livraisons.id_livraison LEFT JOIN adresses ON livraisons.id_adresse = adresses.id_adresse LEFT JOIN commandes_contact ON commandes.id_commande = commandes_contact.id_commande WHERE commandes.id_commande = :id_commande AND commandes.etat = 0');
 $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
 $req->execute();
 $commande = $req->fetch(PDO::FETCH_ASSOC);
@@ -44,7 +44,7 @@ header('location: gestioncommandes');
 <div id="resultat-commande"></div>
 <div class="loader" style="display: none"><img src="images/loader.gif"></div>
 <span class="titre-menu">Informations commande</span>
-<form id="creerCommande" action="" method="post">
+<form id="modifierCommande" data-id_commande="<?= $commande['id_commande']; ?>" action="" method="post">
 <div class="commande-flex">
 <div class="commande-infos">
 <label for="client">Associer la commande  à un client : </label><input type="text" name="client" id="nom_client" placeholder="Tapez un nom, une adresse, ...">
@@ -85,7 +85,7 @@ echo '<option value="'.$table['id_table'].'">Table '.$table['id_table'].' ['.$ta
 <input type="text" id="pays" name="pays" value="<?= $commande['pays']; ?>" placeholder="Pays">
 </div>
 </div>
-<input type="submit" class="boutton-rouge" name="creer" id="creer_menu" value="Créer la commande">
+<input type="submit" class="boutton-rouge" name="creer" id="creer_menu" value="Modifier les informations">
 </form>
 </div>
 <div class="flex-menu">
@@ -103,15 +103,15 @@ while($menu = $req->fetch()) {
     <div class="quantite">Quantité : 
     <input type="text" class="quantite_saisie" value="<?= $menu['quantite']; ?>">
     </div>
-    <input type="button" class="menuCommandeQuantite" data-produit="<?= $menu['id_menu']; ?>" value="Valider quantité">
+    <input type="button" class="commandeMenuQuantite" data-menu="<?= $menu['id_menu']; ?>" data-commande="<?= $commande['id_commande']; ?>" value="Valider quantité">
     </div>
     <div class="prix"><?= $menu['prix']; ?> €</div>
-    <input type="button" class="supprimerMenuCommande" data-produit="<?= $menu['id_menu']; ?>" value="supprimer">
+    <input type="button" class="commandeSupprimerMenu" data-menu="<?= $menu['id_menu']; ?>" data-commande="<?= $commande['id_commande']; ?>" value="supprimer">
     </div>
 
 <?php } ?>
 <?php
-$req = $bdd->prepare('SELECT b.quantite, b.id_produit as id, a.libelle as libelle, a.prix as prix FROM produits as a INNER JOIN commandes_produits as b ON a.id_produit = b.id_produit WHERE b.id_commande = :id GROUP BY b.id_produit ORDER BY id ASC');
+$req = $bdd->prepare('SELECT b.id_commande, b.quantite, b.id_produit, a.libelle as libelle, a.prix as prix FROM produits as a INNER JOIN commandes_produits as b ON a.id_produit = b.id_produit WHERE b.id_commande = :id GROUP BY b.id_produit ORDER BY id ASC');
 $req->bindValue('id', $id_commande, PDO::PARAM_INT);
 $req->execute();
 while($afficher = $req->fetch()) {
@@ -121,10 +121,10 @@ while($afficher = $req->fetch()) {
 <div class="quantite">Quantité : 
 <input type="text" class="quantite_saisie" value="<?= $afficher['quantite']; ?>">
 </div>
-<input type="button" class="produit_quantite" data-produit="<?= $afficher['id']; ?>" data-menu="<?= $menu['id_menu']; ?>" value="Valider quantité">
+<input type="button" class="modifProduitQuantite" data-produit="<?= $afficher['id_produit']; ?>" data-commande="<?= $afficher['id_commande']; ?>" value="Valider quantité">
 </div>
 <div class="prix"><?= $afficher['prix']; ?> €</div>
-<input type="button" class="supprimer_produit" data-produit="<?= $afficher['id']; ?>" data-menu="<?= $menu['id_menu']; ?>" value="supprimer">
+<input type="button" class="supprimerMenu" data-produit="<?= $afficher['id_produit']; ?>" data-commande="<?= $commande['id_commande']; ?>" value="supprimer">
 </div>
 <?php 
 }
