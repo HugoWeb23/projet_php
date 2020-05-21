@@ -18,6 +18,7 @@ $numero = $_POST['numero'];
 $code_postal = $_POST['code_postal'];
 $ville = $_POST['ville'];
 $pays = $_POST['pays'];
+$commentaire = $_POST['commentaire'];
 
 $req = $bdd->prepare('SELECT *, commandes.id_commande as id_commande, commandes_contact.id_commande as id_contact FROM commandes LEFT JOIN livraisons ON commandes.id_livraison = livraisons.id_livraison LEFT JOIN adresses ON livraisons.id_adresse = adresses.id_adresse LEFT JOIN commandes_contact ON commandes.id_commande = commandes_contact.id_commande WHERE commandes.id_commande = :id_commande AND commandes.etat = 0');
 $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
@@ -78,16 +79,104 @@ $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
 $req->execute() or die(print_r($req->errorInfo(), TRUE));
 }
 }
-$req = $bdd->prepare('UPDATE commandes SET id_client = :id_client, id_livraison = :id_livraison, type = 1 WHERE id_commande = :id_commande');
+$req = $bdd->prepare('UPDATE commandes SET id_client = :id_client, id_livraison = :id_livraison, type = 1, commentaire = :commentaire WHERE id_commande = :id_commande');
 $req->bindValue('id_client', $id_client, PDO::PARAM_INT);
 $req->bindValue('id_livraison', $id_livraison, PDO::PARAM_INT);
 $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
+$req->bindValue('commentaire', $commentaire, PDO::PARAM_STR); 
+$req->execute() or die(print_r($req->errorInfo(), TRUE));
+echo '<h2 class="message-confirmation">Les informations ont été validées</h2>';
+} elseif($type_commande == 2) {
+$req = $bdd->prepare('UPDATE commandes SET id_client = :id_client, id_table = :id_table, type = 2, commentaire = :commentaire WHERE id_commande = :id_commande');
+$req->bindValue('id_client', $id_client, PDO::PARAM_INT);
+$req->bindValue('id_table', $table, PDO::PARAM_INT);
+$req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
+$req->bindValue('commentaire', $commentaire, PDO::PARAM_STR);
+$req->execute();
+echo '<h2 class="message-confirmation">Les informations ont été validées</h2>';
+} elseif($type_commande == 3) {
+if($commande['id_contact'] == null) {
+$req = $bdd->prepare('INSERT INTO commandes_contact (id_commande, tel_fixe, gsm, email) VALUES (:id_commande, :tel_fixe, :gsm, :email)');
+$req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
+$req->bindValue('tel_fixe', $tel_fixe, PDO::PARAM_STR);
+$req->bindValue('gsm', $gsm, PDO::PARAM_STR);
+$req->bindValue('email', $email, PDO::PARAM_STR);
+$req->execute() or die(print_r($req->errorInfo(), TRUE));
+} else {
+$req = $bdd->prepare('UPDATE commandes_contact SET tel_fixe = :tel_fixe, gsm = :gsm, email = :email WHERE id_commande = :id_commande');
+$req->bindValue('tel_fixe', $tel_fixe, PDO::PARAM_STR);
+$req->bindValue('gsm', $gsm, PDO::PARAM_STR);
+$req->bindValue('email', $email, PDO::PARAM_STR);
+$req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
 $req->execute() or die(print_r($req->errorInfo(), TRUE));
 }
-if($type_commande == 2) {
-
+$req = $bdd->prepare('UPDATE commandes SET id_client = :id_client, type = 3, commentaire = :commentaire WHERE id_commande = :id_commande');
+$req->bindValue('id_client', $id_client, PDO::PARAM_INT);
+$req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
+$req->bindValue('commentaire', $commentaire, PDO::PARAM_STR);
+$req->execute();
+echo '<h2 class="message-confirmation">Les informations ont été validées</h2>';
+} else {
+echo '<h2 class="message-erreur">Le type de commande est invalide</h2>';
+}
 }
 
+// Ajout d'un menu à la commande
+
+if(isset($_POST['action']) && $_POST['action'] == 'ajouter_menu') {
+$id_menu = $_POST['id_menu'];
+$id_commande = $_POST['id_commande'];
+    
+$req = $bdd->prepare('SELECT id_menu FROM menus WHERE id_menu = :id_menu');
+$req->bindValue('id_menu', $id_menu, PDO::PARAM_INT);
+$req->execute() or die(print_r($req->errorInfo(), TRUE));
+if($req->rowCount() > 0) {
+$req = $bdd->prepare('SELECT id_menu FROM commandes_menus WHERE id_menu = :id_menu AND id_commande = :id_commande');
+$req->bindValue('id_menu', $id_menu, PDO::PARAM_INT);
+$req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
+$req->execute() or die(print_r($req->errorInfo(), TRUE));
+if($req->rowCount() == 0) {
+$req = $bdd->prepare('INSERT INTO commandes_menus (id_commande, id_menu, quantite) VALUES (:id_commande, :id_menu, :quantite)');
+$req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
+$req->bindValue('id_menu', $id_menu, PDO::PARAM_INT);
+$req->bindValue('quantite', 1, PDO::PARAM_INT);
+$req->execute() or die(print_r($req->errorInfo(), TRUE));
+} else {
+$req = $bdd->prepare('UPDATE commandes_menus SET quantite = quantite+1 WHERE id_menu = :id_menu AND id_commande = :id_commande');
+$req->bindValue('id_menu', $id_menu, PDO::PARAM_INT);
+$req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
+$req->execute() or die(print_r($req->errorInfo(), TRUE));
+}
+}
+}
+
+// Ajout d'un produit à la commande
+
+if(isset($_POST['action']) && $_POST['action'] == 'ajouter_produit') {
+$id_produit = $_POST['id_produit'];
+$id_commande = $_POST['id_commande'];
+    
+$req = $bdd->prepare('SELECT id_produit FROM produits WHERE id_produit = :id_produit');
+$req->bindValue('id_produit', $id_produit, PDO::PARAM_INT);
+$req->execute() or die(print_r($req->errorInfo(), TRUE));
+if($req->rowCount() > 0) {
+$req = $bdd->prepare('SELECT id_produit FROM commandes_produits WHERE id_produit = :id_produit AND id_commande = :id_commande');
+$req->bindValue('id_produit', $id_produit, PDO::PARAM_INT);
+$req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
+$req->execute() or die(print_r($req->errorInfo(), TRUE));
+if($req->rowCount() == 0) {
+$req = $bdd->prepare('INSERT INTO commandes_produits (id_commande, id_produit, quantite) VALUES (:id_commande, :id_produit, :quantite)');
+$req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
+$req->bindValue('id_produit', $id_produit, PDO::PARAM_INT);
+$req->bindValue('quantite', 1, PDO::PARAM_INT);
+$req->execute() or die(print_r($req->errorInfo(), TRUE));
+} else {
+$req = $bdd->prepare('UPDATE commandes_produits SET quantite = quantite+1 WHERE id_produit = :id_produit AND id_commande = :id_commande');
+$req->bindValue('id_produit', $id_produit, PDO::PARAM_INT);
+$req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
+$req->execute() or die(print_r($req->errorInfo(), TRUE));
+}
+}
 }
 
 if(isset($_POST['action']) && $_POST['action'] == 'commande_quantite_menu') {
@@ -100,7 +189,7 @@ $req->bindValue('quantite', $quantite, PDO::PARAM_INT);
 $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
 $req->bindValue('id_menu', $id_menu, PDO::PARAM_INT);
 $req->execute();
-echo 'ok';
+echo '<h2 class="validation-menu">La quantité a été modifée</h2>';
 }
 
 if(isset($_POST['action']) && $_POST['action'] == 'commande_supprimer_menu') {
@@ -123,7 +212,7 @@ $req->bindValue('quantite', $quantite, PDO::PARAM_INT);
 $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
 $req->bindValue('id_produit', $id_produit, PDO::PARAM_INT);
 $req->execute();
-echo 'ok';
+echo '<h2 class="validation-menu">La quantité a été modifée</h2>';
 }
     
 if(isset($_POST['action']) && $_POST['action'] == 'commande_supprimer_produit') {

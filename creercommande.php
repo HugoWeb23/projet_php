@@ -72,6 +72,10 @@ echo '<option value="'.$table['id_table'].'">Table '.$table['id_table'].' ['.$ta
 <input type="text" id="pays" name="pays" placeholder="Pays">
 </div>
 </div>
+<div class="commentaire-commande">
+<label for="commentaire">Commentaire(s) :</label>
+<textarea id="commentaire"></textarea>
+</div>
 <input type="submit" class="boutton-rouge" name="creer" id="creer_menu" value="Créer la commande">
 </form>
 </div>
@@ -88,6 +92,7 @@ $in = str_repeat('?,', count($_SESSION['menus_commande']) - 1) . '?';
 $sql = "SELECT * FROM menus WHERE id_menu IN ($in)";
 $req = $bdd->prepare($sql);
 $req->execute($_SESSION['menus_commande']) or die(print_r($req->errorInfo(), TRUE));
+$totaux_menus = 0;
 while($menu = $req->fetch()) {
     $count = array_count_values($_SESSION['menus_commande']);
     foreach($count as $j => $k) {
@@ -95,6 +100,7 @@ while($menu = $req->fetch()) {
     $quantite = $k;
     }
     }
+    $totaux_menus += $menu['prix'] * $quantite;
     ?>
     <div class="apercu-menus">
     <div class="libelle"><?= $menu['nom']; ?>
@@ -103,7 +109,7 @@ while($menu = $req->fetch()) {
     </div>
     <input type="button" class="menuCommandeQuantite" data-produit="<?= $menu['id_menu']; ?>" value="Valider quantité">
     </div>
-    <div class="prix"><?= $menu['prix']; ?> €</div>
+    <div class="prix" data-prix="<?= $menu['prix']; ?>"><?= $menu['prix']; ?> €</div>
     <input type="button" class="supprimerMenuCommande" data-produit="<?= $menu['id_menu']; ?>" value="supprimer">
     </div>
     <?php
@@ -118,6 +124,7 @@ $in = str_repeat('?,', count($_SESSION['produits_commande']) - 1) . '?';
 $sql = "SELECT id_produit, libelle, prix FROM produits WHERE id_produit IN ($in)";
 $req = $bdd->prepare($sql);
 $req->execute($_SESSION['produits_commande']) or die(print_r($req->errorInfo(), TRUE));
+$totaux_produits = 0;
 while($afficher = $req->fetch()) {
 $count = array_count_values($_SESSION['produits_commande']);
 foreach($count as $j => $k) {
@@ -125,6 +132,7 @@ if($afficher['id_produit'] == $j) {
 $quantite = $k;
 }
 }
+$totaux_produits += $afficher['prix'] * $quantite;
 ?>
 <div class="apercu-produits">
 <div class="libelle"><?= $afficher['libelle']; ?>
@@ -133,7 +141,7 @@ $quantite = $k;
 </div>
 <input type="button" class="commandeProduitQuantite" data-produit="<?= $afficher['id_produit']; ?>" value="Valider quantité">
 </div>
-<div class="prix"><?= $afficher['prix']; ?> €</div>
+<div class="prix" data-prix="<?= $afficher['prix']; ?>"><?= $afficher['prix']; ?> €</div>
 <input type="button" class="commandeSupprimerProduit" data-produit="<?= $afficher['id_produit']; ?>" value="supprimer">
 </div>
 <?php
@@ -141,7 +149,7 @@ $quantite = $k;
 }
 }
 ?>
-
+<div class="total">Total commande : <span><?= $totaux_menus + $totaux_produits ?> €</span></div>
 </div>
 <div class="menu-categories">
 <div class="nom-categorie">

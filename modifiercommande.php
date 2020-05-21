@@ -36,7 +36,7 @@ header('location: gestioncommandes');
 <?php include('header.php'); ?>
 <div class="conteneur">
 <div class="titre-page">
-<h1>Créer une commande</h1>
+<h1>Modifier une commande</h1>
 <a href="gestioncommandes">Gestion des commandes</a>
 </div>
 <div class="contenu">
@@ -65,7 +65,12 @@ $req->execute();
 <option value="0">Aucune</option>
 <?php
 while ($table = $req->fetch()) {
-echo '<option value="'.$table['id_table'].'">Table '.$table['id_table'].' ['.$table['nb_places'].' places]</option>';
+if($commande['id_table'] == $table['id_table']) {
+$selected = 'selected';
+} else {
+$selected = null;
+}
+echo '<option value="'.$table['id_table'].'" '.$selected.'>Table '.$table['id_table'].' ['.$table['nb_places'].' places]</option>';
 }
 ?>
 </select>
@@ -85,6 +90,10 @@ echo '<option value="'.$table['id_table'].'">Table '.$table['id_table'].' ['.$ta
 <input type="text" id="pays" name="pays" value="<?= $commande['pays']; ?>" placeholder="Pays">
 </div>
 </div>
+<div class="commentaire-commande">
+<label for="commentaire">Commentaire(s) :</label>
+<textarea id="commentaire"><?= $commande['commentaire']; ?></textarea>
+</div>
 <input type="submit" class="boutton-rouge" name="creer" id="creer_menu" value="Modifier les informations">
 </form>
 </div>
@@ -96,7 +105,9 @@ echo '<option value="'.$table['id_table'].'">Table '.$table['id_table'].' ['.$ta
 $req = $bdd->prepare('SELECT b.quantite, b.id_menu as id_menu, a.nom, a.prix as prix FROM menus as a INNER JOIN commandes_menus as b ON a.id_menu = b.id_menu WHERE b.id_commande = :id GROUP BY id_menu ORDER BY id_menu ASC');
 $req->bindValue('id', $id_commande, PDO::PARAM_INT);
 $req->execute();
+$totaux_menus = 0;
 while($menu = $req->fetch()) {
+$totaux_menus += $menu['prix'] * $menu['quantite'];
 ?>
 <div class="apercu-menus">
     <div class="libelle"><?= $menu['nom']; ?>
@@ -105,7 +116,7 @@ while($menu = $req->fetch()) {
     </div>
     <input type="button" class="commandeMenuQuantite" data-menu="<?= $menu['id_menu']; ?>" data-commande="<?= $commande['id_commande']; ?>" value="Valider quantité">
     </div>
-    <div class="prix"><?= $menu['prix']; ?> €</div>
+    <div class="prix" data-prix="<?= $menu['prix']; ?>"><?= $menu['prix']; ?> €</div>
     <input type="button" class="commandeSupprimerMenu" data-menu="<?= $menu['id_menu']; ?>" data-commande="<?= $commande['id_commande']; ?>" value="supprimer">
     </div>
 
@@ -114,7 +125,9 @@ while($menu = $req->fetch()) {
 $req = $bdd->prepare('SELECT b.id_commande, b.quantite, b.id_produit, a.libelle as libelle, a.prix as prix FROM produits as a INNER JOIN commandes_produits as b ON a.id_produit = b.id_produit WHERE b.id_commande = :id GROUP BY b.id_produit ORDER BY id ASC');
 $req->bindValue('id', $id_commande, PDO::PARAM_INT);
 $req->execute();
+$totaux_produits = 0;
 while($afficher = $req->fetch()) {
+$totaux_produits += $afficher['prix'] * $afficher['quantite'];
 ?>
 <div class="apercu-produits">
 <div class="libelle"><?= $afficher['libelle']; ?>
@@ -123,22 +136,13 @@ while($afficher = $req->fetch()) {
 </div>
 <input type="button" class="modifProduitQuantite" data-produit="<?= $afficher['id_produit']; ?>" data-commande="<?= $afficher['id_commande']; ?>" value="Valider quantité">
 </div>
-<div class="prix"><?= $afficher['prix']; ?> €</div>
-<input type="button" class="supprimerMenu" data-produit="<?= $afficher['id_produit']; ?>" data-commande="<?= $commande['id_commande']; ?>" value="supprimer">
+<div class="prix" data-prix="<?= $afficher['prix']; ?>"><?= $afficher['prix']; ?> €</div>
+<input type="button" class="supprimerProduit" data-produit="<?= $afficher['id_produit']; ?>" data-commande="<?= $commande['id_commande']; ?>" value="supprimer">
 </div>
 <?php 
 }
-$req = $bdd->prepare('SELECT SUM(a.prix) as total_produits FROM produits as a INNER JOIN commandes_produits as b ON a.id_produit = b.id_produit WHERE b.id_commande = :id');
-$req->bindValue('id', $id_commande, PDO::PARAM_INT);
-$req->execute();
-$total = $req->fetch(PDO::FETCH_ASSOC);
 ?>
-<?php
-if($total['total_produits'] > 0) { ?>
-<div class="total">Différence : </div>
-<div class="total">Total produits : <?= $total['total_produits']; ?> €</div>
-<?php } ?>
-<div class="total">Prix menu : </div>
+<div class="total">Total commande : <span><?= $totaux_menus + $totaux_produits ?> €</span></div>
 </div>
 <div class="menu-categories">
 <div class="nom-categorie">
@@ -154,7 +158,7 @@ while($menu = $req->fetch()) {
 <div class="details-produit">
 <p>Nom : <?= $menu['nom']; ?></p>
 <p>Prix : <?= $menu['prix']; ?></p>
-<button data-menu_id="<?= $menu['id_menu']; ?>" class="commandeAjouterMenu">Ajouter</button>
+<button data-menu="<?= $menu['id_menu']; ?>" data-commande="<?= $commande['id_commande']; ?>" class="modifCommandeAjouterMenu">Ajouter</button>
 </div>
 </div>
 <?php } ?>
@@ -184,7 +188,7 @@ while($produit = $req2->fetch()) {
 <div class="details-produit">
 <p>Nom : <?= $produit['libelle']; ?></p>
 <p>Prix : <?= $produit['prix']; ?></p>
-<button data-produit_id="<?= $produit['id_produit']; ?>" class="commandeAjouterProduit">Ajouter</button>
+<button data-produit="<?= $produit['id_produit']; ?>" data-commande="<?= $commande['id_commande']; ?>" class="modifCommandeAjouterProduit">Ajouter</button>
 </div>
 </div>
 <?php } ?>

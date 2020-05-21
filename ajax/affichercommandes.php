@@ -56,7 +56,13 @@ $req2->bindValue('commande', $afficher['id_commande'], PDO::PARAM_INT);
 $req2->execute();
 while($commande = $req2->fetch()) {
 ?>
-<div class="commande_details_produit"><?= $commande['quantite']; ?> x <?= $commande['libelle']; ?> <?php if($commande['etat'] == 0) { ?><button class="commande_etat" data-id_commande="<?= $afficher['id_commande']; ?>" data-id_produit="<?= $commande['id_produit']; ?>">Prêt</button><?php } else { echo '<font color="green">Prêt !</font>'; } ?></div>
+<div class="commande_details_produit"><?= $commande['quantite']; ?> x <?= $commande['libelle']; ?> <?php if($commande['etat'] == 0) { ?><button class="commande_etat" data-id_commande="<?= $afficher['id_commande']; ?>" data-id_produit="<?= $commande['id_produit']; ?>">Prêt</button><?php } else { echo '<font color="green">Prêt !</font>'; } ?>
+</div>
+<?php } ?>
+<?php if(strlen($afficher['commentaire']) > 1) { ?>
+<div class="afficher-commentaire-commande">
+<b>Commentaire :</b> <?= $afficher['commentaire']; ?>
+</div>
 <?php } ?>
 </div>
 <?php

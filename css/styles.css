@@ -555,6 +555,17 @@ padding: 3px;
 margin-bottom: 5px;
 }
 
+.commentaire-commande textarea {
+width: 365px;
+margin-left: 10px;
+}
+
+.commentaire-commande label {
+display: block;
+margin-left: 10px;
+margin-bottom: 5px;
+}
+
 .apercu-menus {
 display: block;
 float: left;
@@ -623,14 +634,23 @@ font-family: 'Noto Sans SC', sans-serif;
 box-shadow: 1px 2px #000;
 }
 
+.afficher-commentaire-commande {
+display: block;
+margin-top: 10px;
+border: 2px solid #c92828;
+padding: 3px;
+color: #c92828;
+max-width: 400px;
+}
+
 .commande_contact {
-    font-size: 1.2em;
-    margin-left: 30px;
+font-size: 1.2em;
+margin-left: 30px;
 }
 
 .commande_livraison {
-    font-size: 1.2em;
-    margin-left: auto;
+font-size: 1.2em;
+margin-left: auto;
 }
 
 .commande_contact span, .commande_livraison span {

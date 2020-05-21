@@ -457,11 +457,13 @@ $(document).ready(function(){
 				disableinput('adresse', false);
 				disableinput('table', true);
 				disableinput('contact', false);
+				$('#table').val('0');
 			}
 			if($("input[id=3]").prop('checked') == true){ 
 				disableinput('adresse', true);
 				disableinput('table', true);
 				disableinput('contact', false);
+				$('#table').val('0');
 			}
 		
 	});
@@ -478,11 +480,13 @@ $(document).ready(function(){
 				disableinput('adresse', false);
 				disableinput('table', true);
 				disableinput('contact', false);
+				$('#table').val('0');
 			}
 			if($(this).val() == 3) {
 				disableinput('adresse', true);
 				disableinput('table', true);
 				disableinput('contact', false);
+				$('#table').val('0');
 			}
 		   });
 
@@ -533,6 +537,7 @@ $(document).ready(function(){
 					}
 					$('#resultat').html(data).fadeIn('slow');
 					$('#resultat').delay(2000).fadeOut('slow');
+					totalCommande();
 				}
 			});
 		});
@@ -553,6 +558,7 @@ $(document).ready(function(){
 				}
 				$('#resultat').html(data).fadeIn('slow');
 				$('#resultat').delay(2000).fadeOut('slow');
+				totalCommande();
 			}
 		});
 	});
@@ -568,6 +574,7 @@ $(document).ready(function(){
 				{
 					$('#resultat').html(data).fadeIn('slow');
 					$('#resultat').delay(2000).fadeOut('slow');
+					totalCommande();
 				}
 			});
 		});
@@ -584,6 +591,7 @@ $(document).ready(function(){
 				{
 					$('#resultat').html(data).fadeIn('slow');
 					$('#resultat').delay(2000).fadeOut('slow');
+					totalCommande();
 				}
 			});
 		});
@@ -611,6 +619,7 @@ $(document).ready(function(){
 		var code_postal = $(this).find('#code_postal').val();
 		var ville = $(this).find('#ville').val();
 		var pays = $(this).find('#pays').val();
+		var commentaire = $(this).find('#commentaire').val();
 		if(type_commande == 1) {
 		if(rue.length < 1 || numero.length < 1 || code_postal.length < 1 || ville.length < 1 || pays.length < 1 || gsm.length < 1 && tel_fixe.length < 1) {
 		check = false;
@@ -631,7 +640,7 @@ $(document).ready(function(){
 		$.ajax({
 		url:"ajax/creercommande.php",
 		method:"post",
-		data:{action:'creer_commande', id_client:id_client, tel_fixe:tel_fixe, gsm:gsm, email:email, type_commande:type_commande, table:table, rue:rue, numero:numero, code_postal:code_postal, ville:ville, pays:pays},
+		data:{action:'creer_commande', id_client:id_client, tel_fixe:tel_fixe, gsm:gsm, email:email, type_commande:type_commande, table:table, rue:rue, numero:numero, code_postal:code_postal, ville:ville, pays:pays, commentaire:commentaire},
 		success:function(data)
 		{
 		$('#resultat-commande').html(data).fadeIn('slow');
@@ -715,6 +724,7 @@ $(document).ready(function(){
 			var code_postal = $(this).find('#code_postal').val();
 			var ville = $(this).find('#ville').val();
 			var pays = $(this).find('#pays').val();
+			var commentaire = $(this).find('#commentaire').val();
 			if(type_commande == 1) {
 			if(rue.length < 1 || numero.length < 1 || code_postal.length < 1 || ville.length < 1 || pays.length < 1 || gsm.length < 1 && tel_fixe.length < 1) {
 			check = false;
@@ -735,7 +745,7 @@ $(document).ready(function(){
 			$.ajax({
 			url:"ajax/modifiercommande.php",
 			method:"post",
-			data:{action:'modifier_commande', id_commande:id_commande, id_client:id_client, tel_fixe:tel_fixe, gsm:gsm, email:email, type_commande:type_commande, table:table, rue:rue, numero:numero, code_postal:code_postal, ville:ville, pays:pays},
+			data:{action:'modifier_commande', id_commande:id_commande, id_client:id_client, tel_fixe:tel_fixe, gsm:gsm, email:email, type_commande:type_commande, table:table, rue:rue, numero:numero, code_postal:code_postal, ville:ville, pays:pays, commentaire:commentaire},
 			success:function(data)
 			{
 			$('#resultat-commande').html(data).fadeIn('slow');
@@ -746,6 +756,18 @@ $(document).ready(function(){
 			}
 			return false;
 			});
+
+			function totalCommande() {
+			var total_commande = 0;
+			var quantite = 0;
+			$('.prix').each(function() {
+			var prix = $(this).data('prix');
+			var quantite = $(this).parent().find('.quantite_saisie').val();
+			total_produit = (prix * quantite);
+			total_commande += total_produit;
+			});
+			$('.total span').text(total_commande+' €');
+			}
 
 		$('.commandeMenuQuantite').on('click', function() {
 			var id_menu = $(this).data('menu');
@@ -759,6 +781,7 @@ $(document).ready(function(){
 				{
 					$('#resultat').html(data).fadeIn('slow');
 					$('#resultat').delay(2000).fadeOut('slow');
+					totalCommande();
 				}
 			});
 		});
@@ -772,6 +795,7 @@ $(document).ready(function(){
 				data:{action:'commande_supprimer_menu', id_menu:id_menu, id_commande:id_commande}
 			});
 			$(this).parent().remove();
+			totalCommande();
 		});
 
 		$('.modifProduitQuantite').on('click', function() {
@@ -786,11 +810,12 @@ $(document).ready(function(){
 				{
 					$('#resultat').html(data).fadeIn('slow');
 					$('#resultat').delay(2000).fadeOut('slow');
+					totalCommande();
 				}
 			});
 		});
 
-		$('.supprimerMenu').on('click', function() {
+		$('.supprimerProduit').on('click', function() {
 			var id_produit = $(this).data('produit');
 			var id_commande = $(this).data('commande');
 			$.ajax({
@@ -799,6 +824,35 @@ $(document).ready(function(){
 				data:{action:'commande_supprimer_produit', id_produit:id_produit, id_commande:id_commande}
 			});
 			$(this).parent().remove();
+			totalCommande();
+		});
+
+		$('.modifCommandeAjouterMenu').on('click', function() {
+			var id_menu = $(this).data('menu');
+			var id_commande = $(this).data('commande');
+			$.ajax({
+				url:"ajax/modifiercommande.php",
+				method:"post",
+				data: {action:'ajouter_menu', id_menu:id_menu, id_commande:id_commande},
+				success:function(data)
+				{
+					location.reload();
+				}
+			});
+		});
+
+		$('.modifCommandeAjouterProduit').on('click', function() {
+			var id_produit = $(this).data('produit');
+			var id_commande = $(this).data('commande');
+			$.ajax({
+				url:"ajax/modifiercommande.php",
+				method:"post",
+				data: {action:'ajouter_produit', id_produit:id_produit, id_commande:id_commande},
+				success:function(data)
+				{
+					location.reload();
+				}
+			});
 		});
 		
 	});
