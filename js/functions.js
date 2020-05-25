@@ -117,14 +117,19 @@ $(document).ready(function(){
 		$.ajax({
 			url:"ajax/creermenu.php",
 			method:"post",
+			dataType: "json",
 			data:{nom:nom, prix:prix, etat:etat},
 			success:function(data)
 			{
-					$('#resultat-menu').html(data).fadeIn('slow');
+					if(data.type == 'erreur') {
+					$('#resultat-menu').html('<h2 class="message-erreur">'+data.message+'</h2>').fadeIn('slow');
+					} else if(data.type == 'succes') {
+					$('#resultat-menu').html('<h2 class="message-confirmation">'+data.message+'</h2>').fadeIn('slow');
+					$('.apercu-produits').fadeOut(0);
+					}
 					$('#resultat-menu').delay(3000).fadeOut('slow');
 					$('#creerMenu').css('opacity', '1');
 					$('.loader').hide();
-					$('.apercu-produits').fadeOut(0);
 					$('#creer_menu').val('Créer le menu');
 			}
 		});
@@ -640,10 +645,16 @@ $(document).ready(function(){
 		$.ajax({
 		url:"ajax/creercommande.php",
 		method:"post",
+		dataType:"json",
 		data:{action:'creer_commande', id_client:id_client, tel_fixe:tel_fixe, gsm:gsm, email:email, type_commande:type_commande, table:table, rue:rue, numero:numero, code_postal:code_postal, ville:ville, pays:pays, commentaire:commentaire},
 		success:function(data)
 		{
-		$('#resultat-commande').html(data).fadeIn('slow');
+		if(data.type == 'succes') {
+		$('#resultat-commande').html('<h2 class="message-confirmation">'+data.message+'</h2>').fadeIn('slow');
+		$('.apercu-produits, .apercu-menus').fadeOut(0);
+		} else if(data.type == 'erreur') {
+		$('#resultat-commande').html('<h2 class="message-erreur">'+data.message+'</h2>').fadeIn('slow');
+		}
 		$('#creerCommande').css('opacity', '1');
 		$('.loader').hide();
 		}
@@ -745,10 +756,15 @@ $(document).ready(function(){
 			$.ajax({
 			url:"ajax/modifiercommande.php",
 			method:"post",
+			dataType:"json",
 			data:{action:'modifier_commande', id_commande:id_commande, id_client:id_client, tel_fixe:tel_fixe, gsm:gsm, email:email, type_commande:type_commande, table:table, rue:rue, numero:numero, code_postal:code_postal, ville:ville, pays:pays, commentaire:commentaire},
 			success:function(data)
 			{
-			$('#resultat-commande').html(data).fadeIn('slow');
+			if(data.type == 'succes') {
+			$('#resultat-commande').html('<h2 class="message-confirmation">'+data.message+'</h2>').fadeIn('slow');
+			} else if(data.type == 'erreur') {
+			$('#resultat-commande').html('<h2 class="message-erreur">'+data.message+'</h2>').fadeIn('slow');
+			}
 			$('#modifierCommande').css('opacity', '1');
 			$('.loader').hide();
 			}
@@ -854,6 +870,48 @@ $(document).ready(function(){
 				}
 			});
 		});
+		var id = 1;
+		$(document).on('click', '#creer_categorie', function() { 
+		$('table').append('<tr><td><input class="test" type="text"></td><td><textarea class="test2"></textarea></td><td><input type="button" value="Créer" class="ok"> <input type="button" value="Annuler" class="supprimer"></td></tr>');
+		id++;	
+		return false;
+		});
+		$(document).on('click', '.ok', function() {
+		var nom = $(this).parent().parent().find('.test').val();
+		var description = $(this).parent().parent().find('.test2').val();
+		if(nom.length == 0 || description.length == 0) {
+			alert('Certains champs sont vides !');
+		} else {
+			$.ajax({
+				url:"ajax/gestioncategories.php",
+				method:"post",
+				data:{action:'creer', nom:nom, description:description},
+				success:function(data) {
+					$('table').append('<tr><td>'+nom+'</td><td>'+description+'</td><td><a class="editer" data-id="'+data+'" href="#">Éditer</a> - <a data-id="'+data+'" href="#">Supprimer</a></td></tr>');
+				}
+			});
+			$(this).closest('tr').remove();
+			
+		}
+		 });
+
+		 $(document).on('click', '.supprimer', function() {
+			$(this).closest('tr').remove();
+		 });
+
+		 $(document).on('click', '.editer', function() {
+			var id_categorie = $(this).data('id');
+			var nom = $(this).closest('tr').find('td').eq(0).text();
+			var description = $(this).closest('tr').find('td').eq(1).text();
+			$(this).closest('tr').html('<td><input type="text" class="test" value="'+nom+'"></td><td><textarea class="test2">'+description+'</textarea></td><td><input type="button" data-id="'+id_categorie+'" value="Modifier" class="modifier"> <input type="button" value="Annuler" class="supprimer"></td>');
+			
+		 });
+
+		 $(document).on('click', '.modifier', function() {
+			var id_categorie = $(this).data('id');
+			var nom = $(this).closest('tr').find('td').eq(0).text();
+			var description = $(this).closest('tr').find('td').eq(1).text();
+		 });
 		
 	});
 

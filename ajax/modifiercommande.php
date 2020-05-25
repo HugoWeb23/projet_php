@@ -85,7 +85,7 @@ $req->bindValue('id_livraison', $id_livraison, PDO::PARAM_INT);
 $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
 $req->bindValue('commentaire', $commentaire, PDO::PARAM_STR); 
 $req->execute() or die(print_r($req->errorInfo(), TRUE));
-echo '<h2 class="message-confirmation">Les informations ont été validées</h2>';
+$message = array("type" => "succes", "message" => "Les informations ont été validées");
 } elseif($type_commande == 2) {
 $req = $bdd->prepare('UPDATE commandes SET id_client = :id_client, id_table = :id_table, type = 2, commentaire = :commentaire WHERE id_commande = :id_commande');
 $req->bindValue('id_client', $id_client, PDO::PARAM_INT);
@@ -93,7 +93,7 @@ $req->bindValue('id_table', $table, PDO::PARAM_INT);
 $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
 $req->bindValue('commentaire', $commentaire, PDO::PARAM_STR);
 $req->execute();
-echo '<h2 class="message-confirmation">Les informations ont été validées</h2>';
+$message = array("type" => "succes", "message" => "Les informations ont été validées");
 } elseif($type_commande == 3) {
 if($commande['id_contact'] == null) {
 $req = $bdd->prepare('INSERT INTO commandes_contact (id_commande, tel_fixe, gsm, email) VALUES (:id_commande, :tel_fixe, :gsm, :email)');
@@ -115,10 +115,11 @@ $req->bindValue('id_client', $id_client, PDO::PARAM_INT);
 $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
 $req->bindValue('commentaire', $commentaire, PDO::PARAM_STR);
 $req->execute();
-echo '<h2 class="message-confirmation">Les informations ont été validées</h2>';
+$message = array("type" => "succes", "message" => "Les informations ont été validées");
 } else {
-echo '<h2 class="message-erreur">Le type de commande est invalide</h2>';
+$message = array("type" => "erreur", "message" => "Le type de commande est invalide");
 }
+echo json_encode($message);
 }
 
 // Ajout d'un menu à la commande

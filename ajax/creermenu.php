@@ -47,18 +47,20 @@ $type = 4;
 }
 switch($type) {
 case 1:
-echo '<h2 class="message-erreur">Merci de remplir tous les champs</h2>';
-break;
+$type = array("type" => "erreur", "message" => "Merci de remplir tous les champs !");
+break; 
 case 2:
-echo '<h2 class="message-erreur">Le prix ne peut pas être inférieur à 1</h2>';
+$type = array("type" => "erreur", "message" => "Le prix ne peut pas être inférieur à 1");
 break;
 case 3:
-echo '<h2 class="message-erreur">Sélectionnez au moins un produit</h2>';    
+$type = array("type" => "erreur", "message" => "Sélectionnez au moins un produit");  
 break;
 case 4:
-echo '<h2 class="message-confirmation">Le menu a été créé</h2>';
+$type = array("type" => "succes", "message" => "Le menu a été créé"); 
 break;
 }
+echo json_encode($type);
 }
+
 
 ?>

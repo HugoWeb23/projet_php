@@ -84,6 +84,7 @@ echo '<option value="'.$table['id_table'].'">Table '.$table['id_table'].' ['.$ta
 <h3>Détails commande</h3>
 <div id="resultat"></div>
 <?php
+$totaux_menus = 0;
 if(isset($_SESSION['menus_commande'])) {
 if($_SESSION['menus_commande'] == null) {
 unset($_SESSION['menus_commande']);
@@ -92,7 +93,6 @@ $in = str_repeat('?,', count($_SESSION['menus_commande']) - 1) . '?';
 $sql = "SELECT * FROM menus WHERE id_menu IN ($in)";
 $req = $bdd->prepare($sql);
 $req->execute($_SESSION['menus_commande']) or die(print_r($req->errorInfo(), TRUE));
-$totaux_menus = 0;
 while($menu = $req->fetch()) {
     $count = array_count_values($_SESSION['menus_commande']);
     foreach($count as $j => $k) {
@@ -116,6 +116,7 @@ while($menu = $req->fetch()) {
 }
 }
 }
+$totaux_produits = 0;
 if(isset($_SESSION['produits_commande'])) {
 if($_SESSION['produits_commande'] == null) {
 unset($_SESSION['produits_commande']);
@@ -124,7 +125,6 @@ $in = str_repeat('?,', count($_SESSION['produits_commande']) - 1) . '?';
 $sql = "SELECT id_produit, libelle, prix FROM produits WHERE id_produit IN ($in)";
 $req = $bdd->prepare($sql);
 $req->execute($_SESSION['produits_commande']) or die(print_r($req->errorInfo(), TRUE));
-$totaux_produits = 0;
 while($afficher = $req->fetch()) {
 $count = array_count_values($_SESSION['produits_commande']);
 foreach($count as $j => $k) {

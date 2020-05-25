@@ -101,10 +101,13 @@ $req->bindValue('etat', 0, PDO::PARAM_INT);
 $req->execute();
 }
 }
-echo 'ok';
+unset($_SESSION['produits_commande']);
+unset($_SESSION['menus_commande']);
+$message = array("type" => "succes", "message" => "La commande a été créée !");
 } else {
-echo 'no';
+$message = array("type" => "erreur", "message" => "Sélectionnez au moins un produit ou un menu");
 }
+echo json_encode($message);
 }
 if($type_commande == 2) {
 if(isset($_SESSION['produits_commande']) && count($_SESSION['produits_commande']) || isset($_SESSION['menus_commande']) && count($_SESSION['menus_commande'])) {
@@ -140,10 +143,13 @@ $req->bindValue('etat', 0, PDO::PARAM_INT);
 $req->execute();
 }
 }
-echo 'ok';
+unset($_SESSION['produits_commande']);
+unset($_SESSION['menus_commande']);
+$message = array("type" => "succes", "message" => "La commande a été créée !");
 } else {
-echo 'Pas assez de produits';
+$message = array("type" => "erreur", "message" => "Sélectionnez au moins un produit ou un menu");
 }
+echo json_encode($message);
 }
 if($type_commande == 3) {
 if(isset($_SESSION['produits_commande']) && count($_SESSION['produits_commande']) || isset($_SESSION['menus_commande']) && count($_SESSION['menus_commande'])) {
@@ -185,9 +191,13 @@ $req->bindValue('tel_fixe', $tel_fixe, PDO::PARAM_STR);
 $req->bindValue('gsm', $gsm, PDO::PARAM_STR);
 $req->bindValue('email', $email, PDO::PARAM_STR);
 $req->execute() or die(print_r($req->errorInfo(), TRUE));
+unset($_SESSION['produits_commande']);
+unset($_SESSION['menus_commande']);
+$message = array("type" => "succes", "message" => "La commande a été créée !");
 } else {
-echo 'Pas assez de produits';
+$message = array("type" => "erreur", "message" => "Sélectionnez au moins un produit ou un menu");
 }
+echo json_encode($message);
 }
 }
 
