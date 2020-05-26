@@ -36,24 +36,12 @@ require('config.php');
 <?php
 $req = $bdd->prepare('SELECT * FROM categories ORDER BY nom');
 $req->execute();
-if($req->rowCount() < 1) {
-    echo 'Aucune catégorie';
-}
-if(isset($_GET['creer'])) {
-?>
-<tr>
-    <td><input type="text" name="nom"></td>
-    <td><textarea name="description"></textarea></td>
-    <td><input type="submit" name="creer" value="Créer"></td>
-</tr>
-<?php } ?>
-<?php
 while($categ = $req->fetch()) {
 ?>
 <tr>
 <td><?= $categ['nom']; ?></td>
 <td><?= $categ['description']; ?></td>   
-<td><a class="editer" data-id="<?= $categ['id_categorie']; ?>" href="#">Éditer</a> - <a data-id="<?= $categ['id_categorie']; ?>" href="#">Supprimer</a></td>  
+<td><a class="editer" data-id="<?= $categ['id_categorie']; ?>" href="#">Éditer</a> - <a data-id="<?= $categ['id_categorie']; ?>" class="supprimer_categorie" href="#">Supprimer</a></td>  
 </tr>     
 <?php } ?>
 </table>

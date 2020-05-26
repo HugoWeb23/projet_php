@@ -651,7 +651,8 @@ $(document).ready(function(){
 		{
 		if(data.type == 'succes') {
 		$('#resultat-commande').html('<h2 class="message-confirmation">'+data.message+'</h2>').fadeIn('slow');
-		$('.apercu-produits, .apercu-menus').fadeOut(0);
+		$('.apercu-produits, .apercu-menus').remove();
+		totalCommande();
 		} else if(data.type == 'erreur') {
 		$('#resultat-commande').html('<h2 class="message-erreur">'+data.message+'</h2>').fadeIn('slow');
 		}
@@ -872,7 +873,7 @@ $(document).ready(function(){
 		});
 		var id = 1;
 		$(document).on('click', '#creer_categorie', function() { 
-		$('table').append('<tr><td><input class="test" type="text"></td><td><textarea class="test2"></textarea></td><td><input type="button" value="Créer" class="ok"> <input type="button" value="Annuler" class="supprimer"></td></tr>');
+		$('table').append('<tr><td><input class="test" type="text"></td><td><textarea class="test2"></textarea></td><td><input type="button" value="Créer" class="ok"> <input type="button" value="Annuler" class="annuler"></td></tr>');
 		id++;	
 		return false;
 		});
@@ -887,7 +888,7 @@ $(document).ready(function(){
 				method:"post",
 				data:{action:'creer', nom:nom, description:description},
 				success:function(data) {
-					$('table').append('<tr><td>'+nom+'</td><td>'+description+'</td><td><a class="editer" data-id="'+data+'" href="#">Éditer</a> - <a data-id="'+data+'" href="#">Supprimer</a></td></tr>');
+					$('table').append('<tr><td>'+nom+'</td><td>'+description+'</td><td><a class="editer" data-id="'+data+'" href="#">Éditer</a> - <a data-id="'+data+'" class="supprimer_categorie" href="#">Supprimer</a></td></tr>');
 				}
 			});
 			$(this).closest('tr').remove();
@@ -895,24 +896,62 @@ $(document).ready(function(){
 		}
 		 });
 
-		 $(document).on('click', '.supprimer', function() {
+		 $(document).on('click', '.supprimer_categorie', function() {
+			id_categorie = $(this).data('id');
 			$(this).closest('tr').remove();
+			$.ajax({
+			url:"ajax/gestioncategories.php",
+			method:"post",
+			dataType:"json",
+			data:{action:'supprimer', id_categorie:id_categorie},
+			success:function(data) {
+			if(data.type == 'succes'){
+			} else if(data.type == 'erreur') {
+			alert(data.message);
+			}
+			}
+			});
+		 });
+
+		 $(document).on('click', '.annuler', function() {
+		var id_categorie = $(this).data('id');
+		var nom = $(this).closest('tr').find('input[type="text"]').val();
+		var description = $(this).closest('tr').find('td').eq(1).text();
+		if(nom.length == 0 || description.length == 0) {
+		$(this).closest('tr').remove();
+		}
+		$(this).closest('tr').html('<td>'+nom+'</td><td>'+description+'</td><td><a class="editer" data-id="'+id_categorie+'" href="#">Éditer</a> - <a data-id="'+id_categorie+'" class="supprimer_categorie" href="#">Supprimer</a></td>');
 		 });
 
 		 $(document).on('click', '.editer', function() {
 			var id_categorie = $(this).data('id');
 			var nom = $(this).closest('tr').find('td').eq(0).text();
 			var description = $(this).closest('tr').find('td').eq(1).text();
-			$(this).closest('tr').html('<td><input type="text" class="test" value="'+nom+'"></td><td><textarea class="test2">'+description+'</textarea></td><td><input type="button" data-id="'+id_categorie+'" value="Modifier" class="modifier"> <input type="button" value="Annuler" class="supprimer"></td>');
+			$(this).closest('tr').html('<td><input type="text" class="test" value="'+nom+'"></td><td><textarea class="test2">'+description+'</textarea></td><td><input type="button" data-id="'+id_categorie+'" value="Modifier" class="modifier"> <input type="button" data-id="'+id_categorie+'" value="Annuler" class="annuler"></td>');
 			
 		 });
 
 		 $(document).on('click', '.modifier', function() {
 			var id_categorie = $(this).data('id');
-			var nom = $(this).closest('tr').find('td').eq(0).text();
-			var description = $(this).closest('tr').find('td').eq(1).text();
+			var nom = $(this).closest('tr').find('input[type="text"]').val();
+			var description = $(this).closest('tr').find('textarea').val();
+
+			$.ajax({
+				url:"ajax/gestioncategories.php",
+				method:"post",
+				dataType:"json",
+				data:{action:'modifier', id_categorie:id_categorie, nom:nom, description:description},
+				success:function(data) {
+				if(data.type == 'succes') {
+				$('.modifier').closest('tr').html('<td>'+nom+'</td><td>'+description+'</td><td><a class="editer" data-id="'+id_categorie+'" href="#">Éditer</a> - <a data-id="'+id_categorie+'" class="supprimer_categorie" href="#">Supprimer</a></td>');
+				} else if(data.type == 'erreur') {
+				alert(data.message);
+				$('.modifier').parent().parent().css("background", "red");
+				}
+				}
 		 });
 		
 	});
+});
 
 	
