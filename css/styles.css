@@ -328,6 +328,15 @@ transition-duration: 0.1s;
 max-width: 100%; 
 }
 
+.label-error {
+position: absolute;
+right: 0;
+text-transform: uppercase;
+background: red;
+color: #FFF;
+font-size: 0.8em;
+}
+
 .details-produit {
 position: absolute;
 left: 3px;

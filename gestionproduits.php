@@ -23,11 +23,16 @@ require('config.php');
 <div class="contenu">
 <div class="flex-produits">
 <?php 
-$req = $bdd->prepare('SELECT * FROM produits');
+$req = $bdd->prepare('SELECT *, COUNT(b.id) as compteur, a.id_produit as id_produit FROM produits as a LEFT JOIN produits_categories as b ON a.id_produit = b.id_produit GROUP BY a.id_produit');
 $req->execute();
 while($produit = $req->fetch()) {
 ?>
 <div class="apercuproduit">
+<?php
+if($produit['compteur'] == 0) {
+echo '<div class="label-error">Aucune catégorie</div>';
+}
+?>
 <img src="<?= $produit['photo']; ?>">
 <div class="details-produit">
 <p>Nom : <?= $produit['libelle']; ?></p>
