@@ -142,7 +142,9 @@ $totaux_produits += $afficher['prix'] * $afficher['quantite'];
 <?php 
 }
 ?>
+<div class="afficher-total">
 <div class="total">Total commande : <span><?= $totaux_menus + $totaux_produits ?> €</span></div>
+</div>
 </div>
 <div class="menu-categories">
 <div class="nom-categorie">

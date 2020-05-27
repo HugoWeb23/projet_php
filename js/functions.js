@@ -87,6 +87,7 @@ $(document).ready(function(){
 					}
 					$('#resultat').html(data).fadeIn('slow');
 					$('#resultat').delay(2000).fadeOut('slow');
+					totalCommande();
 				}
 			});
 		});	
@@ -94,17 +95,13 @@ $(document).ready(function(){
 
 		$('.supprimer').on('click', function() {
 			var id_produit = $(this).data('produit');
-			$(this).parent().fadeOut(0);
 			$.ajax({
 				url:"ajax/modifierquantite.php",
 				method:"post",
-				data:{delete:id_produit},
-				success:function(data)
-				{
-					$('#resultat').html(data).fadeIn('slow');
-					$('#resultat').delay(2000).fadeOut('slow');
-				}
+				data:{delete:id_produit}
 			});
+			$(this).parent().remove();
+			totalCommande();
 		});
 
 		$('#creerMenu').submit(function() {
@@ -125,12 +122,14 @@ $(document).ready(function(){
 					$('#resultat-menu').html('<h2 class="message-erreur">'+data.message+'</h2>').fadeIn('slow');
 					} else if(data.type == 'succes') {
 					$('#resultat-menu').html('<h2 class="message-confirmation">'+data.message+'</h2>').fadeIn('slow');
-					$('.apercu-produits').fadeOut(0);
+					$('.apercu-menus').remove();
 					}
 					$('#resultat-menu').delay(3000).fadeOut('slow');
 					$('#creerMenu').css('opacity', '1');
 					$('.loader').hide();
+					$('#creerMenu').find('input[type="text"], input[type="number"]').val('');
 					$('#creer_menu').val('Créer le menu');
+					totalCommande();
 			}
 		});
 		
@@ -159,6 +158,8 @@ $(document).ready(function(){
 						$('#modifierMenu').css('opacity', '1');
 						$('.loader').hide();
 						$('#modifier_menu').val('Modifier les informations du menu');
+						$('#prix_menu span').text(prix+ ' €');
+						diffMenu();
 				}
 			});
 			 }
@@ -302,6 +303,8 @@ $(document).ready(function(){
 					}
 					$('#resultat').html(data).fadeIn('slow');
 					$('#resultat').delay(2000).fadeOut('slow');
+					totalCommande();
+					diffMenu();
 				}
 			});
 		});
@@ -310,18 +313,14 @@ $(document).ready(function(){
 			var produit = $(this).data('produit');
 			var id_menu = $(this).data('menu');
 
-			$(this).parent().fadeOut(0);
-
 			$.ajax({
 				url:"ajax/modifiermenu.php",
 				method:"post",
-				data: {action:'supprimer_produit', produit:produit, id_menu:id_menu},
-				success:function(data)
-				{
-					$('#resultat').html(data).fadeIn('slow');
-					$('#resultat').delay(2000).fadeOut('slow');
-				}
+				data: {action:'supprimer_produit', produit:produit, id_menu:id_menu}
 			});
+			$(this).parent().remove();
+			totalCommande();
+			diffMenu();
 		});
 
 			$('#nom_client').autocomplete({
@@ -570,35 +569,25 @@ $(document).ready(function(){
 		
 		$('.supprimerMenuCommande').on('click', function() {
 			var id_menu = $(this).data('produit');
-			$(this).parent().fadeOut(0);
 			$.ajax({
 				url:"ajax/creercommande.php",
 				method:"post",
-				data:{action:'supprimer_menu', delete:id_menu},
-				success:function(data)
-				{
-					$('#resultat').html(data).fadeIn('slow');
-					$('#resultat').delay(2000).fadeOut('slow');
-					totalCommande();
-				}
+				data:{action:'supprimer_menu', delete:id_menu}
 			});
+			$(this).parent().remove();
+			totalCommande();
 		});
 
 
 		$('.commandeSupprimerProduit').on('click', function() {
 			var produit = $(this).data('produit');
-			$(this).parent().fadeOut(0);
 			$.ajax({
 				url:"ajax/creercommande.php",
 				method:"post",
-				data:{action:'supprimer_produit', delete:produit},
-				success:function(data)
-				{
-					$('#resultat').html(data).fadeIn('slow');
-					$('#resultat').delay(2000).fadeOut('slow');
-					totalCommande();
-				}
+				data:{action:'supprimer_produit', delete:produit}
 			});
+			$(this).parent().remove();
+			totalCommande();
 		});
 
 		$('#creerCommande').submit(function() { 
@@ -784,6 +773,13 @@ $(document).ready(function(){
 			total_commande += total_produit;
 			});
 			$('.total span').text(total_commande+' €');
+			}
+
+			function diffMenu() {
+			var prix_menu = $('#prix_menu span').text().replace(/[^\d]/g, "");
+			var total_produits = $('.total span').text().replace(/[^\d]/g, "");
+			var diff = total_produits - prix_menu;
+			$('#diff span').text(Math.abs(diff)+ ' €');
 			}
 
 		$('.commandeMenuQuantite').on('click', function() {

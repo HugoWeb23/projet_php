@@ -463,19 +463,12 @@ float: right;
 
 .menu-apercu .supprimer {
 text-decoration: none;
-margin-left: 5px;
 }
 
 .menu-apercu .quantite {
 display: flex;
 font-weight: 600;
 margin-top: 10px;
-}
-
-.menu-apercu .total {
-float: right;
-font-size: 20px;
-font-weight: bold;
 }
 
 .creermenu-ajouter-produit, .modifiermenu-ajouter-produit,
@@ -487,6 +480,10 @@ width: 151px;
 color: #ab4a4a;
 margin-left: -3px;
 transition-duration: 0.5s;
+}
+
+.afficher-total {
+font-size: 1.2em;
 }
 
 .creermenu-ajouter-produit:hover, .modifiermenu-ajouter-produit:hover,

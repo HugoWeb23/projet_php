@@ -94,10 +94,12 @@ if(isset($_GET['id'])) {
 <h3>Composition du menu</h3>
 <div id="resultat"></div>
 <?php
+$total_menu = 0;
 $req = $bdd->prepare('SELECT b.quantite, b.id_produit as id, a.libelle as libelle, a.prix as prix FROM produits as a INNER JOIN menus_produits as b ON a.id_produit = b.id_produit WHERE b.id_menu = :id GROUP BY b.id_produit ORDER BY id ASC');
 $req->bindValue('id', $id_menu, PDO::PARAM_INT);
 $req->execute();
 while($afficher = $req->fetch()) {
+$total_menu += $afficher['prix'] * $afficher['quantite'];
 ?>
 <div class="apercu-produits">
 <div class="libelle"><?= $afficher['libelle']; ?>
@@ -106,22 +108,15 @@ while($afficher = $req->fetch()) {
 </div>
 <input type="button" class="produit_quantite" data-produit="<?= $afficher['id']; ?>" data-menu="<?= $menu['id_menu']; ?>" value="Valider quantité">
 </div>
-<div class="prix"><?= $afficher['prix']; ?> €</div>
+<div class="prix" data-prix="<?= $afficher['prix']; ?>"><?= $afficher['prix']; ?> €</div>
 <input type="button" class="supprimer_produit" data-produit="<?= $afficher['id']; ?>" data-menu="<?= $menu['id_menu']; ?>" value="supprimer">
 </div>
-<?php 
-}
-$req = $bdd->prepare('SELECT SUM(a.prix) as total_produits FROM produits as a INNER JOIN menus_produits as b ON a.id_produit = b.id_produit WHERE b.id_menu = :id');
-$req->bindValue('id', $id_menu, PDO::PARAM_INT);
-$req->execute();
-$total = $req->fetch(PDO::FETCH_ASSOC);
-?>
-<?php
-if($total['total_produits'] > 0) { ?>
-<div class="total">Différence : <?php $diff = $total['total_produits'] - $menu['prix']; echo $diff; ?> €</div>
-<div class="total">Total produits : <?= $total['total_produits']; ?> €</div>
 <?php } ?>
-<div class="total">Prix menu : <?= $menu['prix']; ?> €</div>
+<div class="afficher-total">
+<div id="diff">Différence : <span><?= abs($total_menu -  $menu['prix']); ?> €</span></div>
+<div class="total">Total produits : <span><?= $total_menu; ?> €</span></div>
+<div id="prix_menu">Prix menu : <span><?= $menu['prix']; ?> €</span></div>
+</div>
 </div>
 <div class="menu-categories">
 <?php 

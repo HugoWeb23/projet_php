@@ -94,25 +94,25 @@ $sql = "SELECT * FROM menus WHERE id_menu IN ($in)";
 $req = $bdd->prepare($sql);
 $req->execute($_SESSION['menus_commande']) or die(print_r($req->errorInfo(), TRUE));
 while($menu = $req->fetch()) {
-    $count = array_count_values($_SESSION['menus_commande']);
-    foreach($count as $j => $k) {
-    if($menu['id_menu'] == $j) {
-    $quantite = $k;
-    }
-    }
-    $totaux_menus += $menu['prix'] * $quantite;
-    ?>
-    <div class="apercu-menus">
-    <div class="libelle"><?= $menu['nom']; ?>
-    <div class="quantite">Quantité : 
-    <input type="text" class="quantite_saisie" value="<?= $quantite ?>">
-    </div>
-    <input type="button" class="menuCommandeQuantite" data-produit="<?= $menu['id_menu']; ?>" value="Valider quantité">
-    </div>
-    <div class="prix" data-prix="<?= $menu['prix']; ?>"><?= $menu['prix']; ?> €</div>
-    <input type="button" class="supprimerMenuCommande" data-produit="<?= $menu['id_menu']; ?>" value="supprimer">
-    </div>
-    <?php
+$count = array_count_values($_SESSION['menus_commande']);
+foreach($count as $j => $k) {
+if($menu['id_menu'] == $j) {
+$quantite = $k;
+}
+}
+$totaux_menus += $menu['prix'] * $quantite;
+?>
+<div class="apercu-menus">
+<div class="libelle"><?= $menu['nom']; ?>
+<div class="quantite">Quantité : 
+<input type="text" class="quantite_saisie" value="<?= $quantite ?>">
+</div>
+<input type="button" class="menuCommandeQuantite" data-produit="<?= $menu['id_menu']; ?>" value="Valider quantité">
+</div>
+<div class="prix" data-prix="<?= $menu['prix']; ?>"><?= $menu['prix']; ?> €</div>
+<input type="button" class="supprimerMenuCommande" data-produit="<?= $menu['id_menu']; ?>" value="supprimer">
+</div>
+<?php
 }
 }
 }
@@ -149,7 +149,9 @@ $totaux_produits += $afficher['prix'] * $quantite;
 }
 }
 ?>
+<div class="afficher-total">
 <div class="total">Total commande : <span><?= $totaux_menus + $totaux_produits ?> €</span></div>
+</div>
 </div>
 <div class="menu-categories">
 <div class="nom-categorie">

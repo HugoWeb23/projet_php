@@ -39,6 +39,7 @@ require('config.php');
 <h3>Composition du menu</h3>
 <div id="resultat"></div>
 <?php
+$total_menu = 0;
 if(isset($_SESSION['menu'])) {
 if($_SESSION['menu'] == null) {
 unset($_SESSION['menu']);
@@ -52,21 +53,25 @@ $count = array_count_values($_SESSION['menu']);
 foreach($count as $j => $k) {
 if($afficher['id_produit'] == $j) {
 $quantite = $k;
+$total_menu += $afficher['prix'] * $quantite;
 }
 }
 ?>
-<div class="apercu-produits">
+<div class="apercu-menus">
 <div class="libelle"><?= $afficher['libelle']; ?>
 <div class="quantite">Quantité : 
 <input type="text" class="quantite_saisie" value="<?= $quantite ?>">
 </div>
 <input type="button" class="validerQuantite" data-produit="<?= $afficher['id_produit']; ?>" value="Valider quantité">
 </div>
-<div class="prix"><?= $afficher['prix']; ?> €</div>
+<div class="prix" data-prix="<?= $afficher['prix']; ?>"><?= $afficher['prix']; ?> €</div>
 <input type="button" class="supprimer" data-produit="<?= $afficher['id_produit']; ?>" value="supprimer">
 </div>
+<?php } ?>
+<div class="afficher-total">
+<div class="total">Total des produits : <span><?= $total_menu; ?> €</span></div>
+</div>
 <?php
-}
 }
 }
 ?>
