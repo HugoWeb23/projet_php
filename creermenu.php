@@ -57,7 +57,7 @@ $total_menu += $afficher['prix'] * $quantite;
 }
 }
 ?>
-<div class="apercu-menus">
+<div class="apercu-produits">
 <div class="libelle"><?= $afficher['libelle']; ?>
 <div class="quantite">Quantité : 
 <input type="text" class="quantite_saisie" value="<?= $quantite ?>">
@@ -68,14 +68,13 @@ $total_menu += $afficher['prix'] * $quantite;
 <input type="button" class="supprimer" data-produit="<?= $afficher['id_produit']; ?>" value="supprimer">
 </div>
 <?php } ?>
-<div class="afficher-total">
-<div class="total">Total des produits : <span><?= $total_menu; ?> €</span></div>
-</div>
 <?php
 }
 }
 ?>
-
+<div class="afficher-total">
+<div class="total">Total des produits : <span><?= $total_menu; ?> €</span></div>
+</div>
 </div>
 <div class="menu-categories">
 <?php 
@@ -101,8 +100,8 @@ while($produit = $req2->fetch()) {
 <label for="produit<?= $produit['id_produit']; ?>">
 <img src="<?= $produit['photo']; ?>">
 <div class="details-produit">
-<p>Nom : <?= $produit['libelle']; ?></p>
-<p>Prix : <?= $produit['prix']; ?></p>
+<p>Nom : <span><?= $produit['libelle']; ?></span></p>
+<p>Prix : <span><?= $produit['prix']; ?></span></p>
 <button data-id="<?= $produit['id_produit']; ?>" class="creermenu-ajouter-produit">Ajouter</button>
 </div>
 </div>

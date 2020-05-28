@@ -165,8 +165,8 @@ while($menu = $req->fetch()) {
 ?>
 <div class="apercuproduit">
 <div class="details-produit">
-<p>Nom : <?= $menu['nom']; ?></p>
-<p>Prix : <?= $menu['prix']; ?></p>
+<p>Nom : <span><?= $menu['nom']; ?></span></p>
+<p>Prix : <span><?= $menu['prix']; ?></span></p>
 <button data-menu_id="<?= $menu['id_menu']; ?>" class="commandeAjouterMenu">Ajouter</button>
 </div>
 </div>
@@ -195,8 +195,8 @@ while($produit = $req2->fetch()) {
 <label for="produit<?= $produit['id_produit']; ?>">
 <img src="<?= $produit['photo']; ?>">
 <div class="details-produit">
-<p>Nom : <?= $produit['libelle']; ?></p>
-<p>Prix : <?= $produit['prix']; ?></p>
+<p>Nom : <span><?= $produit['libelle']; ?></span></p>
+<p>Prix : <span><?= $produit['prix']; ?></span></p>
 <button data-produit_id="<?= $produit['id_produit']; ?>" class="commandeAjouterProduit">Ajouter</button>
 </div>
 </div>

@@ -18,7 +18,7 @@ case 1:
 $type = 'livraison';
 break;
 case 2:
-$type = 'sur place';
+$type = 'sur place - table '.$afficher['id_table'];
 break;
 case 3:
 $type = 'à emporter';

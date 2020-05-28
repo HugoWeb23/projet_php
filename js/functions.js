@@ -58,6 +58,8 @@ $(document).ready(function(){
 	$('.creermenu-ajouter-produit').on('click', function() {
 
 		var id_produit = $(this).data('id');
+		var nom = $(this).closest('.details-produit').find('span').eq(0).text();
+		var prix = $(this).closest('.details-produit').find('span').eq(1).text();
 
 		$.ajax({
 			url:"ajax/modifierquantite.php",
@@ -65,12 +67,12 @@ $(document).ready(function(){
 			data: {id_produit:id_produit},
 			success:function(data)
 			{
-				location.reload();
+				ajouterProduit('produit', 'produit', 0, 0, 'validerQuantite', 'supprimer', id_produit, nom, prix);
 			}
 		});
 	});
 
-	$('.validerQuantite').on('click', function(){
+	$('.menu-apercu').on('click', '.validerQuantite', function(){
 		
 			var produit = $(this).data('produit');
 			var quantite_saisie = $(this).parent().find('.quantite_saisie').val();
@@ -93,7 +95,7 @@ $(document).ready(function(){
 		});	
 	 
 
-		$('.supprimer').on('click', function() {
+		$('.menu-apercu').on('click', '.supprimer', function() {
 			var id_produit = $(this).data('produit');
 			$.ajax({
 				url:"ajax/modifierquantite.php",
@@ -171,6 +173,8 @@ $(document).ready(function(){
 
 				var id_produit = $(this).data('id_produit');
 				var id_menu = $(this).data('id_menu');
+				var nom = $(this).closest('.details-produit').find('span').eq(0).text();
+				var prix = $(this).closest('.details-produit').find('span').eq(1).text();
 		
 				$.ajax({
 					url:"ajax/modifiermenu.php",
@@ -178,7 +182,8 @@ $(document).ready(function(){
 					data:{action:'ajouter_produit', id_produit:id_produit, id_menu:id_menu},
 					success:function(data)
 					{
-						location.reload();
+						ajouterProduit('produit', 'produit', 'menu', id_menu, 'produit_quantite', 'supprimer_produit', id_produit, nom, prix);
+						diffMenu();
 					}
 				});
 			});
@@ -287,7 +292,7 @@ $(document).ready(function(){
 			}
 		});
 
-		$('.produit_quantite').on('click', function(){
+		$('.menu-apercu').on('click', '.produit_quantite', function(){
 		
 			var produit = $(this).data('produit');
 			var id_menu = $(this).data('menu');
@@ -309,7 +314,7 @@ $(document).ready(function(){
 			});
 		});
 		
-		$('.supprimer_produit').on('click', function(){ 
+		$('.menu-apercu').on('click', '.supprimer_produit', function(){ 
 			var produit = $(this).data('produit');
 			var id_menu = $(this).data('menu');
 
@@ -494,9 +499,42 @@ $(document).ready(function(){
 			}
 		   });
 
+		   function ajouterProduit(type, data, dataSup, dataSupValue, up, supp, id, nom, prix) {
+			switch(type) {
+			case 'produit':
+			type = 'apercu-produits';
+			break;
+			case 'menu':
+			type = 'apercu-menus';
+			break;
+			}
+
+			var compteur_id = [];
+			$('.'+type+'').each(function() { 
+			var id_i = $(this).find('.'+up+'').data(''+data+'');
+			compteur_id.push(id_i);
+			});
+
+			if(compteur_id.includes(id) == false) {
+				$('<div class="'+type+'"><div class="libelle">'+nom+'<div class="quantite">Quantité : <input type="text" class="quantite_saisie" value="1"></div><input type="button" class="'+up+'" data-'+data+'="'+id+'" '+(dataSup.length < 0 ? '' : 'data-'+dataSup+'="'+dataSupValue+'"')+' value="Valider quantité"></div><div class="prix" data-prix="'+prix+'">'+prix+' €</div><input type="button" class="'+supp+'" data-'+data+'="'+id+'" '+(dataSup.length < 0 ? '' : 'data-'+dataSup+'="'+dataSupValue+'"')+' value="supprimer"></div>').insertBefore('.afficher-total');
+				} else {
+				$('.'+type+'').each(function() { 
+				if($(this).find('.'+up+'').data(''+data+'') == id) {
+				var num =+ $(this).find('.quantite_saisie').val() + 1;
+				if(num <= 30 ) {
+				$(this).find('.quantite_saisie').val(num);
+				}
+				}
+				});
+				}
+				totalCommande();
+		   }
+
 		   $('.commandeAjouterMenu').on('click', function() {
 
 			var id_menu = $(this).data('menu_id');
+			var nom = $(this).closest('.details-produit').find('span').eq(0).text();
+			var prix = $(this).closest('.details-produit').find('span').eq(1).text();
 	
 			$.ajax({
 				url:"ajax/creercommande.php",
@@ -504,7 +542,7 @@ $(document).ready(function(){
 				data: {action:'ajouter_menu', id_menu:id_menu},
 				success:function(data)
 				{
-					location.reload();
+				ajouterProduit('menu', 'produit', 0, 0, 'menuCommandeQuantite', 'supprimerMenuCommande', id_menu, nom, prix);
 				}
 			});
 		});
@@ -512,6 +550,8 @@ $(document).ready(function(){
 		$('.commandeAjouterProduit').on('click', function() {
 
 			var id_produit = $(this).data('produit_id');
+			var nom = $(this).closest('.details-produit').find('span').eq(0).text();
+			var prix = $(this).closest('.details-produit').find('span').eq(1).text();
 	
 			$.ajax({
 				url:"ajax/creercommande.php",
@@ -519,12 +559,12 @@ $(document).ready(function(){
 				data: {action:'ajouter_produit', id_produit:id_produit},
 				success:function(data)
 				{
-					location.reload();
+					ajouterProduit('produit', 'produit', 0, 0,'commandeProduitQuantite', 'commandeSupprimerProduit', id_produit, nom, prix);
 				}
 			});
 		});
 
-		   $('.menuCommandeQuantite').on('click', function(){
+		   $('.menu-apercu').on('click', '.menuCommandeQuantite', function(){
 		
 			var menu = $(this).data('produit');
 			var quantite_saisie = $(this).parent().find('.quantite_saisie').val();
@@ -546,7 +586,7 @@ $(document).ready(function(){
 			});
 		});
 
-		$('.commandeProduitQuantite').on('click', function(){
+		$('.menu-apercu').on('click', '.commandeProduitQuantite', function(){
 		
 			var id_produit = $(this).data('produit');
 			var quantite_saisie = $(this).parent().find('.quantite_saisie').val();
@@ -567,7 +607,7 @@ $(document).ready(function(){
 		});
 	});
 		
-		$('.supprimerMenuCommande').on('click', function() {
+		$('.menu-apercu').on('click', '.supprimerMenuCommande', function() {
 			var id_menu = $(this).data('produit');
 			$.ajax({
 				url:"ajax/creercommande.php",
@@ -579,7 +619,7 @@ $(document).ready(function(){
 		});
 
 
-		$('.commandeSupprimerProduit').on('click', function() {
+		$('.menu-apercu').on('click', '.commandeSupprimerProduit', function() {
 			var produit = $(this).data('produit');
 			$.ajax({
 				url:"ajax/creercommande.php",
@@ -782,7 +822,7 @@ $(document).ready(function(){
 			$('#diff span').text(Math.abs(diff)+ ' €');
 			}
 
-		$('.commandeMenuQuantite').on('click', function() {
+		$('.menu-apercu').on('click', '.commandeMenuQuantite', function() {
 			var id_menu = $(this).data('menu');
 			var id_commande = $(this).data('commande');
 			var quantite = $(this).parent().find('.quantite_saisie').val();
@@ -799,7 +839,7 @@ $(document).ready(function(){
 			});
 		});
 
-		$('.commandeSupprimerMenu').on('click', function() {
+		$('.menu-apercu').on('click', '.commandeSupprimerMenu', function() {
 			var id_menu = $(this).data('menu');
 			var id_commande = $(this).data('commande');
 			$.ajax({
@@ -811,7 +851,7 @@ $(document).ready(function(){
 			totalCommande();
 		});
 
-		$('.modifProduitQuantite').on('click', function() {
+		$('.menu-apercu').on('click', '.modifProduitQuantite', function() {
 			var id_produit = $(this).data('produit');
 			var id_commande = $(this).data('commande');
 			var quantite = $(this).parent().find('.quantite_saisie').val();
@@ -828,7 +868,7 @@ $(document).ready(function(){
 			});
 		});
 
-		$('.supprimerProduit').on('click', function() {
+		$('.menu-apercu').on('click', '.supprimerProduit', function() {
 			var id_produit = $(this).data('produit');
 			var id_commande = $(this).data('commande');
 			$.ajax({
@@ -843,13 +883,16 @@ $(document).ready(function(){
 		$('.modifCommandeAjouterMenu').on('click', function() {
 			var id_menu = $(this).data('menu');
 			var id_commande = $(this).data('commande');
+			var nom = $(this).closest('.details-produit').find('span').eq(0).text();
+			var prix = $(this).closest('.details-produit').find('span').eq(1).text();
+
 			$.ajax({
 				url:"ajax/modifiercommande.php",
 				method:"post",
 				data: {action:'ajouter_menu', id_menu:id_menu, id_commande:id_commande},
 				success:function(data)
 				{
-					location.reload();
+					ajouterProduit('menu', 'menu', 'commande', id_commande, 'commandeMenuQuantite', 'commandeSupprimerMenu', id_menu, nom, prix);
 				}
 			});
 		});
@@ -857,13 +900,15 @@ $(document).ready(function(){
 		$('.modifCommandeAjouterProduit').on('click', function() {
 			var id_produit = $(this).data('produit');
 			var id_commande = $(this).data('commande');
+			var nom = $(this).closest('.details-produit').find('span').eq(0).text();
+			var prix = $(this).closest('.details-produit').find('span').eq(1).text();
 			$.ajax({
 				url:"ajax/modifiercommande.php",
 				method:"post",
 				data: {action:'ajouter_produit', id_produit:id_produit, id_commande:id_commande},
 				success:function(data)
 				{
-					location.reload();
+				ajouterProduit('produit', 'produit', 'commande', id_commande, 'modifProduitQuantite', 'supprimerProduit', id_produit, nom, prix);
 				}
 			});
 		});
