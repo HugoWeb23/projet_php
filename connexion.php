@@ -31,10 +31,10 @@ $erreur = 1;
 }
 switch($erreur) {
 case 1:
-$erreur = "Identifiants incorrects !";
+$erreur = "<h2 class=\"message-erreur\">Identifiants incorrects !</h2>";
 break;      
 case 2:
-$erreur = "Merci de remplir tous les champs !";   
+$erreur = "<h2 class=\"message-erreur\">Merci de remplir tous les champs !</h2>";   
 break; 
 }
 }
@@ -42,13 +42,17 @@ break;
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="css/styles.css" rel="stylesheet">
-    <title><?= $nom_site ?> : Connexion</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="js/jquery.js"></script>
+<script src="js/jquery-ui/jquery-ui.min.js"></script>
+<script src="js/functions.js"></script>
+<link href="css/styles.css" rel="stylesheet">
+<link rel="stylesheet" href="js/jquery-ui/jquery-ui.min.css">
+<title><?= $nom_site ?> : Connexion</title>
 </head>
 <body> 
-<form action="" method="post">   
+<form id="connexion" action="" method="post">   
 <div class="connexion-box">
 <div class="connexion-logo">
 <img src="images/logo.png">   

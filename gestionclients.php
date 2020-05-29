@@ -6,7 +6,7 @@ require('config.php');
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,10 +21,10 @@ require('config.php');
 <?php include('header.php'); ?>
 <div class="conteneur">
 <div class="titre-page">
-<h1>Gestion des clients</h1>
+<h1>Chercher des clients</h1>
 </div>
 <div class="recherche-employe">
-<label for="rechercher">Chercher un client :</label> <input type="text" name="rechercher" id="rechercher_client" placeholder="Rechercher un nom, un prénom, une adresse, ...">
+<label for="rechercher_client">Effectuer une recherche :</label> <input type="text" name="rechercher" id="rechercher_client" placeholder="Rechercher un nom, un prénom, une adresse, ...">
 </div>
 <div id="result"></div>
 </div>

@@ -31,14 +31,14 @@ if(isset($_GET['deconnexion'])) {
 <a href="#">Clients</a>
 <div class="dropdown-child">
 <a href="creerclient">Créer un compte client</a>
-<a href="gestionclients">Gestion des clients</a>
+<a href="gestionclients">Chercher des clients</a>
 </div>
 </div>
 <div class="dropdown">
 <a href="#">Personnel</a>
 <div class="dropdown-child">
 <a href="creeremploye">Créer un profil employé</a>
-<a href="gestionemployes">Gestion des employés</a>
+<a href="gestionemployes">Chercher des employés</a>
 </div>
 </div>
 <div class="dropdown">

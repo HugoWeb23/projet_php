@@ -15,7 +15,7 @@ $req->bindValue('quantite', $quantite_saisie, PDO::PARAM_INT);
 $req->bindValue('id_produit', $id_produit, PDO::PARAM_INT);
 $req->bindValue('id_menu', $id_menu, PDO::PARAM_INT);
 $req->execute();
-echo 'ok';
+echo '<h2 class="validation-menu">La quantité a été modifée</h2>';
 }
 
 if(isset($_POST['action']) && $_POST['action'] == 'supprimer_produit') {
@@ -47,7 +47,7 @@ break;
 }
 
 if(strlen($nom) == 0 || $prix == 0 || $etat == 0) {
-echo '<h2 class="message-erreur">Merci de compléter tous les champs</h2>';
+$message = array('type' => 'erreur', 'message' => 'Merci de compléter tous les champs');
 } else {
 $req = $bdd->prepare('UPDATE menus SET nom = :nom, prix = :prix, etat = :etat WHERE id_menu = :id_menu');
 $req->bindValue('nom', $nom, PDO::PARAM_STR);
@@ -55,7 +55,8 @@ $req->bindValue('prix', $prix, PDO::PARAM_INT);
 $req->bindValue('etat', $etat, PDO::PARAM_INT);
 $req->bindValue('id_menu', $id_menu, PDO::PARAM_INT);
 $req->execute();
-echo '<h2 class="message-confirmation">Les informations du menu ont été modifiées</h2>';
+$message = array('type' => 'succes', 'message' => 'Les informations du menu ont été modifiées');
+echo json_encode($message);
 }
 }
 

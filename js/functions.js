@@ -1,6 +1,16 @@
-// Recherche employés
-
 $(document).ready(function(){
+
+	// Page connexion
+	$('#connexion').submit(function() { 
+	var email = $(this).find('#email').val();
+	var mdp = $(this).find('#mdp').val();
+	if(email.length == 0 || mdp.length == 0) {
+	$('.message-erreur').remove();
+	$('.connexion-nom').after('<h2 class="message-erreur">Merci de remplir tous les champs !</h2>');
+	return false;
+	}
+	});
+	// Recherche employés
 	function load_data(query)
 	{
 		$.ajax({
@@ -23,10 +33,32 @@ $(document).ready(function(){
 			{
 				load_data();			
 			}
-		});	
-});
+		});
 
-$(document).ready(function(){
+	// Vérification de la disponibilité d'une adresse email
+
+	$('#email').on('keyup', function() { 
+	var email = $(this).val();
+	if(email.length > 7) {
+		$.ajax({
+		url:"ajax/checkemail.php",
+		method:"post",
+		dataType:"json",
+		data:{action:'email-personnel', email:email},
+		success:function(data)
+		{
+		if(data.dispo == 0) {
+		console.log('Email indisponible');
+		} else if(data.dispo == 1) {
+		console.log('Email disponible');
+		}
+		}
+		});
+	}
+	});
+
+	// Recherche clients
+
 	function load_clients(query)
 	{
 	
@@ -51,9 +83,6 @@ $(document).ready(function(){
 				load_clients();			
 			}
 		});	
-});
-
-$(document).ready(function(){
 
 	$('.creermenu-ajouter-produit').on('click', function() {
 
@@ -144,7 +173,7 @@ $(document).ready(function(){
 			var etat = $(this).find('input[name=etat]:checked').val();
 			var id_menu = $(this).find('#modifier_menu').data('menu_id');
 		if(nom.length < 1 || prix < 1) {
-			$('#resultat-menu').html("<h2 class=\"message-erreur\">Merci de compléter tous les champs</h2>");
+			$('#resultat-menu').html('<h2 class="message-erreur">Merci de compléter tous les champs</h2>');
 		} else {
 				$(this).css('opacity', '0.3');
 				$('.loader').show();
@@ -152,16 +181,21 @@ $(document).ready(function(){
 			$.ajax({
 				url:"ajax/modifiermenu.php",
 				method:"post",
+				dataType:"json",
 				data:{action:'modifier_menu', nom:nom, prix:prix, etat:etat, id_menu:id_menu},
 				success:function(data)
 				{
-						$('#resultat-menu').html(data).fadeIn('slow');
+					if(data.type == 'erreur') {
+					$('#resultat-menu').html('<h2 class="message-erreur">'+data.message+'</h2>');
+					} else if(data.type == 'succes') {
+						$('#resultat-menu').html('<h2 class="message-confirmation">'+data.message+'</h2>').fadeIn('slow');
 						$('#resultat-menu').delay(3000).fadeOut('slow');
 						$('#modifierMenu').css('opacity', '1');
 						$('.loader').hide();
 						$('#modifier_menu').val('Modifier les informations du menu');
 						$('#prix_menu span').text(prix+ ' €');
 						diffMenu();
+					}
 				}
 			});
 			 }
@@ -993,6 +1027,7 @@ $(document).ready(function(){
 		 });
 		
 	});
+
 });
 
 	
