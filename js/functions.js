@@ -735,18 +735,29 @@ $(document).ready(function(){
 			});
 		}
 
-		$(document).on('click', '.cloturer_commande', function() { 
+		function retablir_commande(id_commande) {
+			$.ajax({
+				url:"ajax/commandes_inactives.php",
+				method:"post",
+				data:{action:'retablir_commande', id_commande:id_commande},
+			});
+		}
+		
+
+		$('#liste_commandes').on('click', '.cloturer_commande', function() { 
 			var id_commande = $(this).data('id_commande');
 			
 				cloturer_commande(id_commande);
-				$(this).closest('tr').remove();
+				$(this).parent().parent().remove();
 			
 		});
 
-		$(document).on('click', '.cloturer_commande', function() { 
+		$('#commandes_inactives').on('click', '.retablir_commande', function() { 
 			var id_commande = $(this).data('id_commande');
-			$(this).parent().parent().remove();
-
+			
+				retablir_commande(id_commande);
+				$(this).parent().parent().remove();
+			
 		});
 
 		$(document).on('click', '.commande_etat', function() { 

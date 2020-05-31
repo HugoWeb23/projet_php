@@ -32,10 +32,40 @@ $(document).ready(function() {
 			});
    }
 
+   function commandes_inactives() {
+    $.ajax({
+				url:"ajax/commandes_inactives.php",
+				method:"post",
+				data:{action:'afficher_commandes'},
+				success:function(data)
+				{
+					$('#commandes_inactives').html(data).fadeIn('slow');
+				}
+			});
+   }
+
+   $('.nav-commandes a').on('click', function() { 
+	$(this).siblings('.active').removeClass('active');
+	$(this).addClass('active');
+	if($('.nav-commandes a').eq(0).hasClass('active')) {
+	$('#commandes_inactives').hide();
+	$('#liste_commandes').show();
+	afficher_commandes();
+	} else if($('.nav-commandes a').eq(1).hasClass('active')) {
+	$('#commandes_inactives').show();
+	$('#liste_commandes').hide();
+	commandes_inactives();
+	}
+	});
+
     setInterval(function(){ 
 
-    afficher_commandes();
-       }, 10000);
+		if($('.nav-commandes a').eq(0).hasClass('active')) {
+		afficher_commandes();
+		} else  if($('.nav-commandes a').eq(1).hasClass('active')) {
+		commandes_inactives();
+		}
+	   }, 10000);
     
     
 });
@@ -49,7 +79,18 @@ $(document).ready(function() {
 <div class="titre-page">
 <h1>Gestion des commandes</h1>
 </div>
+<div class="nav-commandes">
+<a href="#" class="active">Commandes actives</a>
+<a href="#">Commandes clôturées</a>
+</div>
+<div class="test" id="actives">
+Test actives
+</div>
+<div class="test" id="inactives">
+Test inactives
+</div>
 <div id="liste_commandes"></div>
+<div id="commandes_inactives"></div>
 </div>
 </body>
 </html>
