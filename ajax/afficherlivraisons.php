@@ -6,7 +6,7 @@ require('../config.php');
 
 if(isset($_POST['action']) && $_POST['action'] == 'afficher_livraisons') {
 
-$req = $bdd->prepare('SELECT *, b.id_livraison as id_livraison FROM commandes as a INNER JOIN livraisons as b ON a.id_livraison = b.id_livraison WHERE a.etat = 1 AND a.type = 1 AND b.etat = 0 AND b.id_livreur is null ORDER BY a.id_commande');
+$req = $bdd->prepare('SELECT *, b.id_livraison as id_livraison FROM commandes as a INNER JOIN livraisons as b ON a.id_livraison = b.id_livraison WHERE a.etat = 1 AND a.type = 1 AND b.etat = 1 AND b.id_livreur is null ORDER BY a.id_commande');
 $req->execute();
 if($req->rowCount() < 1) {
     echo 'Aucun résultat';
@@ -97,7 +97,7 @@ $req->execute();
 $livraison = $req->fetch();
 if($livraison['id_livreur'] == null) {
 $date = date('Y-m-d H:i:s');
-$req = $bdd->prepare('UPDATE livraisons SET etat = 1, date_debut = :date_debut, id_livreur = :id_livreur WHERE id_livraison = :id_livraison');
+$req = $bdd->prepare('UPDATE livraisons SET etat = 2, date_debut = :date_debut, id_livreur = :id_livreur WHERE id_livraison = :id_livraison');
 $req->bindValue('date_debut', $date, PDO::PARAM_STR);
 $req->bindValue('id_livreur', $personnel['id_personnel'], PDO::PARAM_INT);
 $req->bindValue('id_livraison', $id_livraison, PDO::PARAM_INT);

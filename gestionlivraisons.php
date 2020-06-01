@@ -43,7 +43,7 @@ function afficher_livraisons() {
 <h2>Mes livraisons</h2>
 </div>
 <?php
-$req = $bdd->prepare('SELECT *, b.id_livraison as id_livraison FROM commandes as a INNER JOIN livraisons as b ON a.id_livraison = b.id_livraison WHERE a.etat = 1 AND a.type = 1 AND b.etat = 1 AND b.id_livreur = :id_livreur ORDER BY b.date_debut');
+$req = $bdd->prepare('SELECT *, b.id_livraison as id_livraison FROM commandes as a INNER JOIN livraisons as b ON a.id_livraison = b.id_livraison WHERE a.etat = 1 AND a.type = 1 AND b.etat = 2 AND b.id_livreur = :id_livreur ORDER BY b.date_debut');
 $req->bindValue('id_livreur', $personnel['id_personnel'], PDO::PARAM_INT);
 $req->execute();
 if($req->rowCount() > 0) {
