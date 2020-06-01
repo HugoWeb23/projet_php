@@ -1039,6 +1039,49 @@ $(document).ready(function(){
 		
 	});
 
+	$('#liste_livraisons').on('click', '.prendre_commande', function() { 
+	var id_livraison = $(this).data('id_livraison');
+	var button = $(this);
+
+	$.ajax({
+		url:"ajax/afficherlivraisons.php",
+		method:"post",
+		dataType:"json",
+		data:{action:'prendre_commande', id_livraison:id_livraison},
+		success:function(data) {
+		if(data.type == 'succes') {
+		var mescommandes = button.closest('.contenu_commande').html();
+		$('.meslivraisons').after('');
+		$('<div class="contenu_commande">'+mescommandes+'</div>').insertBefore('.attentelivraisons');
+		button.closest('.contenu_commande').remove();
+		} else if(data.type == 'erreur') {
+		alert(data.message);
+		button.closest('.contenu_commande').remove();
+		}
+		}
+	});
+	});
+
+	$(document).on('click', '.livraison-details-produits', function() {
+	var button = $(this);
+	var id_commande = button.data('id_commande');
+	if(button.val() == 1) {
+	button.closest('.contenu_commande').find('.commande_produits').find('.produit').remove();
+	button.val(0).html('Détails commande');
+	} else {
+		$.ajax({
+			url:"ajax/afficherlivraisons.php",
+			method:"post",
+			data:{action:'details_commande', id_commande:id_commande},
+			success:function(data) {
+			button.closest('.contenu_commande').find('.commande_produits').prepend(data);
+			button.val(1).html('Masquer les détails');
+			
+			}
+		});
+	}
+	});
+
 });
 
 	

@@ -627,9 +627,7 @@ background: #eeeeee;
 .commande_produits {
 display: flex;
 justify-content: space-between;
-
 }
-
 
 .commande_produits > .produit {
 font-size: 1.2em;
@@ -701,4 +699,34 @@ font-style: italic;
 
 .details_menu, .commande_details_produit {
 margin-bottom: 3px;
+}
+
+/* Gestion des livraisons */
+
+.meslivraisons {
+display: flex;
+width: 100%;
+padding: 2px;
+background: #49763d;
+justify-content: center;
+margin-bottom: 10px;
+}
+
+.meslivraisons h2 {
+font-size: 1.4em;
+margin: 0;
+}
+
+.attentelivraisons {
+display: flex;
+width: 100%;
+padding: 2px;
+background: #ab4a4a;
+justify-content: center;
+margin-bottom: 10px;
+}
+
+.attentelivraisons h2 {
+font-size: 1.4em;
+margin: 0;
 }
