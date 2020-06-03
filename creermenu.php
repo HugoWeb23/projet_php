@@ -12,6 +12,7 @@ require('config.php');
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="js/jquery.js"></script>
 <script src="js/functions.js"></script>
+<link rel="icon" href="images/favicon.ico"/>
 <link href="css/styles.css" rel="stylesheet">
 <title><?= $nom_site ?></title>
 </head>

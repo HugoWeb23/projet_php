@@ -9,16 +9,15 @@ if(isset($_POST['action']) && $_POST['action'] == 'afficher_livraisons') {
 $req = $bdd->prepare('SELECT *, b.id_livraison as id_livraison FROM commandes as a INNER JOIN livraisons as b ON a.id_livraison = b.id_livraison WHERE a.etat = 1 AND a.type = 1 AND b.etat = 1 AND b.id_livreur is null ORDER BY a.id_commande');
 $req->execute();
 if($req->rowCount() < 1) {
-    echo 'Aucun résultat';
+    echo 'Il n\'y a aucune livraison en attente pour le moment';
 } else {
 
 while($afficher = $req->fetch()) {
 ?>
 <div class="contenu_commande">
 <div class="titre_commande">
-Commande n° <?= $afficher['id_commande']; ?><button class="prendre_commande" data-id_livraison="<?= $afficher['id_livraison']; ?>">Prendre en charge</button>
+Commande n° <?= $afficher['id_commande']; ?> <button class="btn-rouge prendre_commande" data-id_livraison="<?= $afficher['id_livraison']; ?>" data-id_commande="<?= $afficher['id_commande']; ?>">Prendre en charge</button>
 </div>
-<button class="livraison-details-produits" data-id_commande="<?= $afficher['id_commande']; ?>">Détails commande</button>
 <div class="commande_produits">
 <?php
 $req3 = $bdd->prepare('SELECT * FROM commandes as a LEFT JOIN livraisons as b ON a.id_livraison = b.id_livraison LEFT JOIN adresses as c ON b.id_adresse = c.id_adresse LEFT JOIN commandes_contact as d ON a.id_commande = d.id_commande WHERE a.id_commande = :id_commande');
@@ -42,7 +41,7 @@ $adresse = $req3->fetch();
 <span><?= $adresse['gsm']; ?></span>
 <span><?= $adresse['email']; ?></span>
 </div>
-<?php }?>
+<?php } ?>
 </div>
 
 </div>    
@@ -50,6 +49,8 @@ $adresse = $req3->fetch();
 }
 }
 }
+
+// Afficher les produits et menus d'une commande
 
 if(isset($_POST['action']) && $_POST['action'] == 'details_commande') {
 $id_commande = $_POST['id_commande'];
@@ -81,6 +82,16 @@ $req2->execute();
 while($commande = $req2->fetch()) {
 ?>
 <div class="commande_details_produit"><?= $commande['quantite']; ?> x <?= $commande['libelle']; ?>
+</div>
+<?php } ?>
+<?php 
+$req = $bdd->prepare('SELECT commentaire FROM commandes WHERE id_commande = :id_commande');
+$req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
+$req->execute();
+$afficher = $req->fetch();
+if(strlen($afficher['commentaire']) > 1) { ?>
+<div class="afficher-commentaire-commande">
+<b>Commentaire :</b> <?= $afficher['commentaire']; ?>
 </div>
 <?php } ?>
 </div>

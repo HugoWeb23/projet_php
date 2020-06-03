@@ -9,7 +9,7 @@ if(isset($_POST['action']) && $_POST['action'] == 'afficher_commandes') {
 $req = $bdd->prepare('SELECT * FROM commandes WHERE etat = 0 ORDER BY id_commande');
 $req->execute();
 if($req->rowCount() < 1) {
-    echo 'Aucun résultat';
+    echo 'Il n\'y a aucune commande pour le moment';
 } else {
 
 while($afficher = $req->fetch()) {
@@ -27,7 +27,7 @@ break;
 ?>
 <div class="contenu_commande">
 <div class="titre_commande">
-Commande n° <?= $afficher['id_commande']; ?> <span class="type"><?= $type; ?></span><button class="cloturer_commande" data-id_commande="<?= $afficher['id_commande']; ?>">Clôturer la commande</button><a class="editer_commande" href="modifiercommande?id=<?= $afficher['id_commande']; ?>">Modifier la commande</a>
+Commande n° <?= $afficher['id_commande']; ?> <span class="type"><?= $type; ?></span><button class="btn-rouge cloturer_commande" data-id_commande="<?= $afficher['id_commande']; ?>">Clôturer la commande</button><button class="btn-vert editer_commande" onclick="window.location.href='modifiercommande?id=<?= $afficher['id_commande']; ?>'">Modifier la commande</button>
 </div>
 <div class="commande_produits">
 <div class="produit">

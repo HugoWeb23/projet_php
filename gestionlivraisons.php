@@ -15,21 +15,32 @@ require('config.php');
 <script src="js/functions.js"></script>
 <link href="css/styles.css" rel="stylesheet">
 <link rel="stylesheet" href="js/jquery-ui/jquery-ui.min.css">
+<link rel="icon" href="images/favicon.ico"/>
 <link href="css/styles.css" rel="stylesheet">
 <script>
+$(document).ready(function() { 
+
 afficher_livraisons();
 
 function afficher_livraisons() {
- $.ajax({
-             url:"ajax/afficherlivraisons.php",
-             method:"post",
-             data:{action:'afficher_livraisons'},
-             success:function(data)
-             {
-                 $('#liste_livraisons').html(data).fadeIn('slow');
-             }
-         });
+$.ajax({
+            url:"ajax/afficherlivraisons.php",
+            method:"post",
+            data:{action:'afficher_livraisons'},
+            success:function(data)
+            {
+                $('#liste_livraisons').html(data).fadeIn('slow');
+            }
+        });
 }
+
+
+setInterval(function(){ 
+   afficher_livraisons();
+   }, 5000);
+
+
+});
 </script>
 <title><?= $nom_site ?></title>
 </head>
@@ -52,9 +63,9 @@ while($afficher = $req->fetch()) {
 ?>
 <div class="contenu_commande">
 <div class="titre_commande">
-Commande n° <?= $afficher['id_commande']; ?><button class="terminer_livraison" data-id_livraison="<?= $afficher['id_livraison']; ?>">Livraison effectuée</button>
+Commande n° <?= $afficher['id_commande']; ?> <button class="btn-vert terminer_livraison" data-id_livraison="<?= $afficher['id_livraison']; ?>">Livraison effectuée</button>
 </div>
-<button class="livraison-details-produits" data-id_commande="<?= $afficher['id_commande']; ?>">Détails commande</button>
+<button class="btn-gris-transparent livraison-details-produits" data-id_commande="<?= $afficher['id_commande']; ?>">Détails commande</button>
 <div class="commande_produits">
 <?php
 $req3 = $bdd->prepare('SELECT * FROM commandes as a LEFT JOIN livraisons as b ON a.id_livraison = b.id_livraison LEFT JOIN adresses as c ON b.id_adresse = c.id_adresse LEFT JOIN commandes_contact as d ON a.id_commande = d.id_commande WHERE a.id_commande = :id_commande');

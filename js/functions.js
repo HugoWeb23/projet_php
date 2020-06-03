@@ -741,6 +741,10 @@ $(document).ready(function(){
 			
 				cloturer_commande(id_commande);
 				$(this).parent().parent().remove();
+				var x = $('#liste_commandes').find('.contenu_commande').html();
+				if(x == undefined) {
+				$('#liste_commandes').html("Il n'y a aucune commande pour le moment");
+				}
 			
 		});
 
@@ -1053,16 +1057,23 @@ $(document).ready(function(){
 		data:{action:'prendre_commande', id_livraison:id_livraison},
 		success:function(data) {
 		if(data.type == 'succes') {
-		var mescommandes = button.closest('.contenu_commande').html();
-		$('.meslivraisons').after('');
-		$('<div class="contenu_commande">'+mescommandes+'</div>').insertBefore('.attentelivraisons');
+		var id_livraison = button.data('id_livraison');
+		var id_commande = button.data('id_commande');
+		var commande_livraison = button.closest('.contenu_commande').find('.commande_livraison').html();
+		var commande_contact = button.closest('.contenu_commande').find('.commande_contact').html();
+		$('<div class="contenu_commande"><div class="titre_commande">Commande n° '+id_commande+' <button class="btn-vert terminer_livraison" data-id_livraison="'+id_livraison+'">Livraison effectuée</button></div><button class="btn-gris-transparent livraison-details-produits" data-id_commande="'+id_commande+'">Détails commande</button><div class="commande_produits"><div class="commande_livraison">'+commande_livraison+'</div><div class="commande_contact">'+commande_contact+'</div></div></div>').insertBefore('.attentelivraisons');
 		button.closest('.contenu_commande').remove();
+		var x = $('#liste_livraisons').find('.contenu_commande').html();
+		if(x == undefined) {
+		$('#liste_livraisons').html("Il n'y a aucune livraison en attente pour le moment");
+		}
 		} else if(data.type == 'erreur') {
 		alert(data.message);
 		button.closest('.contenu_commande').remove();
 		}
 		}
 	});
+	
 	});
 
 	$(document).on('click', '.livraison-details-produits', function() {
@@ -1112,7 +1123,7 @@ $(document).ready(function(){
 			dataType:"json",
 			data:{action:'details_commande', id_commande:id_commande},
 			success:function(data) {
-			alert('Date commande : '+data.date_commande+'Durée de la livraison : '+data.duree_livraison);
+			alert('Date commande : '+data.date_commande+'\nLivraison prise en charge par '+data.livreur+' à '+data.date_debut+'\nLivrée à '+data.date_fin+'\nDurée de la livraison : '+data.duree_livraison);
 			}
 		});
 		
