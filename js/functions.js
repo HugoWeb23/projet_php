@@ -734,14 +734,6 @@ $(document).ready(function(){
 				data:{action:'cloturer_commande', id_commande:id_commande},
 			});
 		}
-
-		function retablir_commande(id_commande) {
-			$.ajax({
-				url:"ajax/commandes_inactives.php",
-				method:"post",
-				data:{action:'retablir_commande', id_commande:id_commande},
-			});
-		}
 		
 
 		$('#liste_commandes').on('click', '.cloturer_commande', function() { 
@@ -754,9 +746,20 @@ $(document).ready(function(){
 
 		$('#commandes_inactives').on('click', '.retablir_commande', function() { 
 			var id_commande = $(this).data('id_commande');
-			
-				retablir_commande(id_commande);
-				$(this).parent().parent().remove();
+			var commande = (this);
+			$.ajax({
+				url:"ajax/commandes_inactives.php",
+				method:"post",
+				dataType:"json",
+				data:{action:'retablir_commande', id_commande:id_commande},
+				success:function(data) {
+				if(data.type == 'erreur') {
+				alert(data.message);
+				} else if(data.type == 'succes') {
+				$(commande).parent().parent().remove();
+				}
+				}
+			});
 			
 		});
 
@@ -1080,6 +1083,39 @@ $(document).ready(function(){
 			}
 		});
 	}
+	});
+
+	$(document).on('click', '.terminer_livraison', function() { 
+	var livraison = $(this);
+	var id_livraison = $(this).data('id_livraison');
+	$.ajax({
+		url:"ajax/afficherlivraisons.php",
+		method:"post",
+		dataType:"json",
+		data:{action:'cloturer_livraison', id_livraison:id_livraison},
+		success:function(data) {
+		if(data.type == 'erreur') {
+		alert(data.message);
+		} else if(data.type == 'succes') {
+		livraison.closest('.contenu_commande').remove();
+		}
+		}
+	});
+	});
+
+	$('#commandes_inactives').on('click', '.infos_commande', function() { 
+		var id_commande = $(this).data('id_commande');
+		var commande = (this);
+		$.ajax({
+			url:"ajax/commandes_inactives.php",
+			method:"post",
+			dataType:"json",
+			data:{action:'details_commande', id_commande:id_commande},
+			success:function(data) {
+			alert('Date commande : '+data.date_commande+'Durée de la livraison : '+data.duree_livraison);
+			}
+		});
+		
 	});
 
 });

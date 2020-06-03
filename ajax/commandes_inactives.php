@@ -6,7 +6,7 @@ require('../config.php');
 
 if(isset($_POST['action']) && $_POST['action'] == 'afficher_commandes') {
 
-$req = $bdd->prepare('SELECT * FROM commandes WHERE etat = 1 ORDER BY id_commande');
+$req = $bdd->prepare('SELECT *, b.etat as etat FROM commandes as a LEFT JOIN livraisons as b ON a.id_livraison = b.id_livraison WHERE a.etat = 1 ORDER BY id_commande');
 $req->execute();
 if($req->rowCount() < 1) {
     echo 'Aucun résultat';
@@ -27,7 +27,7 @@ break;
 ?>
 <div class="contenu_commande">
 <div class="titre_commande">
-Commande n° <?= $afficher['id_commande']; ?> <span class="type"><?= $type; ?></span><button class="retablir_commande" data-id_commande="<?= $afficher['id_commande']; ?>">Rétablir la commande</button>
+Commande n° <?= $afficher['id_commande']; ?> <span class="type"><?= $type; ?></span><?php if($afficher['etat'] < 2 && minutes_dates($afficher['date']) <= 60) { ?> <button class="retablir_commande" data-id_commande="<?= $afficher['id_commande']; ?>">Rétablir la commande</button><?php } if($afficher['etat'] > 1) { ?> <button class="infos_commande" data-id_commande="<?= $afficher['id_commande']; ?>">Détails de livraison</button><?php } ?>
 </div>
 <div class="commande_produits">
 <div class="produit">
@@ -72,7 +72,7 @@ $adresse = $req3->fetch();
 ?>
 <?php if($adresse['type'] == 1) { ?>
 <div class="commande_livraison">
-Informations de livraison
+<b>Informations de livraison</b>
 <br>
 <span><?= $adresse['rue']; ?>, <?= $adresse['numero']; ?></span>
 <span><?= $adresse['code_postal']; ?> <?= $adresse['ville']; ?></span>
@@ -80,7 +80,7 @@ Informations de livraison
 <?php } ?>
 <?php if($adresse['type'] == 1 || $adresse['type'] == 3) { ?>
 <div class="commande_contact">
-Informations de contact
+<b>Informations de contact</b>
 <br>
 <span><?= $adresse['tel_fixe']; ?></span>
 <span><?= $adresse['gsm']; ?></span>
@@ -95,13 +95,36 @@ Informations de contact
 }
 }
 
-// Cloturer une commande
+// Rétablir une commande
 
 if(isset($_POST['action']) && $_POST['action'] == 'retablir_commande') {
 $id_commande = $_POST['id_commande'];
-$req = $bdd->prepare('UPDATE commandes SET etat = 0 WHERE id_commande = :id_commande');
+$req = $bdd->prepare('SELECT *, b.etat as type FROM commandes as a LEFT JOIN livraisons as b ON a.id_livraison = b.id_livraison WHERE a.id_commande = :id_commande');
+$req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
+$req->execute();
+$checklivraison = $req->fetch(PDO::FETCH_ASSOC);
+if($checklivraison['etat'] < 2) {
+$req = $bdd->prepare('UPDATE commandes as a LEFT JOIN livraisons as b ON a.id_livraison = b.id_livraison SET a.etat = 0, b.etat = 0 WHERE id_commande = :id_commande');
 $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
 $req->execute() or die(print_r($req->errorInfo(), TRUE));
+$message = array("type" => "succes");
+} else {
+$message = array("type" => "erreur", "message" => "Cette commande ne peut pas être rétablie car elle a déjà été livrée ou est en cours de livraison");
+}
+echo json_encode($message);
+}
+
+// Détails d'une commande
+
+if(isset($_POST['action']) && $_POST['action'] == 'details_commande') {
+$id_commande = $_POST['id_commande'];
+$req = $bdd->prepare('SELECT * FROM commandes as a LEFT JOIN livraisons as b ON a.id_livraison = b.id_livraison WHERE a.id_commande = :id_commande');
+$req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
+$req->execute();
+$commande = $req->fetch();
+$temps_livraison = minutes_dates($commande['date_debut'], $commande['date_fin']);
+$resultat = array("date_commande" => $commande['date'], "duree_livraison" => $temps_livraison.' minutes', "livreur" => $commande['id_livreur']);
+echo json_encode($resultat);
 }
 
 ?>

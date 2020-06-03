@@ -91,11 +91,11 @@ while($commande = $req2->fetch()) {
 
 if(isset($_POST['action']) && $_POST['action'] == 'prendre_commande') {
 $id_livraison = $_POST['id_livraison'];
-$req = $bdd->prepare('SELECT id_livreur FROM livraisons WHERE id_livraison = :id_livraison');
+$req = $bdd->prepare('SELECT id_livreur, etat FROM livraisons WHERE id_livraison = :id_livraison');
 $req->bindValue('id_livraison', $id_livraison, PDO::PARAM_INT);
 $req->execute();
 $livraison = $req->fetch();
-if($livraison['id_livreur'] == null) {
+if($livraison['id_livreur'] == null && $livraison['etat'] == 1) {
 $date = date('Y-m-d H:i:s');
 $req = $bdd->prepare('UPDATE livraisons SET etat = 2, date_debut = :date_debut, id_livreur = :id_livreur WHERE id_livraison = :id_livraison');
 $req->bindValue('date_debut', $date, PDO::PARAM_STR);
@@ -103,8 +103,35 @@ $req->bindValue('id_livreur', $personnel['id_personnel'], PDO::PARAM_INT);
 $req->bindValue('id_livraison', $id_livraison, PDO::PARAM_INT);
 $req->execute() or die(print_r($req->errorInfo(), TRUE));
 $message = array("type" => "succes");
-} else {
+} elseif($livraison['id_livreur'] != null) {
 $message = array("type" => "erreur", "message" => "Cette livraison a déjà été traitée par un livreur");
+} elseif($livraison['etat'] != 1) {
+$message = array("type" => "erreur", "message" => "Cette livraison n'est pas disponible pour le moment");
+}
+echo json_encode($message);
+}
+
+// Clôturer une livraison
+
+if(isset($_POST['action']) && $_POST['action'] == 'cloturer_livraison') {
+$id_livraison = $_POST['id_livraison'];
+$date = date('Y-m-d H:i:s');
+$req = $bdd->prepare('SELECT etat, id_livreur FROM livraisons WHERE id_livraison = :id_livraison');
+$req->bindValue('id_livraison', $id_livraison, PDO::PARAM_INT);
+$req->execute();
+$livraison = $req->fetch();
+if($req->rowCount() == 0) {
+$message = array("type" => "erreur", "message" => "Cette livraison n'existe pas");
+} elseif(!$livraison['id_livreur'] == $personnel['id_personnel']) {
+$message = array("type" => "erreur", "message" => "Cette livraison ne vous appartient pas");
+} elseif($livraison['etat'] != 2) {
+$message = array("type" => "erreur", "message" => "Cette livraison n'est pas disponible pour le moment");
+} else {
+$req = $bdd->prepare('UPDATE livraisons SET date_fin = :date_fin, etat = 3 WHERE id_livraison = :id_livraison');
+$req->bindValue('date_fin', $date, PDO::PARAM_STR);
+$req->bindValue('id_livraison', $id_livraison, PDO::PARAM_INT);
+$req->execute();
+$message = array("type" => "succes");
 }
 echo json_encode($message);
 }

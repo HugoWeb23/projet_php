@@ -52,7 +52,7 @@ while($afficher = $req->fetch()) {
 ?>
 <div class="contenu_commande">
 <div class="titre_commande">
-Commande n° <?= $afficher['id_commande']; ?><button class="prendre_commande" data-id_livraison="<?= $afficher['id_livraison']; ?>">Livraison effectuée</button>
+Commande n° <?= $afficher['id_commande']; ?><button class="terminer_livraison" data-id_livraison="<?= $afficher['id_livraison']; ?>">Livraison effectuée</button>
 </div>
 <button class="livraison-details-produits" data-id_commande="<?= $afficher['id_commande']; ?>">Détails commande</button>
 <div class="commande_produits">

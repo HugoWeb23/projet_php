@@ -83,12 +83,6 @@ $(document).ready(function() {
 <a href="#" class="active">Commandes actives</a>
 <a href="#">Commandes clôturées</a>
 </div>
-<div class="test" id="actives">
-Test actives
-</div>
-<div class="test" id="inactives">
-Test inactives
-</div>
 <div id="liste_commandes"></div>
 <div id="commandes_inactives"></div>
 </div>
