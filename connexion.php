@@ -53,7 +53,8 @@ break;
 <title><?= $nom_site ?> : Connexion</title>
 </head>
 <body> 
-<form id="connexion" action="" method="post">   
+<form id="connexion" action="" method="post">
+<div class="connexion-flex">
 <div class="connexion-box">
 <div class="connexion-logo">
 <img src="images/logo.png">   
@@ -70,6 +71,7 @@ if(isset($_POST['connexion'])) { echo $erreur; } ?>
 <input type="password" name="mdp" id="mdp">
 <div class="box-connexion">
 <input class="boutton-orange" type="submit" name="connexion" value="Connexion">
+</div>
 </div>
 </div>
 </div>

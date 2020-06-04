@@ -21,4 +21,12 @@ $date_commande = strtotime($date_commande);
 $minutes = ceil(abs($date_actuelle - $date_commande) / 60);
 return $minutes;
 }
+
+function verif_permissions($id_personnel, $permission = null) {
+global $bdd;
+$req = $bdd->prepare('SELECT b.id_permission FROM fonctions_personnel as a INNER JOIN permissions as b ON a.id_fonction = b.id_fonction WHERE a.id_personnel = :id_personnel');
+$req->bindValue('id_personnel', $id_personnel, PDO::PARAM_INT);
+$req->execute();
+$afficher = $req->fetchAll();
+}
 ?>

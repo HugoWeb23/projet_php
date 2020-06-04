@@ -98,11 +98,16 @@ display: none;
 
 /* Page connexion */
 
+.connexion-flex {
+display: flex;
+justify-content: center;
+align-items: center; 
+}
+
 .connexion-box {
 width: 500px;
-margin: 0 auto;
 background: #FFF;
-border-radius: 8px;    
+border-radius: 8px;   
 }
 
 .connexion-box label {
@@ -563,6 +568,7 @@ margin-bottom: 5px;
 
 .commentaire-commande textarea {
 width: 365px;
+max-width: 1057px;
 margin-left: 10px;
 }
 
@@ -739,4 +745,21 @@ margin-bottom: 10px;
 .attentelivraisons h2 {
 font-size: 1.4em;
 margin: 0;
+}
+
+/* Gestion des permisions */
+
+.permissions {
+display: flex;
+justify-content: space-evenly;
+}
+
+.aa {
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+
+.aa span, .aa input[type="checkbox"] {
+display: block;
 }

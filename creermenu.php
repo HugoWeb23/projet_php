@@ -102,7 +102,7 @@ while($produit = $req2->fetch()) {
 <img src="<?= $produit['photo']; ?>">
 <div class="details-produit">
 <p>Nom : <span><?= $produit['libelle']; ?></span></p>
-<p>Prix : <span><?= $produit['prix']; ?></span></p>
+<p>Prix : <span><?= $produit['prix']; ?></span> €</p>
 <button data-id="<?= $produit['id_produit']; ?>" class="creermenu-ajouter-produit">Ajouter</button>
 </div>
 </div>

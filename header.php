@@ -40,6 +40,7 @@ if(isset($_GET['deconnexion'])) {
 <div class="dropdown-child">
 <a href="creeremploye">Créer un profil employé</a>
 <a href="gestionemployes">Chercher des employés</a>
+<a href="gestionpermissions">Gestion des permissions</a>
 </div>
 </div>
 <div class="dropdown">
