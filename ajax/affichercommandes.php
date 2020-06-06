@@ -27,7 +27,7 @@ break;
 ?>
 <div class="contenu_commande">
 <div class="titre_commande">
-Commande n° <?= $afficher['id_commande']; ?> <span class="type"><?= $type; ?></span><button class="btn-rouge cloturer_commande" data-id_commande="<?= $afficher['id_commande']; ?>">Clôturer la commande</button><button class="btn-vert editer_commande" onclick="window.location.href='modifiercommande?id=<?= $afficher['id_commande']; ?>'">Modifier la commande</button>
+Commande n° <?= $afficher['id_commande']; ?> <span class="commande_type"><?= $type; ?></span><button class="btn-rouge cloturer_commande" data-id_commande="<?= $afficher['id_commande']; ?>">Clôturer la commande</button><button class="btn-vert editer_commande" onclick="window.location.href='modifiercommande?id=<?= $afficher['id_commande']; ?>'">Modifier la commande</button>
 </div>
 <div class="commande_produits">
 <div class="produit">

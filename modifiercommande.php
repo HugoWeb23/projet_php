@@ -112,10 +112,10 @@ $totaux_menus += $menu['prix'] * $menu['quantite'];
     <div class="quantite">Quantité : 
     <input type="text" class="quantite_saisie" value="<?= $menu['quantite']; ?>">
     </div>
-    <input type="button" class="commandeMenuQuantite" data-menu="<?= $menu['id_menu']; ?>" data-commande="<?= $commande['id_commande']; ?>" value="Valider quantité">
     </div>
     <div class="prix" data-prix="<?= $menu['prix']; ?>"><?= $menu['prix']; ?> €</div>
-    <input type="button" class="commandeSupprimerMenu" data-menu="<?= $menu['id_menu']; ?>" data-commande="<?= $commande['id_commande']; ?>" value="supprimer">
+    <input type="button" class="boutton-quantite commandeMenuQuantite" data-menu="<?= $menu['id_menu']; ?>" data-commande="<?= $commande['id_commande']; ?>" value="Valider quantité">
+    <input type="button" class="boutton-supprimer-produit commandeSupprimerMenu" data-menu="<?= $menu['id_menu']; ?>" data-commande="<?= $commande['id_commande']; ?>" value="supprimer">
     </div>
 
 <?php } ?>
@@ -132,10 +132,10 @@ $totaux_produits += $afficher['prix'] * $afficher['quantite'];
 <div class="quantite">Quantité : 
 <input type="text" class="quantite_saisie" value="<?= $afficher['quantite']; ?>">
 </div>
-<input type="button" class="modifProduitQuantite" data-produit="<?= $afficher['id_produit']; ?>" data-commande="<?= $afficher['id_commande']; ?>" value="Valider quantité">
-</div>
 <div class="prix" data-prix="<?= $afficher['prix']; ?>"><?= $afficher['prix']; ?> €</div>
-<input type="button" class="supprimerProduit" data-produit="<?= $afficher['id_produit']; ?>" data-commande="<?= $commande['id_commande']; ?>" value="supprimer">
+<input type="button" class="boutton-quantite modifProduitQuantite" data-produit="<?= $afficher['id_produit']; ?>" data-commande="<?= $afficher['id_commande']; ?>" value="Valider quantité">
+</div>
+<input type="button" class="boutton-supprimer-produit supprimerProduit" data-produit="<?= $afficher['id_produit']; ?>" data-commande="<?= $commande['id_commande']; ?>" value="supprimer">
 </div>
 <?php 
 }

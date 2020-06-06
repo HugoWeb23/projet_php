@@ -27,7 +27,7 @@ break;
 ?>
 <div class="contenu_commande">
 <div class="titre_commande">
-Commande n° <?= $afficher['id_commande']; ?> <span class="type"><?= $type; ?></span><?php if($afficher['etat'] < 2 && minutes_dates($afficher['date']) <= 60) { ?> <button class="btn-vert retablir_commande" data-id_commande="<?= $afficher['id_commande']; ?>">Rétablir la commande</button><?php } if($afficher['etat'] > 1) { ?> <button class="btn-gris-transparent infos_commande" data-id_commande="<?= $afficher['id_commande']; ?>">Détails de livraison</button><?php } ?>
+Commande n° <?= $afficher['id_commande']; ?> <span class="commande_type"><?= $type; ?></span><?php if($afficher['etat'] < 2 && minutes_dates($afficher['date']) <= 60) { ?> <button class="btn-vert retablir_commande" data-id_commande="<?= $afficher['id_commande']; ?>">Rétablir la commande</button><?php } if($afficher['etat'] > 1) { ?> <button class="btn-gris-transparent infos_commande" data-id_commande="<?= $afficher['id_commande']; ?>">Détails de livraison</button><?php } ?>
 </div>
 <div class="commande_produits">
 <div class="produit">

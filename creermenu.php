@@ -29,9 +29,15 @@ require('config.php');
 <div class="loader" style="display: none"><img src="images/loader.gif"></div>
 <span class="titre-menu">Informations sur le menu</span>
 <form id="creerMenu" action="" method="post">
+<div class="label-menu">
 <label for="nom">Nom : </label><input type="text" class="lol" name="nom" id="nom">
+</div>
+<div class="label-menu">
 <label for="prix">Prix : </label><input type="number" name="prix" id="prix">
-<input type="radio" name="etat" id="etat-1" value="1" checked><label for="etat-1">Actif</label><input type="radio" name="etat" id="etat-2" value="2"><label for="etat-2">Inactif</label>
+</div>
+<div class="label-menu">
+<label for="etat">État : </label><input type="radio" name="etat" id="etat-1" value="1" checked><label for="etat-1">Actif</label><input type="radio" name="etat" id="etat-2" value="2"><label for="etat-2">Inactif</label>
+</div>
 <input type="submit" class="boutton-rouge" name="creer" id="creer_menu" value="Créer le menu">
 </form>
 </div>
@@ -63,10 +69,10 @@ $total_menu += $afficher['prix'] * $quantite;
 <div class="quantite">Quantité : 
 <input type="text" class="quantite_saisie" value="<?= $quantite ?>">
 </div>
-<input type="button" class="validerQuantite" data-produit="<?= $afficher['id_produit']; ?>" value="Valider quantité">
 </div>
 <div class="prix" data-prix="<?= $afficher['prix']; ?>"><?= $afficher['prix']; ?> €</div>
-<input type="button" class="supprimer" data-produit="<?= $afficher['id_produit']; ?>" value="supprimer">
+<input type="button" class="boutton-quantite validerQuantite" data-produit="<?= $afficher['id_produit']; ?>" value="Valider quantité">
+<input type="button" class="boutton-supprimer-produit supprimer" data-produit="<?= $afficher['id_produit']; ?>" value="supprimer">
 </div>
 <?php } ?>
 <?php

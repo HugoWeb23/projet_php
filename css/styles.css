@@ -387,7 +387,6 @@ height: auto;
 
 .infos-menu {
 position: relative;
-border: 2px solid #000;
 margin-bottom: 10px;
 padding: 5px;
 }
@@ -396,6 +395,21 @@ padding: 5px;
 display: block;
 font-size: 1.4em;
 margin-bottom: 10px;
+}
+
+.label-menu {
+display: inline;
+}
+
+@media screen and (max-width: 627px) {
+.label-menu {
+display: block;
+margin-bottom: 5px;
+}
+
+.label-menu input[type="text"], .label-menu input[type="number"] {
+width: 99%;
+}
 }
 
 .loader img {
@@ -458,15 +472,26 @@ display: flex;
 flex-direction: row-reverse;
 }
 
-.menu-categories {
-margin-right: 5px;
-width: 100%;
-}
-
 .menu-apercu {
 width: 273px;
 padding: 5px; 
-border: 3px solid #000;
+border: 2px solid #000;
+}
+
+@media screen and (max-width: 764px) {
+.flex-menu {
+flex-direction: column;
+}
+
+.menu-apercu {
+width: unset;
+margin-bottom: 10px;
+}
+}
+
+.menu-categories {
+margin-right: 5px;
+width: 100%;
 }
 
 .apercu-produits {
@@ -555,22 +580,89 @@ justify-content: space-evenly;
 
 .commande-flex {
 display: flex;
-justify-content: space-between;
-padding: 0 10px 0 10px;
 }
 
 .commande-infos input[type="text"] {
 display:block;
 padding: 3px;
 margin-top: 1.5px;
-width: 250px;
+width: 100%;
 font-size: 17px;
 padding: 3px;
+}
+
+.commande-infos {
+margin-right: 20px;
+width: 345px;
+}
+
+.commande-contact {
+width: 351px;
+margin-right: 20px;
+}
+
+.commande-adresse {
+width: 351px;
+}
+
+.commande-adresse input, .commande-contact input {
+display: block;
+font-size: 17px;
+width: 328px;
+padding: 3px;
+margin-bottom: 5px;
+width: 100%;
 }
 
 #user_id {
 display: inline-block;
 margin-bottom: 10px;
+}
+
+#viderclient {
+display: inline;
+position: absolute;
+top: 94px;
+left: 277px;
+}
+
+.commentaire-commande textarea {
+width: 100%;
+max-width: 100%;
+}
+
+@media screen and (max-width: 730px) {
+.commande-flex {
+flex-direction: column;
+}
+
+.commande-adresse input, .commande-contact input {
+width: 100%;
+}
+
+#viderclient {
+display: block;
+margin-bottom: 5px;
+right: 2px;
+left: unset;
+}
+
+.commande-infos {
+margin-bottom: 5px;
+width: 100%;
+}
+
+#user_id, #nom_client {
+width: 100%;
+}
+
+.commande-contact, .commande-adresse {
+width: 100%;
+}
+}
+
+.ui-menu {
+ width: 200px;
 }
 
 .commande-infos label[for="type_commande"], .commande-infos label[for="table"] {
@@ -582,23 +674,8 @@ margin-bottom: 5px;
 margin-bottom: 10px;
 }
 
-.commande-adresse input, .commande-contact input {
-display: block;
-font-size: 17px;
-width: 328px;
-padding: 3px;
-margin-bottom: 5px;
-}
-
-.commentaire-commande textarea {
-width: 365px;
-max-width: 1057px;
-margin-left: 10px;
-}
-
 .commentaire-commande label {
 display: block;
-margin-left: 10px;
 margin-bottom: 5px;
 }
 
@@ -638,6 +715,17 @@ color: #FFF;
 display: block;
 font-size: 1.4em;
 margin-bottom: 15px;
+}
+
+@media all and (max-width: 390px) {
+.commande_type {
+display: block;
+width: 50%;
+}
+
+.nav-commandes a {
+font-size: 14px;
+}
 }
 
 .contenu_commande {
@@ -795,7 +883,7 @@ max-width: 470px;
 display: block;
 }
 
-.type {
+.commande_type {
 font-size: 14px;
 border: 2px solid #818181;
 padding: 1px;
