@@ -47,7 +47,8 @@ echo '<a href="gestionmenus">Gestion des menus</a>';
 <div class="contenu">
 <?php
 if(!isset($_GET['id'])) { ?>
-<table class="liste-employes">
+<table>
+<thead>
 <tr>
     <th>Nom</th>      
     <th>Prix</th>
@@ -55,6 +56,7 @@ if(!isset($_GET['id'])) { ?>
     <th>Date de création</th>
     <th>Actions</th>
 </tr>
+</thead>
 <?php
 $req = $bdd->prepare('SELECT * FROM menus ORDER BY etat ASC, nom ASC');
 $req->execute();
@@ -68,11 +70,13 @@ $etat = 'Actif';
 break;
 }
     echo '
-    <tr><td>'.$afficher['nom'].'</td>
-    <td>'.$afficher['prix'].' €</td>
-    <td>'.$etat.'</td>
-    <td>'.$afficher['date_creation'].'</td>
-    <td><a href="?id='.$afficher['id_menu'].'">Modifier</a> - <a href="#" data-id="'.$afficher['id_menu'].'" class="supprimer-menu">Supprimer</a></td></tr>
+    <tbody>
+    <tr><td data-label="Nom">'.$afficher['nom'].'</td>
+    <td data-label="Prix">'.$afficher['prix'].' €</td>
+    <td data-label="État">'.$etat.'</td>
+    <td data-label="Date de création">'.$afficher['date_creation'].'</td>
+    <td data-label="Actions"><a href="?id='.$afficher['id_menu'].'">Modifier</a> - <a href="#" data-id="'.$afficher['id_menu'].'" class="supprimer-menu">Supprimer</a></td></tr>
+    </tbody>
     ';
 }
 ?>

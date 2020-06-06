@@ -43,7 +43,7 @@ margin-top: 0px;
 z-index: 99;
 }
 
-@media all and (min-width: 1188px) {
+@media all and (min-width: 1250px) {
 
 .dropdown a:hover {
 background: #521d06;
@@ -87,7 +87,7 @@ width: auto;
 margin-right: 10px;
 }
 }
-@media all and (max-width: 1188px) {
+@media all and (max-width: 1250px) {
 .dropdown-child {
 display: none;
 }
@@ -198,7 +198,7 @@ text-decoration: none;
 /* Conteneur */
 
 .conteneur {
-width: 1100px;
+max-width: 1100px;
 height: auto;
 margin-top: 30px;
 margin-left: auto;
@@ -217,7 +217,8 @@ align-items: center;
 }
 
 .titre-page h1 {
-margin: 0;    
+margin: 0;
+font-size: 25px;    
 }
 
 .message-erreur {
@@ -255,6 +256,13 @@ cursor: pointer;
 .employe-flex {
 display: flex;
 justify-content: space-evenly;    
+}
+
+@media screen and (max-width: 668px) {
+.employe-flex {
+flex-direction: column;
+align-items: center;
+}
 }
 
 /* Gestion des employés */
@@ -631,6 +639,97 @@ display: flex;
 justify-content: space-between;
 }
 
+.commande_livraison {
+font-size: 1.2em;
+margin-left: auto;
+}
+
+.commande_contact {
+font-size: 1.2em;
+margin-left: 30px;
+}
+
+.cloturer_commande {
+margin-left: 20px;
+}
+    
+.editer_commande {
+margin-left: 20px;
+}
+
+@media screen and (max-width: 768px) {
+.commande_produits {
+flex-direction: column;
+justify-content: start;
+}
+
+.commande_livraison {
+font-size: 1.2em;
+margin-left: 0;
+margin-top: 10px;
+}
+
+.commande_contact {
+font-size: 1.2em;
+margin-left: 0;
+margin-top: 10px;
+}
+
+.cloturer_commande {
+display: block;
+margin-top: 5px;
+margin-left: 0;
+}
+        
+.editer_commande {
+display: block;
+margin-top: 5px;
+margin-left: 0;
+}
+
+.infos_commande {
+display: block;
+margin-top: 5px;
+}
+}
+
+@media screen and (max-width: 900px){
+table, th, tr, td, tbody, thead {
+display: block;
+}
+
+thead {
+display: none;
+}
+
+td {
+padding-left: 160px;
+padding-right: 10px;
+position: relative;
+text-align: right;
+}
+
+td::before {
+position: absolute;
+content: attr(data-label);
+padding: 10px;
+top: 0;
+background: #565656;
+color: #FFF;
+left: 0;
+width: 130px;
+bottom: 0;
+display: flex;
+align-items: center;
+font-weight: bold;
+font-size: 15px;
+}
+
+tbody:not(:last-child) {
+margin-bottom: 20px;
+}
+}
+
 .commande_produits > .produit {
 font-size: 1.2em;
 }
@@ -667,36 +766,17 @@ text-decoration: none;
 cursor: pointer;
 }
 
-.cloturer_commande {
-margin-left: 20px;
-}
-
-.editer_commande {
-margin-left: 20px;
-}
-
 .afficher-commentaire-commande {
 display: block;
 margin-top: 10px;
 border: 2px solid #c92828;
 padding: 3px;
 color: #c92828;
-max-width: 400px;
-}
-
-.commande_contact {
-font-size: 1.2em;
-margin-left: 30px;
-}
-
-.commande_livraison {
-font-size: 1.2em;
-margin-left: auto;
+max-width: 470px;
 }
 
 .commande_contact span, .commande_livraison span {
 display: block;
-
 }
 
 .type {

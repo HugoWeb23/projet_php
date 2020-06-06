@@ -26,6 +26,7 @@ if($req->rowCount() < 1) {
 } else {
     echo '
     <table class="liste-employes">
+    <thead>
 <tr>
     <th>Nom</th>      
     <th>Prénom</th>
@@ -34,7 +35,8 @@ if($req->rowCount() < 1) {
     <th>Email</th>
     <th>Adresse</th>
     <th>Actions</th>
-</tr>';
+</tr>
+</thead>';
     while($afficher = $req->fetch()) {
 
         if(strlen($afficher['rue']) > 1) {
@@ -44,13 +46,15 @@ if($req->rowCount() < 1) {
         }
     
         echo '
-        <tr><td>'.$afficher['nom'].'</td>
-        <td>'.$afficher['prenom'].'</td>
-        <td>'.$afficher['date_naissance'].'</td>
-        <td>'.$afficher['telephone'].'</td>
-        <td>'.$afficher['email'].'</td>
-        <td>'.$condition.'</td>
-        <td><a href="details_employes?id='.$afficher['id_personnel'].'">Détails</a></td></tr>
+        <tbody>
+        <tr><td data-label="Nom">'.$afficher['nom'].'</td>
+        <td data-label="Prénom">'.$afficher['prenom'].'</td>
+        <td data-label="Date de naissance">'.$afficher['date_naissance'].'</td>
+        <td data-label="Téléphone">'.$afficher['telephone'].'</td>
+        <td data-label="Email">'.$afficher['email'].'</td>
+        <td data-label="Adresse">'.$condition.'</td>
+        <td data-label="Actions"><a href="details_employes?id='.$afficher['id_personnel'].'">Détails</a></td></tr>
+        </tbody>
         ';
             
             

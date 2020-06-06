@@ -981,7 +981,7 @@ $(document).ready(function(){
 				method:"post",
 				data:{action:'creer', nom:nom, description:description},
 				success:function(data) {
-					$('table').append('<tr><td>'+nom+'</td><td>'+description+'</td><td><a class="editer" data-id="'+data+'" href="#">Éditer</a> - <a data-id="'+data+'" class="supprimer_categorie" href="#">Supprimer</a></td></tr>');
+				$('table').append('<tr><td>'+nom+'</td><td>'+description+'</td><td><a class="editer" data-id="'+data+'" href="#">Éditer</a> - <a data-id="'+data+'" class="supprimer_categorie" href="#">Supprimer</a></td></tr>');
 				}
 			});
 			$(this).closest('tr').remove();

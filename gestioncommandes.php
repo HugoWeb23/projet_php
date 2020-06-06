@@ -59,6 +59,7 @@ $(document).ready(function() {
 	}
 	});
 
+/*
     setInterval(function(){ 
 
 		if($('.nav-commandes a').eq(0).hasClass('active')) {
@@ -67,6 +68,7 @@ $(document).ready(function() {
 		commandes_inactives();
 		}
 	   }, 10000);
+	   */
     
 });
 </script>
