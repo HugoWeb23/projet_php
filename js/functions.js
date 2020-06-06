@@ -550,7 +550,7 @@ $(document).ready(function(){
 			});
 
 			if(compteur_id.includes(id) == false) {
-				$('<div class="'+type+'"><div class="libelle">'+nom+'<div class="quantite">Quantité : <input type="text" class="quantite_saisie" value="1"></div><input type="button" class="'+up+'" data-'+data+'="'+id+'" '+(dataSup.length < 0 ? '' : 'data-'+dataSup+'="'+dataSupValue+'"')+' value="Valider quantité"></div><div class="prix" data-prix="'+prix+'">'+prix+' €</div><input type="button" class="'+supp+'" data-'+data+'="'+id+'" '+(dataSup.length < 0 ? '' : 'data-'+dataSup+'="'+dataSupValue+'"')+' value="supprimer"></div>').insertBefore('.afficher-total');
+				$('<div class="'+type+'"><div class="libelle">'+nom+'<div class="quantite">Quantité : <input type="text" class="quantite_saisie" value="1"></div></div><div class="prix" data-prix="'+prix+'">'+prix+' €</div><input type="button" class="boutton-quantite '+up+'" data-'+data+'="'+id+'" '+(dataSup.length < 0 ? '' : 'data-'+dataSup+'="'+dataSupValue+'"')+' value="Valider quantité"><input type="button" class="boutton-supprimer-produit '+supp+'" data-'+data+'="'+id+'" '+(dataSup.length < 0 ? '' : 'data-'+dataSup+'="'+dataSupValue+'"')+' value="Supprimer"></div>').insertBefore('.afficher-total');
 				} else {
 				$('.'+type+'').each(function() { 
 				if($(this).find('.'+up+'').data(''+data+'') == id) {

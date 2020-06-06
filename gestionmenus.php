@@ -150,7 +150,7 @@ while($produit = $req2->fetch()) {
 <div class="details-produit">
 <p>Nom : <span><?= $produit['libelle']; ?></span></p>
 <p>Prix : <span><?= $produit['prix']; ?></span> €</p>
-<button data-id_produit="<?= $produit['id_produit']; ?>" data-id_menu="<?= $id_menu; ?>" class="modifiermenu-ajouter-produit">Ajouter</button>
+<button data-id_produit="<?= $produit['id_produit']; ?>" data-id_menu="<?= $id_menu; ?>" class="boutton-produits modifiermenu-ajouter-produit">Ajouter</button>
 </div>
 </div>
 <?php } ?>

@@ -195,6 +195,24 @@ cursor: pointer;
 text-decoration: none;
 }
 
+.boutton-quantite {
+width: 100%;
+border: 2px solid #FFF;
+background: #256321;
+color: #FFF;
+font-size: 1.2rem;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+
+.boutton-supprimer-produit {
+width: 100%;
+border: 2px solid #FFF;
+background: #bc2727;
+color: #FFF;
+font-size: 1.2rem;
+}
+
 /* Conteneur */
 
 .conteneur {
@@ -484,8 +502,7 @@ font-weight: 600;
 margin-top: 10px;
 }
 
-.creermenu-ajouter-produit, .modifiermenu-ajouter-produit,
-.commandeAjouterMenu, .commandeAjouterProduit, .modifCommandeAjouterMenu, .modifCommandeAjouterProduit {
+.boutton-produits {
 display: block;
 border: 2px solid #ab4a4a;
 padding: 5px;
@@ -499,8 +516,7 @@ transition-duration: 0.5s;
 font-size: 1.2em;
 }
 
-.creermenu-ajouter-produit:hover, .modifiermenu-ajouter-produit:hover,
-.commandeAjouterMenu:hover, .commandeAjouterProduit:hover {
+.boutton-produits:hover {
 background-color: #ab4a4a;
 color: #FFF;
 }

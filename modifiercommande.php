@@ -158,7 +158,7 @@ while($menu = $req->fetch()) {
 <div class="details-produit">
 <p>Nom : <span><?= $menu['nom']; ?></span></p>
 <p>Prix : <span><?= $menu['prix']; ?></span> €</p>
-<button data-menu="<?= $menu['id_menu']; ?>" data-commande="<?= $commande['id_commande']; ?>" class="modifCommandeAjouterMenu">Ajouter</button>
+<button data-menu="<?= $menu['id_menu']; ?>" data-commande="<?= $commande['id_commande']; ?>" class="boutton-produits modifCommandeAjouterMenu">Ajouter</button>
 </div>
 </div>
 <?php } ?>
@@ -188,7 +188,7 @@ while($produit = $req2->fetch()) {
 <div class="details-produit">
 <p>Nom : <span><?= $produit['libelle']; ?></span></p>
 <p>Prix : <span><?= $produit['prix']; ?> €</span></p>
-<button data-produit="<?= $produit['id_produit']; ?>" data-commande="<?= $commande['id_commande']; ?>" class="modifCommandeAjouterProduit">Ajouter</button>
+<button data-produit="<?= $produit['id_produit']; ?>" data-commande="<?= $commande['id_commande']; ?>" class="boutton-produits modifCommandeAjouterProduit">Ajouter</button>
 </div>
 </div>
 <?php } ?>
