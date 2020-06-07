@@ -26,7 +26,8 @@ if($req->rowCount() < 1) {
     echo 'Aucun résultat';
 } else {
     echo '
-    <table class="liste-employes">
+    <table>
+    <thead>
 <tr>
     <th>Nom</th>      
     <th>Prénom</th>
@@ -36,7 +37,8 @@ if($req->rowCount() < 1) {
     <th>Email</th>
     <th>Adresse</th>
     <th>Actions</th>
-</tr>';
+</tr>
+</thead>';
     while($afficher = $req->fetch()) {
 
         if(strlen($afficher['telephone_fixe']) > 1) {
@@ -58,14 +60,16 @@ if($req->rowCount() < 1) {
             }
     
         echo '
-        <tr><td>'.$afficher['nom'].'</td>
-        <td>'.$afficher['prenom'].'</td>
-        <td>'.$afficher['date_naissance'].'</td>
-        <td>'.$telephone_fixe.'</td>
-        <td>'.$gsm.'</td>
-        <td>'.$afficher['email'].'</td>
-        <td>'.$adresse.'</td>
-        <td><a href="details_clients?id='.$afficher['id_client'].'">Détails</a></td></tr>
+        <tbody>
+        <tr><td data-label="Nom">'.$afficher['nom'].'</td>
+        <td data-label="Prénom">'.$afficher['prenom'].'</td>
+        <td data-label="Date de naissance">'.$afficher['date_naissance'].'</td>
+        <td data-label="Téléphone fixe">'.$telephone_fixe.'</td>
+        <td data-label="GSM">'.$gsm.'</td>
+        <td data-label="Email">'.$afficher['email'].'</td>
+        <td data-label="Adresse">'.$adresse.'</td>
+        <td data-label="Actions"><a href="details_clients?id='.$afficher['id_client'].'">Détails</a></td></tr>
+        </tbody>
         ';
             }
 }

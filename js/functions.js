@@ -1129,6 +1129,44 @@ $(document).ready(function(){
 		
 	});
 
+	$('.nom-fonction').click(function() { 
+	var permissions = $(this).parent().find('.permissions');
+	if(permissions.css('display') == 'none') {
+	$('.fonction').each(function() { 
+	$(this).find('.permissions').fadeOut(0);
+	});
+	permissions.fadeIn(0);
+	} else if(permissions.css('display') == 'block') {
+	permissions.fadeOut(0);
+	}
+	});
+
+	$('.permissions input[type="checkbox"]').click(function() {
+	var check = $(this);
+	var id_permission = check.data('id');
+	var type_permission = check.data('type');
+	$(check).is(':checked') ? x = 1 : x = 0;
+	$.ajax({
+		url:"ajax/permissions.php",
+		method:"post",
+		dataType:"json",
+		data:{action:'modif_permissions', id_permission:id_permission, type:type_permission, valeur:x},
+		success:function(data) {
+		if(data.type == 'erreur') {
+		alert(data.message);
+		} else if(data.type == 'succes') {
+		var img = $(check).closest('.permission').find('img').html();
+		if(img == undefined) {
+		check.after('<img class="succes-image" src="images/succes.svg">');
+		} else {
+		$(check).closest('.permission').find('img').fadeIn(0);
+		}
+		check.parent().find('img').delay(3000).fadeOut(200);
+		}
+		}
+	});
+	});
+
 });
 
 	

@@ -292,7 +292,7 @@ margin-top: 20px;
 border-spacing: 0; 
 }
 
-table tr:nth-child(2n+3) {
+table tbody:nth-child(2n+3) {
 background: #e7e7e7;
 }
 
@@ -619,11 +619,17 @@ display: inline-block;
 margin-bottom: 10px;
 }
 
+
 #viderclient {
 display: inline;
 position: absolute;
-top: 94px;
-left: 277px;
+right: -9px;
+top: 4px;
+}
+
+
+.viderclient {
+position: relative;
 }
 
 .commentaire-commande textarea {
@@ -631,7 +637,7 @@ width: 100%;
 max-width: 100%;
 }
 
-@media screen and (max-width: 730px) {
+@media all and (max-width: 730px) {
 .commande-flex {
 flex-direction: column;
 }
@@ -641,10 +647,7 @@ width: 100%;
 }
 
 #viderclient {
-display: block;
-margin-bottom: 5px;
-right: 2px;
-left: unset;
+display: inline;
 }
 
 .commande-infos {
@@ -811,6 +814,7 @@ padding-left: 160px;
 padding-right: 10px;
 position: relative;
 text-align: right;
+overflow-wrap: break-word;
 }
 
 td::before {
@@ -827,6 +831,7 @@ display: flex;
 align-items: center;
 font-weight: bold;
 font-size: 15px;
+overflow-wrap: break-word;
 }
 
 tbody:not(:last-child) {
@@ -933,17 +938,31 @@ margin: 0;
 
 /* Gestion des permisions */
 
-.permissions {
-display: flex;
-justify-content: space-evenly;
-}
-
-.aa {
-display: flex;
-flex-direction: column;
-align-items: center;
-}
-
-.aa span, .aa input[type="checkbox"] {
+.nom-fonction {
 display: block;
+padding: 5px;
+background: #49763d;
+color: #FFF;
+margin-bottom: 5px;
+cursor: pointer;
+}
+
+.fonction h3 {
+margin: 0;
+}
+
+.fonction input[type="checkbox"] {
+display: inline;
+}
+
+.permissions {
+display: none;
+}
+
+.permission {
+margin-bottom: 10px;
+}
+
+.succes-image {
+max-width: 15px;
 }

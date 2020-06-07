@@ -34,8 +34,10 @@ require('config.php');
 <div class="commande-flex">
 <div class="commande-infos">
 <label for="client">Associer la commande  à un client : </label><input type="text" name="client" id="nom_client" placeholder="Tapez un nom, une adresse, ...">
+<div class="viderclient">
 <input type="text" id="user_id" name="client_id" disabled>
 <input type="button" id="viderclient" value="Supprimer">
+</div>
 <div class="type_commande">
 <label for="type_commande">Type de commande :</label>
 <input type="radio" name="type" value="1" id="1" checked><label for="1">Livraison</label> 
