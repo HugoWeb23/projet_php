@@ -8,51 +8,67 @@ if(isset($_GET['deconnexion'])) {
     session_destroy();
     header('location: connexion');
 }
+
+$permissions = verif_permissions($personnel['id_personnel'], array('c_produit', 'g_produits', 'c_menu', 'g_menus', 'g_categ', 'c_employe', 'g_employe', 'g_fonctions', 'g_permissions', 'c_client', 'g_clients', 'c_commande', 'g_commandes', 'g_livraisons'));
+
 ?>
 <div class="nav">
+<div class="burger">
+<div class="barre1"></div>
+<div class="barre2"></div>
+<div class="barre3"></div>
+</div>
 <div class="titre">
 <div class="logo">
 <img src="images/logo.png">
 </div>
 <div class="nom">
-    Pizza Royale
+Pizza Royale
 </div>
 </div>
 <nav>
 <ul class="menu">
+<?php if($permissions[11] == 1 || $permissions[12] == 1 || $permissions[13] == 1) { ?>
 <div class="dropdown">
 <a href="#">Commandes</a>
 <div class="dropdown-child">
-<a href="creercommande">Créer une nouvelle commande</a>
-<a href="gestioncommandes">Gestion des commandes</a>
-<a href="gestionlivraisons">Gestion des livraisons</a>
+<?php if($permissions[11] == 1) { ?><a href="creercommande">Créer une nouvelle commande</a><?php } ?>
+<?php if($permissions[12] == 1) { ?><a href="gestioncommandes">Gestion des commandes</a><?php } ?>
+<?php if($permissions[13] == 1) { ?><a href="gestionlivraisons">Gestion des livraisons</a><?php } ?>
 </div>
 </div>
+<?php } ?>
+<?php if($permissions[9] == 1 || $permissions[10] == 1) { ?>
 <div class="dropdown">
 <a href="#">Clients</a>
 <div class="dropdown-child">
-<a href="creerclient">Créer un compte client</a>
-<a href="gestionclients">Chercher des clients</a>
+<?php if($permissions[9] == 1) { ?><a href="creerclient">Créer un compte client</a><?php } ?>
+<?php if($permissions[10] == 1) { ?><a href="gestionclients">Chercher des clients</a><?php } ?>
 </div>
 </div>
+<?php } ?>
+<?php if($permissions[5] == 1 || $permissions[6] == 1 || $permissions[8] == 1) { ?>
 <div class="dropdown">
 <a href="#">Personnel</a>
 <div class="dropdown-child">
-<a href="creeremploye">Créer un profil employé</a>
-<a href="gestionemployes">Chercher des employés</a>
-<a href="gestionpermissions">Gestion des permissions</a>
+<?php if($permissions[5] == 1) { ?><a href="creeremploye">Créer un profil employé</a><?php } ?>
+<?php if($permissions[6] == 1) { ?><a href="gestionemployes">Chercher des employés</a><?php } ?>
+<?php if($permissions[8] == 1) { ?><a href="gestionpermissions">Gestion des permissions</a><?php } ?>
 </div>
 </div>
+<?php } ?>
+<?php if($permissions[0] == 1 || $permissions[1] == 1 || $permissions[2] == 1 || $permissions[3] == 1 || $permissions[4] == 1) { ?>
 <div class="dropdown">
 <a href="gestionproduits">Produits</a>
 <div class="dropdown-child">
-<a href="creerproduit">Créer un produit</a>
-<a href="gestionproduits">Gestion des produits</a>
-<a href="creermenu">Créer un menu</a>
-<a href="gestionmenus">Gestion des menus</a>
-<a href="gestioncategories">Gestion des catégories</a>
+<?php if($permissions[0] == 1) { ?><a href="creerproduit">Créer un produit</a><?php } ?>
+<?php if($permissions[1] == 1) { ?><a href="gestionproduits">Gestion des produits</a><?php } ?>
+<?php if($permissions[2] == 1) { ?><a href="creermenu">Créer un menu</a><?php } ?>
+<?php if($permissions[3] == 1) { ?><a href="gestionmenus">Gestion des menus</a><?php } ?>
+<?php if($permissions[4] == 1) { ?><a href="gestioncategories">Gestion des catégories</a><?php } ?>
 </div>
 </div>
+<?php } ?>
 </ul>
 </nav>
 <div class="connexion">

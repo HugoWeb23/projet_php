@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100&display=swap');
-
 body {
 margin: 0;
 background: #e19d7d;
@@ -34,6 +32,36 @@ color: #FFF;
 font-size: 25px;
 }
 
+.burger {
+display: none;
+float: left;
+margin-top: 32px;
+margin-left: 10px;
+cursor: pointer;
+}
+
+.burger .barre1 {
+transition: all 0.3s;
+width: 25px;
+height: 5px;
+background-color: #FFF;
+margin: 5px;
+}
+.burger .barre2 {
+transition: all 0.3s;
+width: 25px;
+height: 5px;
+background-color: #FFF;
+margin: 5px;
+}
+.burger .barre3 {
+transition: all 0.3s;
+width: 25px;
+height: 5px;
+background-color: #FFF;
+margin: 5px;
+}
+
 .menu {
 position: relative;    
 float: left;
@@ -42,8 +70,6 @@ margin-left: 50px;
 margin-top: 0px;
 z-index: 99;
 }
-
-@media all and (min-width: 1250px) {
 
 .dropdown a:hover {
 background: #521d06;
@@ -86,14 +112,27 @@ float: right;
 width: auto;
 margin-right: 10px;
 }
-}
+
 @media all and (max-width: 1250px) {
-.dropdown-child {
+.burger {
+display: block;
+}
+
+.menu {
+position: absolute;
+background: #c92828;
+width: 150px;
+margin-left: 0;
+height: 100%;
+left: 0;
+top: 0;
+bottom: 0;
+}
+
+.connexion {
 display: none;
 }
-.dropdown {
-display: none;
-}
+
 }
 
 /* Page connexion */
