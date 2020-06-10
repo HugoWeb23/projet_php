@@ -89,10 +89,16 @@ if(isset($_GET['id'])) {
 <div class="loader" style="display: none"><img src="images/loader.gif"></div>
 <span class="titre-menu">Informations sur le menu</span>
 <form id="modifierMenu" action="" method="post">
+<div class="label-menu">
 <label for="nom">Nom : </label><input type="text" class="lol" name="nom" id="nom" value="<?= $menu['nom']; ?>">
+</div>
+<div class="label-menu">
 <label for="prix">Prix : </label><input type="number" name="prix" id="prix" value="<?= $menu['prix']; ?>">
-<input type="radio" name="etat" id="etat-1" value="1" <?php if($menu['etat'] == 1) { echo 'checked'; } ?>><label for="etat-1">Actif</label><input type="radio" name="etat" id="etat-2" value="2" <?php if($menu['etat'] == 2) { echo 'checked'; } ?>><label for="etat-2">Inactif</label>
-<input type="submit" class="boutton-rouge" name="modifier" id="modifier_menu" value="Modifier les informations du menu" data-menu_id="<?= $id_menu; ?>">
+</div>
+<div class="label-menu">
+<label for="etat">État : </label><input type="radio" name="etat" id="etat-1" value="1" <?php if($menu['etat'] == 1) { echo 'checked'; } ?>><label for="etat-1">Actif</label><input type="radio" name="etat" id="etat-2" value="2" <?php if($menu['etat'] == 2) { echo 'checked'; } ?>><label for="etat-2">Inactif</label>
+</div>
+<input type="submit" class="boutton-rouge" name="modifier" id="modifier_menu" value="Modifier le menu" data-menu_id="<?= $id_menu; ?>">
 </form>
 </div>
 <div class="contenu">

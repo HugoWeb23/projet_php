@@ -1,5 +1,19 @@
 $(document).ready(function(){
 
+	// Menu responsive
+
+	$('#burger').click(function(e) { 
+		e.preventDefault();
+		$('.menu').css({'transform' : 'translateX(0)', 'transition-duration' : '.2s'});
+		$('.fermermenu').toggleClass('on');
+	});
+
+	$('.fermermenu').click(function(e) { 
+		e.preventDefault();
+		$('.menu').css({'transform' : 'translateX(-100%)', 'transition-duration' : '.2s'});
+		$('.fermermenu').css('display', 'none');
+	});
+
 	// Page connexion
 	$('#connexion').submit(function() { 
 	var email = $(this).find('#email').val();
@@ -192,7 +206,7 @@ $(document).ready(function(){
 						$('#resultat-menu').delay(3000).fadeOut('slow');
 						$('#modifierMenu').css('opacity', '1');
 						$('.loader').hide();
-						$('#modifier_menu').val('Modifier les informations du menu');
+						$('#modifier_menu').val('Modifier le menu');
 						$('#prix_menu span').text(prix+ ' €');
 						diffMenu();
 					}
@@ -966,7 +980,7 @@ $(document).ready(function(){
 		});
 		var id = 1;
 		$(document).on('click', '#creer_categorie', function() { 
-		$('table').append('<tr><td><input class="test" type="text"></td><td><textarea class="test2"></textarea></td><td><input type="button" value="Créer" class="ok"> <input type="button" value="Annuler" class="annuler"></td></tr>');
+		$('table').append('<tr><td data-label="Nom"><input class="test" type="text"></td><td data-label="Description"><textarea class="test2"></textarea></td><td data-label="Actions"><input type="button" value="Créer" class="ok"> <input type="button" value="Annuler" class="annuler"></td></tr>');
 		id++;	
 		return false;
 		});
@@ -981,7 +995,7 @@ $(document).ready(function(){
 				method:"post",
 				data:{action:'creer', nom:nom, description:description},
 				success:function(data) {
-				$('table').append('<tr><td>'+nom+'</td><td>'+description+'</td><td><a class="editer" data-id="'+data+'" href="#">Éditer</a> - <a data-id="'+data+'" class="supprimer_categorie" href="#">Supprimer</a></td></tr>');
+				$('table').append('<tr><td data-label="Nom">'+nom+'</td><td data-label="Description">'+description+'</td><td data-label="Actions"><a class="editer" data-id="'+data+'" href="#">Éditer</a> - <a data-id="'+data+'" class="supprimer_categorie" href="#">Supprimer</a></td></tr>');
 				}
 			});
 			$(this).closest('tr').remove();
@@ -1013,14 +1027,14 @@ $(document).ready(function(){
 		if(nom.length == 0 || description.length == 0) {
 		$(this).closest('tr').remove();
 		}
-		$(this).closest('tr').html('<td>'+nom+'</td><td>'+description+'</td><td><a class="editer" data-id="'+id_categorie+'" href="#">Éditer</a> - <a data-id="'+id_categorie+'" class="supprimer_categorie" href="#">Supprimer</a></td>');
+		$(this).closest('tr').html('<td data-label="Nom">'+nom+'</td><td data-label="Description">'+description+'</td><td data-label="Actions"><a class="editer" data-id="'+id_categorie+'" href="#">Éditer</a> - <a data-id="'+id_categorie+'" class="supprimer_categorie" href="#">Supprimer</a></td>');
 		 });
 
 		 $(document).on('click', '.editer', function() {
 			var id_categorie = $(this).data('id');
 			var nom = $(this).closest('tr').find('td').eq(0).text();
 			var description = $(this).closest('tr').find('td').eq(1).text();
-			$(this).closest('tr').html('<td><input type="text" class="test" value="'+nom+'"></td><td><textarea class="test2">'+description+'</textarea></td><td><input type="button" data-id="'+id_categorie+'" value="Modifier" class="modifier"> <input type="button" data-id="'+id_categorie+'" value="Annuler" class="annuler"></td>');
+			$(this).closest('tr').html('<td data-label="Nom"><input type="text" class="test" value="'+nom+'"></td><td data-label="Description"><textarea class="test2">'+description+'</textarea></td><td data-label="Actions"><input type="button" data-id="'+id_categorie+'" value="Modifier" class="modifier"> <input type="button" data-id="'+id_categorie+'" value="Annuler" class="annuler"></td>');
 			
 		 });
 
@@ -1036,7 +1050,7 @@ $(document).ready(function(){
 				data:{action:'modifier', id_categorie:id_categorie, nom:nom, description:description},
 				success:function(data) {
 				if(data.type == 'succes') {
-				$('.modifier').closest('tr').html('<td>'+nom+'</td><td>'+description+'</td><td><a class="editer" data-id="'+id_categorie+'" href="#">Éditer</a> - <a data-id="'+id_categorie+'" class="supprimer_categorie" href="#">Supprimer</a></td>');
+				$('.modifier').closest('tr').html('<td data-label="Nom">'+nom+'</td><td data-label="Description">'+description+'</td><td data-label="Actions"><a class="editer" data-id="'+id_categorie+'" href="#">Éditer</a> - <a data-id="'+id_categorie+'" class="supprimer_categorie" href="#">Supprimer</a></td>');
 				} else if(data.type == 'erreur') {
 				alert(data.message);
 				$('.modifier').parent().parent().css("background", "red");

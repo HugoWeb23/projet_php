@@ -20,6 +20,7 @@ require('config.php');
 </head>
 <body>
 <?php include('header.php'); ?>
+<div class="fermermenu"></div>
 <div class="conteneur">
 <div class="titre-page">
 <h1>Créer une commande</h1>

@@ -26,21 +26,25 @@ require('config.php');
 <a id="creer_categorie" href="#">Créer une catégorie</a>
 </div>
 <table>
+<thead>
 <tr>
 <th>Nom</th>
 <th>Description</th>
 <th>Actions</th>
 </tr>
+</thead>
 <?php
 $req = $bdd->prepare('SELECT * FROM categories ORDER BY nom');
 $req->execute();
 while($categ = $req->fetch()) {
 ?>
+<tbdoy>
 <tr>
-<td><?= $categ['nom']; ?></td>
-<td><?= $categ['description']; ?></td>   
-<td><a class="editer" data-id="<?= $categ['id_categorie']; ?>" href="#">Éditer</a> - <a data-id="<?= $categ['id_categorie']; ?>" class="supprimer_categorie" href="#">Supprimer</a></td>  
-</tr>     
+<td data-label="Nom"><?= $categ['nom']; ?></td>
+<td data-label="Description"><?= $categ['description']; ?></td>   
+<td data-label="Actions"><a class="editer" data-id="<?= $categ['id_categorie']; ?>" href="#">Éditer</a> - <a data-id="<?= $categ['id_categorie']; ?>" class="supprimer_categorie" href="#">Supprimer</a></td>  
+</tr>  
+</tbody>   
 <?php } ?>
 </table>
 </div>
