@@ -1,4 +1,4 @@
-# Projet du 17 juin (PHP)
+# Application de gestion des commandes
 
 ## Pré-requis
 
@@ -22,4 +22,16 @@ Les employés se connectent avec leur adresse e-mail et leur mot de passe.
 
 ### Création des produits
 
-Les produits
+Pour créer un produit dans l'application, la personne responsable de cette tâche devra saisir un nom ainsi qu'un prix. Le produit doit obligatoirement être associé à une photo pour être mis en ligne.
+
+### Gestion des produits
+
+Cette page affiche l'ensemble des produits les uns à côté des autres. Elle permet de les modifier facilement en cliquant sur l'icône "modifier". Un message sur fond rouge apparaît sur le produit n'est associé à aucune catégorie.
+
+### Gestion des catégories des produits
+
+Les catégories sont affichées dans un tableau, elles peuvent être éditées et supprimées facilement.
+
+### Responsive
+
+L'application étant destinée à être utilisée sur des tablettes et téléphones, elle est entièrement responsive. En réduisant votre écran, vous verrez le contenu s'adapter et le menu horizontal disparaître pour laisser place à l'icône "burger" qui fera apparaître le menu vertical.
