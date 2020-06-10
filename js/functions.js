@@ -4,14 +4,16 @@ $(document).ready(function(){
 
 	$('#burger').click(function(e) { 
 		e.preventDefault();
-		$('.menu').css({'transform' : 'translateX(0)', 'transition-duration' : '.2s'});
+		$(this).toggleClass('on');
+		$('.menu').toggleClass('on');
 		$('.fermermenu').toggleClass('on');
 	});
 
 	$('.fermermenu').click(function(e) { 
 		e.preventDefault();
-		$('.menu').css({'transform' : 'translateX(-100%)', 'transition-duration' : '.2s'});
-		$('.fermermenu').css('display', 'none');
+		$('#burger').toggleClass('on');
+		$('.menu').toggleClass('on');
+		$(this).toggleClass('on');
 	});
 
 	// Page connexion
@@ -980,7 +982,7 @@ $(document).ready(function(){
 		});
 		var id = 1;
 		$(document).on('click', '#creer_categorie', function() { 
-		$('table').append('<tr><td data-label="Nom"><input class="test" type="text"></td><td data-label="Description"><textarea class="test2"></textarea></td><td data-label="Actions"><input type="button" value="Créer" class="ok"> <input type="button" value="Annuler" class="annuler"></td></tr>');
+		$('table').append('<tbody><tr><td data-label="Nom"><input class="test" type="text"></td><td data-label="Description"><textarea class="test2"></textarea></td><td data-label="Actions"><input type="button" value="Créer" class="ok"> <input type="button" value="Annuler" class="annuler"></td></tr><tbody>');
 		id++;	
 		return false;
 		});
@@ -995,7 +997,7 @@ $(document).ready(function(){
 				method:"post",
 				data:{action:'creer', nom:nom, description:description},
 				success:function(data) {
-				$('table').append('<tr><td data-label="Nom">'+nom+'</td><td data-label="Description">'+description+'</td><td data-label="Actions"><a class="editer" data-id="'+data+'" href="#">Éditer</a> - <a data-id="'+data+'" class="supprimer_categorie" href="#">Supprimer</a></td></tr>');
+				$('table').append('<tbody><tr><td data-label="Nom">'+nom+'</td><td data-label="Description">'+description+'</td><td data-label="Actions"><a class="editer" data-id="'+data+'" href="#">Éditer</a> - <a data-id="'+data+'" class="supprimer_categorie" href="#">Supprimer</a></td></tr></tbody>');
 				}
 			});
 			$(this).closest('tr').remove();
@@ -1176,6 +1178,74 @@ $(document).ready(function(){
 		$(check).closest('.permission').find('img').fadeIn(0);
 		}
 		check.parent().find('img').delay(3000).fadeOut(200);
+		}
+		}
+	});
+	});
+
+	
+
+	$('.nouv-fonction').click(function() { 
+	$('table').append('<tbody><tr><td data-label="Nom"><input type="text"></td><td data-label="Actions"><button class="creer-fonction">Valider</button> - <button class="annuler">Annuler</button></td></tr></tbody>');
+	});
+
+	$('table').on('click', '.creer-fonction', function() { 
+	var boutton = $(this);
+	var nom = $(boutton).closest('tr').find('input').val();
+	$.ajax({
+		url:"ajax/gestionfonctions.php",
+		method:"post",
+		dataType:"json",
+		data:{action:'creer_fonction', nom:nom},
+		success:function(data) {
+		if(data.type == 'succes') {
+		$(boutton).closest('tr').html('<td data-label="Nom">'+nom+'</td><td data-label="Actions"><button class="editerfonction" data-id="'+data.id_fonction+'">Éditer</button> - <button class="supprimer-fonction">Supprimer</button></td>');
+		} else if(data.type == 'erreur') {
+		alert(data.message);
+		}
+		}
+	});
+	});
+
+	$('table').on('click', '.editerfonction', function() { 
+	var boutton = $(this);
+	var id_fonction = boutton.data('id');
+	var nom = boutton.closest('tr').find('td').eq(0).text();
+	boutton.closest('tr').html('<td data-label="Nom"><input type="text" value="'+nom+'"></td><td data-label="Actions"><button class="validerfonction" data-id="'+id_fonction+'">Valider</button> - <button class="annuler">Annuler</button></td>');
+	});
+
+	$('table').on('click', '.validerfonction', function() { 
+	var boutton = $(this);
+	var id_fonction = boutton.data('id');
+	var nom = boutton.closest('tr').find('input').val();
+	$.ajax({
+		url:"ajax/gestionfonctions.php",
+		method:"post",
+		dataType:"json",
+		data:{action:'editer_fonction', nom:nom, id_fonction:id_fonction},
+		success:function(data) {
+		if(data.type == 'succes') {
+		boutton.closest('tr').html('<td data-label="Nom">'+nom+'</td><td data-label="Actions"><button class="editerfonction" data-id="'+id_fonction+'">Éditer</button> - <button class="supprimer-fonction" data-id="'+id_fonction+'">Supprimer</button></td>');
+		} else if(data.type == 'erreur') {
+		alert(data.message);
+		}
+		}
+	});
+	});
+
+	$('table').on('click', '.supprimerfonction', function() { 
+	var boutton = $(this);
+	var id_fonction = boutton.data('id');
+	$.ajax({
+		url:"ajax/gestionfonctions.php",
+		method:"post",
+		dataType:"json",
+		data:{action:'supprimer_fonction', id_fonction:id_fonction},
+		success:function(data) {
+		if(data.type == 'succes') {
+		boutton.closest('tbody').remove();
+		} else if(data.type == 'erreur') {
+		alert(data.message);
 		}
 		}
 	});

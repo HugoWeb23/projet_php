@@ -125,8 +125,9 @@ function toggleSelect()
 </div>
 <div class="identifiants">
 <h2>Carte de fidélité</h2>
+<div class="creer_carte">
 <input type="checkbox" id="creercarte" name="creercarte" onClick="toggleSelect()" checked><label for="creercarte">Créer une carte de fidélité</label>
-<br />
+</div>
 <label for="points">Nombre de points : <label>
 <input type="number" id="points" name="points" value="0">
 <label for="expiration">Durée de validité<label>

@@ -28,12 +28,11 @@ Pizza Royale
 </div>
 <nav>
 <ul class="menu">
-<div class="fermer-menu"><span>X</span></div>
 <?php if($permissions[11] == 1 || $permissions[12] == 1 || $permissions[13] == 1) { ?>
 <div class="dropdown">
 <a href="#">Commandes</a>
 <div class="dropdown-child">
-<?php if($permissions[11] == 1) { ?><li><a href="creercommande">Créer une nouvelle commande</a></li></li><?php } ?>
+<?php if($permissions[11] == 1) { ?><li><a href="creercommande">Créer une nouvelle commande</a></li><?php } ?>
 <?php if($permissions[12] == 1) { ?><li><a href="gestioncommandes">Gestion des commandes</a></li><?php } ?>
 <?php if($permissions[13] == 1) { ?><li><a href="gestionlivraisons">Gestion des livraisons</a></li><?php } ?>
 </div>
@@ -54,6 +53,7 @@ Pizza Royale
 <div class="dropdown-child">
 <?php if($permissions[5] == 1) { ?><li><a href="creeremploye">Créer un profil employé</a></li><?php } ?>
 <?php if($permissions[6] == 1) { ?><li><a href="gestionemployes">Chercher des employés</a></li><?php } ?>
+<?php if($permissions[6] == 1) { ?><li><a href="gestionfonctions">Gestion des fonctions</a></li><?php } ?>
 <?php if($permissions[8] == 1) { ?><li><a href="gestionpermissions">Gestion des permissions</a></li><?php } ?>
 </div>
 </div>
@@ -81,4 +81,5 @@ Pizza Royale
 </div>
 </div>
 </div> 
+<div class="fermermenu"></div>
 </div>
