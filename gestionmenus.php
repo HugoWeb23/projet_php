@@ -122,7 +122,7 @@ $total_menu += $afficher['prix'] * $afficher['quantite'];
 </div>
 <div class="prix" data-prix="<?= $afficher['prix']; ?>"><?= $afficher['prix']; ?> €</div>
 <input type="button" class="boutton-quantite produit_quantite" data-produit="<?= $afficher['id']; ?>" data-menu="<?= $menu['id_menu']; ?>" value="Valider quantité">
-<input type="button" class="boutton-supprimer-produit supprimer_produit" data-produit="<?= $afficher['id']; ?>" data-menu="<?= $menu['id_menu']; ?>" value="supprimer">
+<input type="button" class="boutton-supprimer-produit supprimer_produit" data-produit="<?= $afficher['id']; ?>" data-menu="<?= $menu['id_menu']; ?>" value="Supprimer">
 </div>
 <?php } ?>
 <div class="afficher-total">

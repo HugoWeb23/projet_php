@@ -35,7 +35,8 @@ $req->bindValue('date', $date, PDO::PARAM_STR);
 $req->bindValue('id_client', $id_client, PDO::PARAM_INT);
 $req->execute();
 
-echo 'La carte a été prolongée jusqu\'au '.$date.'';
+$message = array("date" => $date, "message" => "La carte a été prolongée jusqu'au $date");
+echo json_encode($message);
 }
 }
 
@@ -89,4 +90,7 @@ $req->bindValue('points', $points, PDO::PARAM_INT);
 $req->bindValue('expire', $date, PDO::PARAM_STR);
 $req->bindValue('id_client', $id_client, PDO::PARAM_INT);
 $req->execute();
+$lastID = $bdd->lastInsertId();
+$message = array("id_client" => $id_client, "n_carte" => $lastID, "expiration" => $date, "points" => $points);
+echo json_encode($message);
 }

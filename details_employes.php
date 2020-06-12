@@ -54,7 +54,7 @@ if(empty($fonction)) {
 $message_infosperso = 3;   
 } else {
 $req = $bdd->prepare('UPDATE personnel as a LEFT JOIN adresses as b ON a.id_adresse = b.id_adresse SET a.nom = :nom, a.prenom = :prenom, a.email = :email, a.date_naissance = :date_naissance, a.telephone = :telephone,
-b.rue = :rue, b.numero = :numero, b.ville = :ville, b.code_postal = :code_postal, b.pays = :pays WHERE a.id_personnel = :id AND b.id_adresse = (SELECT id_adresse FROM personnel WHERE id_personnel = :id)');    
+b.rue = :rue, b.numero = :numero, b.ville = :ville, b.code_postal = :code_postal, b.pays = :pays WHERE a.id_personnel = :id');    
 $req->bindValue('nom', $nom, PDO::PARAM_STR);
 $req->bindValue('prenom', $prenom, PDO::PARAM_STR);
 $req->bindValue('email', $email, PDO::PARAM_STR);
@@ -65,7 +65,6 @@ $req->bindValue('numero', $numero, PDO::PARAM_STR);
 $req->bindValue('ville', $ville, PDO::PARAM_STR);
 $req->bindValue('code_postal', $code_postal, PDO::PARAM_INT);
 $req->bindValue('pays', $pays, PDO::PARAM_STR);
-$req->bindValue('id', $id, PDO::PARAM_INT);
 $req->bindValue('id', $id, PDO::PARAM_INT);
 $req->execute() or die(print_r($req->errorInfo(), TRUE));
 

@@ -475,7 +475,7 @@ flex-wrap: wrap;
 
 .apercuproduit {
 position: relative;    
-width: 148px;
+width: 159px;
 height: 250px;    
 border: 2px solid #dadada;
 margin-right: 10px;
@@ -664,10 +664,21 @@ margin-top: 10px;
 display: block;
 border: 2px solid #ab4a4a;
 padding: 5px;
-width: 151px;
+width: 159px;
 color: #ab4a4a;
 margin-left: -3px;
 transition-duration: 0.5s;
+}
+
+@media all and (max-width: 500px) {
+
+.apercuproduit {       
+width: 146px;    
+}
+
+.boutton-produits {
+width: 146px;
+}
 }
 
 .afficher-total {
@@ -685,6 +696,7 @@ color: #FFF;
 border: 1px solid #000;
 width: 100%;
 padding: 5px;
+margin-bottom: 20px;
 }
 
 .creer_carte {

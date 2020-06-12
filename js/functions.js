@@ -54,6 +54,7 @@ $(document).ready(function(){
 	// Vérification de la disponibilité d'une adresse email
 
 	$('#email').on('keyup', function() { 
+	var input = $(this);
 	var email = $(this).val();
 	if(email.length > 7) {
 		$.ajax({
@@ -64,9 +65,9 @@ $(document).ready(function(){
 		success:function(data)
 		{
 		if(data.dispo == 0) {
-		console.log('Email indisponible');
+		input.css('border', '2px solid red');
 		} else if(data.dispo == 1) {
-		console.log('Email disponible');
+		input.css('border', '2px solid green');
 		}
 		}
 		});
@@ -98,24 +99,124 @@ $(document).ready(function(){
 			{
 				load_clients();			
 			}
-		});	
+		});
 
-	$('.creermenu-ajouter-produit').on('click', function() {
+	// Créer un compte client
 
-		var id_produit = $(this).data('id');
-		var nom = $(this).closest('.details-produit').find('span').eq(0).text();
-		var prix = $(this).closest('.details-produit').find('span').eq(1).text();
-
+	$('#creerclient').submit(function() { 
+	var creerclient = $(this);
+	var nom = $(creerclient).find('#nom').val();
+	var prenom = $(creerclient).find('#prenom').val();
+	var date_naissance = $(creerclient).find('#date_naissance').val();
+	var email = $(creerclient).find('#email').val();
+	var tel_fixe = $(creerclient).find('#telephone_fixe').val();
+	var gsm = $(creerclient).find('#gsm').val();
+	var rue = $(creerclient).find('#rue').val();
+	var numero = $(creerclient).find('#numero').val();
+	var ville = $(creerclient).find('#ville').val();
+	var code_postal = $(creerclient).find('#code_postal').val();
+	var pays = $(creerclient).find('#pays').val();
+	var creer_carte = $(creerclient).find('#creercarte').is(':checked') ? 1 : 0;
+	var points = $(creerclient).find('#points').val();
+	var expiration = $(creerclient).find('#expiration').val();
+	if(nom.length < 1 || prenom.length < 1 || date_naissance.length < 1 || email.length < 1 || rue.length < 1 || numero.length < 1 || code_postal.length < 1 || pays.length < 1 || points.length < 1 || expiration.length < 1 || tel_fixe.length < 1 && gsm.length < 1) {
+	$('#messages').html('<h2 class="message-erreur">Merci de remplir tous les champs</h2>');
+	} else {
 		$.ajax({
-			url:"ajax/modifierquantite.php",
+			url:"ajax/creerclient.php",
 			method:"post",
-			data: {id_produit:id_produit},
+			dataType:"json",
+			data: {action:'creer_client', nom:nom, prenom:prenom, date_naissance:date_naissance, email:email, telephone_fixe:tel_fixe, gsm:gsm, rue:rue, numero:numero, ville:ville, code_postal:code_postal, pays:pays, creercarte:creer_carte, points:points, expire:expiration},
 			success:function(data)
 			{
-				ajouterProduit('produit', 'produit', 0, 0, 'validerQuantite', 'supprimer', id_produit, nom, prix);
+			if(data.type == 'erreur') {
+			$('#messages').html('<h2 class="message-erreur">'+data.message+'</h2>');
+			} else if(data.type == 'succes') {
+			$('#messages').html('<h2 class="message-confirmation">'+data.message+'</h2>');
+			creerclient.find('.infos-perso').find('input[type="text"], input[type="date"]').val('');
+			}
 			}
 		});
+	}
+	return false;
 	});
+
+
+	// Modifier un client
+
+	$('#modifierclient').submit(function() { 
+		var modifierclient = $(this);
+		var id_client = $(modifierclient).data('id_client');
+		var nom = $(modifierclient).find('#nom').val();
+		var prenom = $(modifierclient).find('#prenom').val();
+		var date_naissance = $(modifierclient).find('#date_naissance').val();
+		var email_actuelle = $(modifierclient).find('#email').data('email_actuelle');
+		var email = $(modifierclient).find('#email').val();
+		var tel_fixe = $(modifierclient).find('#telephone_fixe').val();
+		var gsm = $(modifierclient).find('#gsm').val();
+		var rue = $(modifierclient).find('#rue').val();
+		var numero = $(modifierclient).find('#numero').val();
+		var ville = $(modifierclient).find('#ville').val();
+		var code_postal = $(modifierclient).find('#code_postal').val();
+		var pays = $(modifierclient).find('#pays').val();
+		if(nom.length < 1 || prenom.length < 1 || date_naissance.length < 1 || email.length < 1 || rue.length < 1 || numero.length < 1 || code_postal.length < 1 || pays.length < 1 || tel_fixe.length < 1 && gsm.length < 1) {
+		$('#messages').html('<h2 class="message-erreur">Merci de remplir tous les champs</h2>');
+		} else {
+			$.ajax({
+				url:"ajax/modifierclient.php",
+				method:"post",
+				dataType:"json",
+				data: {action:'modifier_client', id_client:id_client, nom:nom, prenom:prenom, date_naissance:date_naissance, email_actuelle:email_actuelle, email:email, telephone_fixe:tel_fixe, gsm:gsm, rue:rue, numero:numero, ville:ville, code_postal:code_postal, pays:pays},
+				success:function(data)
+				{
+				if(data.type == 'erreur') {
+				$('#messages').html('<h2 class="message-erreur">'+data.message+'</h2>');
+				} else if(data.type == 'succes') {
+				$('#messages').html('<h2 class="message-confirmation">'+data.message+'</h2>');
+				}
+				}
+			});
+		}
+		return false;
+		});
+
+		// Supprimer compte client
+
+		$('#supprimerclient').click(function() {
+			var id_client = $(this).data('client');
+			if(confirm('Voulez-vous vraiment supprimer ce client ?')) {
+				$.ajax({
+					url:"ajax/modifierclient.php",
+					method:"post",
+					dataType:"json",
+					data: {action:'supprimer_client', id_client:id_client},
+					success:function(data)
+					{
+					if(data.type == 'succes') {
+					alert(data.message);
+					window.location = "gestionclients";
+					}
+					}
+				});
+			}
+		});
+	
+		$('.creermenu-ajouter-produit').on('click', function() {
+	
+			var id_produit = $(this).data('id');
+			var nom = $(this).closest('.details-produit').find('span').eq(0).text();
+			var prix = $(this).closest('.details-produit').find('span').eq(1).text();
+	
+			$.ajax({
+				url:"ajax/modifierquantite.php",
+				method:"post",
+				data: {id_produit:id_produit},
+				success:function(data)
+				{
+					ajouterProduit('produit', 'produit', 0, 0, 'validerQuantite', 'supprimer', id_produit, nom, prix);
+				}
+			});
+		});
 
 	$('.menu-apercu').on('click', '.validerQuantite', function(){
 		
@@ -169,7 +270,7 @@ $(document).ready(function(){
 					$('#resultat-menu').html('<h2 class="message-erreur">'+data.message+'</h2>').fadeIn('slow');
 					} else if(data.type == 'succes') {
 					$('#resultat-menu').html('<h2 class="message-confirmation">'+data.message+'</h2>').fadeIn('slow');
-					$('.apercu-menus').remove();
+					$('.apercu-produits').remove();
 					}
 					$('#resultat-menu').delay(3000).fadeOut('slow');
 					$('#creerMenu').css('opacity', '1');
@@ -238,18 +339,21 @@ $(document).ready(function(){
 				});
 			});
 
-			$('#prolongerCarte').change(function(){ 
+			$('.identifiants').on('change', '#prolongerCarte', function(){ 
 				var mois = $(this).val();
-				var id_client = $('#id_client').val();
-				var id_carte = $('#id_carte').val();
+				var id_client = $(this).closest('.carte-fidelite').find('#supprimerCarteFidelite').data('id_client');
+				var id_carte = $(this).closest('.carte-fidelite').find('#supprimerCarteFidelite').data('id_carte');
 				if(mois > 0) {
 				$.ajax({
 					url:"ajax/carte_fidelite.php",
 					method:"post",
+					dataType:"json",
 					data:{action:'prolonger', mois:mois, id_client:id_client, id_carte:id_carte},
 					success:function(data)
 					{
-						$('#resultat').html(data);
+						$('#resultat').html(data.message);
+						$('#expiration span').text(data.date);
+
 					}
 				});
 			}
@@ -263,11 +367,12 @@ $(document).ready(function(){
 				});
 			}
 
-			var count = $('#count').data('count');
+			
 
-			$('#pointsUp').on('click', function() { 
-				var id_client = $('#id_client').val();
-				var id_carte = $('#id_carte').val();
+			$('.identifiants').on('click', '#pointsUp', function() { 
+				var id_client = $(this).closest('.carte-fidelite').find('#supprimerCarteFidelite').data('id_client');
+				var id_carte = $(this).closest('.carte-fidelite').find('#supprimerCarteFidelite').data('id_carte');
+				var count = $('#count').text();
 				if(count < 100) {
 				count++;
 				}
@@ -275,9 +380,10 @@ $(document).ready(function(){
 				points(count, id_client, id_carte);
 			});
 
-			$('#pointsDown').on('click', function() { 
-				var id_client = $('#id_client').val();
-				var id_carte = $('#id_carte').val();
+			$('.identifiants').on('click', '#pointsDown', function() { 
+				var id_client = $(this).closest('.carte-fidelite').find('#supprimerCarteFidelite').data('id_client');
+				var id_carte = $(this).closest('.carte-fidelite').find('#supprimerCarteFidelite').data('id_carte');
+				var count = $('#count').text();
 				if(count > 0) {
 					count--;
 					}
@@ -285,43 +391,48 @@ $(document).ready(function(){
 				points(count, id_client, id_carte);
 			});
 
-			function supprimer_carte(id_client, id_carte) {
+			function supprimer_carte(supprimer, id_client, id_carte) {
 				$.ajax({
 					url:"ajax/carte_fidelite.php",
 					method:"post",
 					data:{action:'supprimer', id_client:id_client, id_carte:id_carte},
 					success:function()
 					{
-						location.reload();
+					supprimer.closest('.carte-fidelite').remove();
+					$('.identifiants h2').after('<div class="creer-carte"><p>Ce client ne possède pas de carte de fidélité</p><h3>Créer une carte :</h3><label for="points">Points :</label><input type="text" id="points" value="0"><label for="duree">Durée de validité</label><select id="duree"><option value="1">1 mois</option><option value="2">2 mois</option><option value="3">3 mois</option><option value="4">4 mois</option><option value="5">5 mois</option><option value="6" selected>6 mois</option><option value="12">1 an</option><option value="24">2 ans</option></select><input type="button" id="creerCarte" data-client="'+id_client+'" value="Créer la carte"></div>');
 					}
 				});
 			}
 
-			function creer_carte(id_client, points, duree) {
+			function creer_carte(creercarte, id_client, points, duree) {
 				$.ajax({
 					url:"ajax/carte_fidelite.php",
 					method:"post",
+					dataType:"json",
 					data:{action:'creer', id_client:id_client, points:points, duree:duree},
-					success:function()
+					success:function(data)
 					{
-						location.reload();
+					creercarte.closest('.creer-carte').remove();
+					$('.identifiants h2').after('<div class="carte-fidelite"><div id="resultat"></div><p>Numéro : '+data.n_carte+'</p><p>Points : <span id="count" data-count="'+data.points+'">'+data.points+'</span> <a href="#" id="pointsUp">+</a> <a href="#" id="pointsDown">-</a></p><p id="expiration">Date d\'expiration : <span>'+data.expiration+'</span></p><p><label for="prolongerCarte">Prolonger :</label> <select name="mois" id="prolongerCarte"><option value="0">Non</option><option value="1">1 mois</option><option value="2">2 mois</option><option value="3">3 mois</option><option value="6">6 mois</option><option value="12">1 an</option><option value="24">2 ans</option></select><p><label for="supprimerCarteFidelite">Supprimer :</label><input type="button" data-id_client="'+data.id_client+'" data-id_carte="'+data.n_carte+'" id="supprimerCarteFidelite" value="Supprimer"></div>');
 					}
 				});
 			}
 
-			$('#creerCarte').on('click', function() {
+			$('.identifiants').on('click', '#creerCarte', function() {
+				var creercarte = $(this);
 				var id_client = $(this).data('client');
 				var points = $('#points').val();
 				var duree = $('#duree').val();
-				creer_carte(id_client, points, duree);
+				creer_carte(creercarte, id_client, points, duree);
 			});
 		
-		$('#supprimerCarteFidelite').on('click', function() { 
-			var id_client = $('#id_client').val();
-			var id_carte = $('#id_carte').val();
+		$('.identifiants').on('click', '#supprimerCarteFidelite', function() { 
+			var supprimer = $(this);
+			var id_client = supprimer.data('id_client');
+			var id_carte = supprimer.data('id_carte');
 			if(id_client > 0 && id_carte > 0) {
 				if(confirm('Voulez-vous vraiment supprimer cette carte ?')) {
-					supprimer_carte(id_client, id_carte);
+					supprimer_carte(supprimer, id_client, id_carte);
 				}
 			}
 		});
@@ -692,18 +803,19 @@ $(document).ready(function(){
 		$('#resultat-commande').html('<h2 class="message-'+type+'">'+message+'</h2>');
 		}
 		var check = null;
-		var id_client = $(this).find('#user_id').val();
-		var tel_fixe = $(this).find('#tel_fixe').val();
-		var gsm = $(this).find('#gsm').val();
-		var email = $(this).find('#email').val();
-		var type_commande = $(this).find('input[name=type]:checked').val();
-		var table = $(this).find('#table').val();
-		var rue = $(this).find('#rue').val();
-		var numero = $(this).find('#numero').val();
-		var code_postal = $(this).find('#code_postal').val();
-		var ville = $(this).find('#ville').val();
-		var pays = $(this).find('#pays').val();
-		var commentaire = $(this).find('#commentaire').val();
+		var commande = $(this);
+		var id_client = $(commande).find('#user_id').val();
+		var tel_fixe = $(commande).find('#tel_fixe').val();
+		var gsm = $(commande).find('#gsm').val();
+		var email = $(commande).find('#e-mail').val();
+		var type_commande = $(commande).find('input[name=type]:checked').val();
+		var table = $(commande).find('#table').val();
+		var rue = $(commande).find('#rue').val();
+		var numero = $(commande).find('#numero').val();
+		var code_postal = $(commande).find('#code_postal').val();
+		var ville = $(commande).find('#ville').val();
+		var pays = $(commande).find('#pays').val();
+		var commentaire = $(commande).find('#commentaire').val();
 		if(type_commande == 1) {
 		if(rue.length < 1 || numero.length < 1 || code_postal.length < 1 || ville.length < 1 || pays.length < 1 || gsm.length < 1 && tel_fixe.length < 1) {
 		check = false;
@@ -719,7 +831,7 @@ $(document).ready(function(){
 		}
 		}
 		if(check != false) {
-		$(this).css('opacity', '0.3');
+		$(commande).css('opacity', '0.3');
 		$('.loader').show();
 		$.ajax({
 		url:"ajax/creercommande.php",
@@ -732,6 +844,8 @@ $(document).ready(function(){
 		$('#resultat-commande').html('<h2 class="message-confirmation">'+data.message+'</h2>').fadeIn('slow');
 		$('.apercu-produits, .apercu-menus').remove();
 		totalCommande();
+		$(commande).find('input[type="text"], textarea').val('');
+		$()
 		} else if(data.type == 'erreur') {
 		$('#resultat-commande').html('<h2 class="message-erreur">'+data.message+'</h2>').fadeIn('slow');
 		}
@@ -1026,10 +1140,12 @@ $(document).ready(function(){
 		var id_categorie = $(this).data('id');
 		var nom = $(this).closest('tr').find('input[type="text"]').val();
 		var description = $(this).closest('tr').find('td').eq(1).text();
-		if(nom.length == 0 || description.length == 0) {
+		var boutton = $(this).closest('tr').find('input[type="button"]').eq(0).val();
+		if(boutton == 'Créer') {
 		$(this).closest('tr').remove();
-		}
+		} else if(boutton == 'Modifier') {
 		$(this).closest('tr').html('<td data-label="Nom">'+nom+'</td><td data-label="Description">'+description+'</td><td data-label="Actions"><a class="editer" data-id="'+id_categorie+'" href="#">Éditer</a> - <a data-id="'+id_categorie+'" class="supprimer_categorie" href="#">Supprimer</a></td>');
+		}
 		 });
 
 		 $(document).on('click', '.editer', function() {
@@ -1186,7 +1302,7 @@ $(document).ready(function(){
 	
 
 	$('.nouv-fonction').click(function() { 
-	$('table').append('<tbody><tr><td data-label="Nom"><input type="text"></td><td data-label="Actions"><button class="creer-fonction">Valider</button> - <button class="annuler">Annuler</button></td></tr></tbody>');
+	$('table').append('<tbody><tr><td data-label="Nom"><input type="text"></td><td data-label="Actions"><button class="creer-fonction">Créer</button> - <button class="annuler-fonction">Annuler</button></td></tr></tbody>');
 	});
 
 	$('table').on('click', '.creer-fonction', function() { 
@@ -1211,7 +1327,7 @@ $(document).ready(function(){
 	var boutton = $(this);
 	var id_fonction = boutton.data('id');
 	var nom = boutton.closest('tr').find('td').eq(0).text();
-	boutton.closest('tr').html('<td data-label="Nom"><input type="text" value="'+nom+'"></td><td data-label="Actions"><button class="validerfonction" data-id="'+id_fonction+'">Valider</button> - <button class="annuler">Annuler</button></td>');
+	boutton.closest('tr').html('<td data-label="Nom"><input type="text" value="'+nom+'"></td><td data-label="Actions"><button class="validerfonction" data-id="'+id_fonction+'">Valider</button> - <button class="annuler-fonction">Annuler</button></td>');
 	});
 
 	$('table').on('click', '.validerfonction', function() { 
@@ -1249,6 +1365,17 @@ $(document).ready(function(){
 		}
 		}
 	});
+	});
+
+	$('table').on('click', '.annuler-fonction', function() { 
+	var boutton = $(this).closest('tr').find('button').eq(0).text();
+	var nom = $(this).closest('tr').find('input').eq(0).val();
+	var id_fonction = $(this).data('id');
+	if(boutton == 'Créer') {
+	$(this).closest('tbody').remove();
+	} else if(boutton == 'Valider') {
+	$(this).closest('tr').html('<td data-label="Nom">'+nom+'</td><td data-label="Actions"><button class="editerfonction" data-id="'+id_fonction+'">Éditer</button> - <button class="supprimer-fonction" data-id="'+id_fonction+'">Supprimer</button></td>');
+	}
 	});
 
 });

@@ -26,7 +26,7 @@ Pour créer un produit dans l'application, la personne responsable de cette tâc
 
 ### Gestion des produits
 
-Cette page affiche l'ensemble des produits les uns à côté des autres. Elle permet de les modifier facilement en cliquant sur l'icône "modifier". Un message sur fond rouge apparaît sur le produit n'est associé à aucune catégorie.
+Cette page affiche l'ensemble des produits les uns à côté des autres. Elle permet de les modifier facilement en cliquant sur l'icône "modifier". Un message sur fond rouge apparaît si le produit n'est associé à aucune catégorie.
 
 ### Gestion des catégories des produits
 

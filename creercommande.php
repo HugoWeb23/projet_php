@@ -30,7 +30,7 @@ require('config.php');
 <div id="resultat-commande"></div>
 <div class="loader" style="display: none"><img src="images/loader.gif"></div>
 <span class="titre-menu">Informations commande</span>
-<form id="creerCommande" action="" method="post">
+<form id="creerCommande">
 <div class="commande-flex">
 <div class="commande-infos">
 <label for="client">Associer la commande  à un client : </label><input type="text" name="client" id="nom_client" placeholder="Tapez un nom, une adresse, ...">
@@ -61,7 +61,7 @@ echo '<option value="'.$table['id_table'].'">Table '.$table['id_table'].' ['.$ta
 <span class="titre-menu">Moyens de contact</span>
 <input type="text" id="tel_fixe" name="tel_fixe" placeholder="Téléphone fixe">
 <input type="text" id="gsm" name="gsm" placeholder="Numéro de gsm">
-<input type="text" id="email" name="email" placeholder="Adresse e-mail">
+<input type="text" id="e-mail" name="email" placeholder="Adresse e-mail">
 </div>
 <div class="commande-adresse">
 <span class="titre-menu">Adresse de livraison</span>

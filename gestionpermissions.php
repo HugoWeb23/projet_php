@@ -4,8 +4,6 @@ session_start();
 
 require('config.php');
 
-$permissions = verif_permissions($personnel['id_personnel'], array('c_produit', 'g_produits', 'c_menu', 'g_menus', 'g_categ', 'c_employe', 'g_employe', 'g_fonctions', 'g_permissions', 'c_client', 'g_clients', 'c_commande', 'g_commandes', 'g_livraisons'));
-
 ?>
 <!DOCTYPE html>
 <html lang="fr">
