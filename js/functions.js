@@ -53,7 +53,7 @@ $(document).ready(function(){
 
 	// Vérification de la disponibilité d'une adresse email
 
-	$('#email').on('keyup', function() { 
+	$('.verif-email').on('keyup', function() { 
 	var input = $(this);
 	var email = $(this).val();
 	if(email.length > 7) {
@@ -268,9 +268,11 @@ $(document).ready(function(){
 			{
 					if(data.type == 'erreur') {
 					$('#resultat-menu').html('<h2 class="message-erreur">'+data.message+'</h2>').fadeIn('slow');
+					$('html, body').animate({ scrollTop:0 }, 300);
 					} else if(data.type == 'succes') {
 					$('#resultat-menu').html('<h2 class="message-confirmation">'+data.message+'</h2>').fadeIn('slow');
 					$('.apercu-produits').remove();
+					$('html, body').animate({ scrollTop:0 }, 300);
 					}
 					$('#resultat-menu').delay(3000).fadeOut('slow');
 					$('#creerMenu').css('opacity', '1');
@@ -304,8 +306,10 @@ $(document).ready(function(){
 				{
 					if(data.type == 'erreur') {
 					$('#resultat-menu').html('<h2 class="message-erreur">'+data.message+'</h2>');
+					$('html, body').animate({ scrollTop:0 }, 300);
 					} else if(data.type == 'succes') {
 						$('#resultat-menu').html('<h2 class="message-confirmation">'+data.message+'</h2>').fadeIn('slow');
+						$('html, body').animate({ scrollTop:0 }, 300);
 						$('#resultat-menu').delay(3000).fadeOut('slow');
 						$('#modifierMenu').css('opacity', '1');
 						$('.loader').hide();
@@ -691,6 +695,18 @@ $(document).ready(function(){
 				totalCommande();
 		   }
 
+		   $('.boutton-produits').click(function() {
+			var click = $(this);
+			if(click.hasClass('click')) {
+			return false;
+			} else {
+			click.toggleClass('click');
+			setTimeout(function() {
+				click.toggleClass('click');
+			}, 2000);
+			}
+		   })
+
 		   $('.commandeAjouterMenu').on('click', function() {
 
 			var id_menu = $(this).data('menu_id');
@@ -801,6 +817,7 @@ $(document).ready(function(){
 		type = 'confirmation';
 		}
 		$('#resultat-commande').html('<h2 class="message-'+type+'">'+message+'</h2>');
+		$('html, body').animate({ scrollTop: 0 }, 300);
 		}
 		var check = null;
 		var commande = $(this);
@@ -841,13 +858,13 @@ $(document).ready(function(){
 		success:function(data)
 		{
 		if(data.type == 'succes') {
-		$('#resultat-commande').html('<h2 class="message-confirmation">'+data.message+'</h2>').fadeIn('slow');
+		message(2, data.message);
 		$('.apercu-produits, .apercu-menus').remove();
 		totalCommande();
 		$(commande).find('input[type="text"], textarea').val('');
 		$()
 		} else if(data.type == 'erreur') {
-		$('#resultat-commande').html('<h2 class="message-erreur">'+data.message+'</h2>').fadeIn('slow');
+		message(1, data.message);
 		}
 		$('#creerCommande').css('opacity', '1');
 		$('.loader').hide();
@@ -933,6 +950,7 @@ $(document).ready(function(){
 			type = 'confirmation';
 			}
 			$('#resultat-commande').html('<h2 class="message-'+type+'">'+message+'</h2>');
+			$('html, body').animate({ scrollTop:0 }, 300);
 			}
 			var check = null;
 			var id_commande = $(this).data('id_commande');
@@ -973,9 +991,9 @@ $(document).ready(function(){
 			success:function(data)
 			{
 			if(data.type == 'succes') {
-			$('#resultat-commande').html('<h2 class="message-confirmation">'+data.message+'</h2>').fadeIn('slow');
+			message(2, data.message);
 			} else if(data.type == 'erreur') {
-			$('#resultat-commande').html('<h2 class="message-erreur">'+data.message+'</h2>').fadeIn('slow');
+			message(1, data.message);
 			}
 			$('#modifierCommande').css('opacity', '1');
 			$('.loader').hide();

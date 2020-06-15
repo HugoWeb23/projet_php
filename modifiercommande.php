@@ -46,8 +46,10 @@ header('location: gestioncommandes');
 <div class="commande-flex">
 <div class="commande-infos">
 <label for="client">Associer la commande  à un client : </label><input type="text" name="client" id="nom_client" placeholder="Tapez un nom, une adresse, ...">
+<div class="viderclient">
 <input type="text" id="user_id" name="client_id" value="<?= $commande['id_client']; ?>" disabled>
 <input type="button" id="viderclient" value="Supprimer">
+</div>
 <div class="type_commande">
 <label for="type_commande">Type de commande :</label>
 
@@ -115,7 +117,7 @@ $totaux_menus += $menu['prix'] * $menu['quantite'];
     </div>
     <div class="prix" data-prix="<?= $menu['prix']; ?>"><?= $menu['prix']; ?> €</div>
     <input type="button" class="boutton-quantite commandeMenuQuantite" data-menu="<?= $menu['id_menu']; ?>" data-commande="<?= $commande['id_commande']; ?>" value="Valider quantité">
-    <input type="button" class="boutton-supprimer-produit commandeSupprimerMenu" data-menu="<?= $menu['id_menu']; ?>" data-commande="<?= $commande['id_commande']; ?>" value="supprimer">
+    <input type="button" class="boutton-supprimer-produit commandeSupprimerMenu" data-menu="<?= $menu['id_menu']; ?>" data-commande="<?= $commande['id_commande']; ?>" value="Supprimer">
     </div>
 
 <?php } ?>
@@ -132,10 +134,10 @@ $totaux_produits += $afficher['prix'] * $afficher['quantite'];
 <div class="quantite">Quantité : 
 <input type="text" class="quantite_saisie" value="<?= $afficher['quantite']; ?>">
 </div>
+</div>
 <div class="prix" data-prix="<?= $afficher['prix']; ?>"><?= $afficher['prix']; ?> €</div>
 <input type="button" class="boutton-quantite modifProduitQuantite" data-produit="<?= $afficher['id_produit']; ?>" data-commande="<?= $afficher['id_commande']; ?>" value="Valider quantité">
-</div>
-<input type="button" class="boutton-supprimer-produit supprimerProduit" data-produit="<?= $afficher['id_produit']; ?>" data-commande="<?= $commande['id_commande']; ?>" value="supprimer">
+<input type="button" class="boutton-supprimer-produit supprimerProduit" data-produit="<?= $afficher['id_produit']; ?>" data-commande="<?= $commande['id_commande']; ?>" value="Supprimer">
 </div>
 <?php 
 }
@@ -187,7 +189,7 @@ while($produit = $req2->fetch()) {
 <img src="<?= $produit['photo']; ?>">
 <div class="details-produit">
 <p>Nom : <span><?= $produit['libelle']; ?></span></p>
-<p>Prix : <span><?= $produit['prix']; ?> €</span></p>
+<p>Prix : <span><?= $produit['prix']; ?></span> €</p>
 <button data-produit="<?= $produit['id_produit']; ?>" data-commande="<?= $commande['id_commande']; ?>" class="boutton-produits modifCommandeAjouterProduit">Ajouter</button>
 </div>
 </div>

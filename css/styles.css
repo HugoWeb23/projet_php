@@ -489,6 +489,7 @@ transition-duration: 0.1s;
 }
 
 .apercuproduit img {
+position: relative;
 max-width: 100%; 
 }
 
@@ -668,6 +669,15 @@ width: 159px;
 color: #ab4a4a;
 margin-left: -3px;
 transition-duration: 0.5s;
+}
+
+.boutton-produits.click {
+position: relative;
+background-image: url('../images/succes.svg');
+background-repeat: no-repeat;
+background-position: center right 2px;
+background-size: 20px;
+z-index: 10;
 }
 
 @media all and (max-width: 500px) {
