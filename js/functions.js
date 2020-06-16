@@ -202,10 +202,11 @@ $(document).ready(function(){
 		});
 	
 		$('.creermenu-ajouter-produit').on('click', function() {
-	
-			var id_produit = $(this).data('id');
-			var nom = $(this).closest('.details-produit').find('span').eq(0).text();
-			var prix = $(this).closest('.details-produit').find('span').eq(1).text();
+			
+			var button = $(this);
+			var id_produit = $(button).data('id');
+			var nom = $(button).closest('.details-produit').find('span').eq(0).text();
+			var prix = $(button).closest('.details-produit').find('span').eq(1).text();
 	
 			$.ajax({
 				url:"ajax/modifierquantite.php",
@@ -214,6 +215,7 @@ $(document).ready(function(){
 				success:function(data)
 				{
 					ajouterProduit('produit', 'produit', 0, 0, 'validerQuantite', 'supprimer', id_produit, nom, prix);
+					success(button);
 				}
 			});
 		});
@@ -326,10 +328,11 @@ $(document).ready(function(){
 
 			$('.modifiermenu-ajouter-produit').on('click', function() {
 
-				var id_produit = $(this).data('id_produit');
-				var id_menu = $(this).data('id_menu');
-				var nom = $(this).closest('.details-produit').find('span').eq(0).text();
-				var prix = $(this).closest('.details-produit').find('span').eq(1).text();
+				var button = $(this);
+				var id_produit = $(button).data('id_produit');
+				var id_menu = $(button).data('id_menu');
+				var nom = $(button).closest('.details-produit').find('span').eq(0).text();
+				var prix = $(button).closest('.details-produit').find('span').eq(1).text();
 		
 				$.ajax({
 					url:"ajax/modifiermenu.php",
@@ -338,6 +341,7 @@ $(document).ready(function(){
 					success:function(data)
 					{
 						ajouterProduit('produit', 'produit', 'menu', id_menu, 'produit_quantite', 'supprimer_produit', id_produit, nom, prix);
+						success(button);
 						diffMenu();
 					}
 				});
@@ -695,23 +699,23 @@ $(document).ready(function(){
 				totalCommande();
 		   }
 
-		   $('.boutton-produits').click(function() {
-			var click = $(this);
+		   function success(click) {
 			if(click.hasClass('click')) {
 			return false;
 			} else {
 			click.toggleClass('click');
 			setTimeout(function() {
-				click.toggleClass('click');
-			}, 2000);
+			click.toggleClass('click');
+			}, 1500);
 			}
-		   })
+		   }
 
 		   $('.commandeAjouterMenu').on('click', function() {
 
-			var id_menu = $(this).data('menu_id');
-			var nom = $(this).closest('.details-produit').find('span').eq(0).text();
-			var prix = $(this).closest('.details-produit').find('span').eq(1).text();
+			var button = $(this);
+			var id_menu = $(button).data('menu_id');
+			var nom = $(button).closest('.details-produit').find('span').eq(0).text();
+			var prix = $(button).closest('.details-produit').find('span').eq(1).text();
 	
 			$.ajax({
 				url:"ajax/creercommande.php",
@@ -720,15 +724,17 @@ $(document).ready(function(){
 				success:function(data)
 				{
 				ajouterProduit('menu', 'produit', 0, 0, 'menuCommandeQuantite', 'supprimerMenuCommande', id_menu, nom, prix);
+				success(button);
 				}
 			});
 		});
 
 		$('.commandeAjouterProduit').on('click', function() {
 
-			var id_produit = $(this).data('produit_id');
-			var nom = $(this).closest('.details-produit').find('span').eq(0).text();
-			var prix = $(this).closest('.details-produit').find('span').eq(1).text();
+			var button = $(this);
+			var id_produit = $(button).data('produit_id');
+			var nom = $(button).closest('.details-produit').find('span').eq(0).text();
+			var prix = $(button).closest('.details-produit').find('span').eq(1).text();
 	
 			$.ajax({
 				url:"ajax/creercommande.php",
@@ -737,6 +743,7 @@ $(document).ready(function(){
 				success:function(data)
 				{
 					ajouterProduit('produit', 'produit', 0, 0,'commandeProduitQuantite', 'commandeSupprimerProduit', id_produit, nom, prix);
+					success(button);
 				}
 			});
 		});
@@ -1081,10 +1088,12 @@ $(document).ready(function(){
 		});
 
 		$('.modifCommandeAjouterMenu').on('click', function() {
-			var id_menu = $(this).data('menu');
-			var id_commande = $(this).data('commande');
-			var nom = $(this).closest('.details-produit').find('span').eq(0).text();
-			var prix = $(this).closest('.details-produit').find('span').eq(1).text();
+
+			var button = $(this);
+			var id_menu = $(button).data('menu');
+			var id_commande = $(button).data('commande');
+			var nom = $(button).closest('.details-produit').find('span').eq(0).text();
+			var prix = $(button).closest('.details-produit').find('span').eq(1).text();
 
 			$.ajax({
 				url:"ajax/modifiercommande.php",
@@ -1093,15 +1102,18 @@ $(document).ready(function(){
 				success:function(data)
 				{
 					ajouterProduit('menu', 'menu', 'commande', id_commande, 'commandeMenuQuantite', 'commandeSupprimerMenu', id_menu, nom, prix);
+					success(button);
 				}
 			});
 		});
 
 		$('.modifCommandeAjouterProduit').on('click', function() {
-			var id_produit = $(this).data('produit');
-			var id_commande = $(this).data('commande');
-			var nom = $(this).closest('.details-produit').find('span').eq(0).text();
-			var prix = $(this).closest('.details-produit').find('span').eq(1).text();
+
+			var button = $(this);
+			var id_produit = $(button).data('produit');
+			var id_commande = $(button).data('commande');
+			var nom = $(button).closest('.details-produit').find('span').eq(0).text();
+			var prix = $(button).closest('.details-produit').find('span').eq(1).text();
 			$.ajax({
 				url:"ajax/modifiercommande.php",
 				method:"post",
@@ -1109,6 +1121,7 @@ $(document).ready(function(){
 				success:function(data)
 				{
 				ajouterProduit('produit', 'produit', 'commande', id_commande, 'modifProduitQuantite', 'supprimerProduit', id_produit, nom, prix);
+				success(button);
 				}
 			});
 		});

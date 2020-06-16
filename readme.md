@@ -32,6 +32,11 @@ Cette page affiche l'ensemble des produits les uns à côté des autres. Elle pe
 
 Les catégories sont affichées dans un tableau, elles peuvent être éditées et supprimées facilement.
 
+### Création d'une commande
+
+Il existe trois types de commande (livraison à domicile, sur place et à emporter).         
+Pour une livraison à domicile, l'employé doit saisir une adresse de livraison (rue, numéro, code postal, ville, pays). Le champ "rue" propose automatiquement des noms de rues en rapport avec la saisie pour ensuite remplir automatiquement les champs (code postal, ville et pays). L'autocomplétion se base sur les adresses présentes dans la base de données pour proposer des suggestions. L'employé doit également saisir des informations de contact sur le client à livrer (numéro de téléphone, numéro de GSM, adresse e-mail), seulement un champ sur trois est obligatoire.
+
 ### Responsive
 
 L'application étant destinée à être utilisée sur des tablettes et téléphones, elle est entièrement responsive. En réduisant votre écran, vous verrez le contenu s'adapter et le menu horizontal disparaître pour laisser place à l'icône "burger" qui fera apparaître le menu vertical.
