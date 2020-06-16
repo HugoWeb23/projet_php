@@ -34,8 +34,10 @@ Les catégories sont affichées dans un tableau, elles peuvent être éditées e
 
 ### Création d'une commande
 
-Il existe trois types de commande (livraison à domicile, sur place et à emporter).         
-Pour une livraison à domicile, l'employé doit saisir une adresse de livraison (rue, numéro, code postal, ville, pays). Le champ "rue" propose automatiquement des noms de rues en rapport avec la saisie pour ensuite remplir automatiquement les champs (code postal, ville et pays). L'autocomplétion se base sur les adresses présentes dans la base de données pour proposer des suggestions. L'employé doit également saisir des informations de contact sur le client à livrer (numéro de téléphone, numéro de GSM, adresse e-mail), seulement un champ sur trois est obligatoire.
+Il existe trois types de commande (livraison à domicile, sur place et à emporter).
+
+#### Livraison à domicile
+L'employé doit saisir une adresse de livraison (rue, numéro, code postal, ville, pays). Le champ "rue" propose automatiquement des noms de rues en rapport avec la saisie pour ensuite remplir automatiquement les champs (code postal, ville et pays). L'autocomplétion se base sur les adresses présentes dans la base de données pour proposer des suggestions. L'employé doit également saisir des informations de contact sur le client à livrer (numéro de téléphone, numéro de GSM, adresse e-mail), seulement un champ sur trois est obligatoire.
 
 ### Responsive
 
