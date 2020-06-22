@@ -37,7 +37,20 @@ Les catégories sont affichées dans un tableau, elles peuvent être éditées e
 Il existe trois types de commande (livraison à domicile, sur place et à emporter).
 
 #### Livraison à domicile
+
 L'employé doit saisir une adresse de livraison (rue, numéro, code postal, ville, pays). Le champ "rue" propose automatiquement des noms de rues en rapport avec la saisie pour ensuite remplir automatiquement les champs (code postal, ville et pays). L'autocomplétion se base sur les adresses présentes dans la base de données pour proposer des suggestions. L'employé doit également saisir des informations de contact sur le client à livrer (numéro de téléphone, numéro de GSM, adresse e-mail), seulement un champ sur trois est obligatoire.
+
+#### Sur place
+
+Seul le choix d'une table est obligatoire.
+
+#### À emporter
+
+L'employé doit compléter les informations de contact du client.
+
+#### Ajouter des produits dans une commande
+
+La méthode d'ajout de produits/menus à la commande reste la même pour les trois types de commande. Un simple clic sur le boutton "ajouter" et le produit/menu se retrouve dans la colonne "détails de la commande". La quantité par défaut est définie à 1, si le boutton "ajouter" est enclenché plusieurs fois, la quantité du produit va augmenter (+1). Pour aller plus vite, l'employé a la possibilité de saisir un chiffre dans le champ "quantité" et de cliquer sur "valider quantité".
 
 ### Responsive
 

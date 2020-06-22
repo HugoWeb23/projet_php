@@ -121,6 +121,7 @@ $(document).ready(function(){
 	var expiration = $(creerclient).find('#expiration').val();
 	if(nom.length < 1 || prenom.length < 1 || date_naissance.length < 1 || email.length < 1 || rue.length < 1 || numero.length < 1 || code_postal.length < 1 || pays.length < 1 || points.length < 1 || expiration.length < 1 || tel_fixe.length < 1 && gsm.length < 1) {
 	$('#messages').html('<h2 class="message-erreur">Merci de remplir tous les champs</h2>');
+	$('html, body').animate({ scrollTop:0 }, 300);
 	} else {
 		$.ajax({
 			url:"ajax/creerclient.php",
@@ -131,9 +132,11 @@ $(document).ready(function(){
 			{
 			if(data.type == 'erreur') {
 			$('#messages').html('<h2 class="message-erreur">'+data.message+'</h2>');
+			$('html, body').animate({ scrollTop:0 }, 300);
 			} else if(data.type == 'succes') {
 			$('#messages').html('<h2 class="message-confirmation">'+data.message+'</h2>');
 			creerclient.find('.infos-perso').find('input[type="text"], input[type="date"]').val('');
+			$('html, body').animate({ scrollTop:0 }, 300);
 			}
 			}
 		});
@@ -161,6 +164,7 @@ $(document).ready(function(){
 		var pays = $(modifierclient).find('#pays').val();
 		if(nom.length < 1 || prenom.length < 1 || date_naissance.length < 1 || email.length < 1 || rue.length < 1 || numero.length < 1 || code_postal.length < 1 || pays.length < 1 || tel_fixe.length < 1 && gsm.length < 1) {
 		$('#messages').html('<h2 class="message-erreur">Merci de remplir tous les champs</h2>');
+		$('html, body').animate({ scrollTop:0 }, 300);
 		} else {
 			$.ajax({
 				url:"ajax/modifierclient.php",
@@ -171,8 +175,10 @@ $(document).ready(function(){
 				{
 				if(data.type == 'erreur') {
 				$('#messages').html('<h2 class="message-erreur">'+data.message+'</h2>');
+				$('html, body').animate({ scrollTop:0 }, 300);
 				} else if(data.type == 'succes') {
 				$('#messages').html('<h2 class="message-confirmation">'+data.message+'</h2>');
+				$('html, body').animate({ scrollTop:0 }, 300);
 				}
 				}
 			});
@@ -200,6 +206,103 @@ $(document).ready(function(){
 				});
 			}
 		});
+
+		// Créer compte employé
+
+		$('#creeremploye').submit(function() { 
+			var creeremploye = $(this);
+			var nom = $(creeremploye).find('#nom').val();
+			var prenom = $(creeremploye).find('#prenom').val();
+			var date_naissance = $(creeremploye).find('#date_naissance').val();
+			var tel_fixe = $(creeremploye).find('#tel_fixe').val();
+			var gsm = $(creeremploye).find('#gsm').val();
+			var rue = $(creeremploye).find('#rue').val();
+			var numero = $(creeremploye).find('#numero').val();
+			var ville = $(creeremploye).find('#ville').val();
+			var code_postal = $(creeremploye).find('#code_postal').val();
+			var pays = $(creeremploye).find('#pays').val();
+			var fonction = new Array();
+			$('.employe-fonction:checked').each(function() {
+			fonction.push($(this).val());
+			});
+			var email = $(creeremploye).find('#email').val();
+			var password = $(creeremploye).find('#password').val();
+			var confirm_password = $(creeremploye).find('#confirm_password').val();
+		
+			if(nom.length < 1 || prenom.length < 1 || date_naissance.length < 1 || email.length < 1 || rue.length < 1 || numero.length < 1 || code_postal.length < 1 || pays.length < 1 || password.length < 1 || confirm_password.length < 1 || tel_fixe.length < 1 && gsm.length < 1) {
+			$('#messages').html('<h2 class="message-erreur">Merci de remplir tous les champs</h2>');
+			$('html, body').animate({ scrollTop:0 }, 300);
+			} else {
+				$.ajax({
+					url:"ajax/creeremploye.php",
+					method:"post",
+					dataType:"json",
+					data: {action:'creer_employe', nom:nom, prenom:prenom, date_naissance:date_naissance, tel_fixe:tel_fixe, gsm:gsm, rue:rue, numero:numero, ville:ville, code_postal:code_postal, pays:pays, fonction:fonction, email:email, password:password, confirm_password:confirm_password},
+					success:function(data)
+					{
+					if(data.type == 'erreur') {
+					$('#messages').html('<h2 class="message-erreur">'+data.message+'</h2>');
+					$('html, body').animate({ scrollTop:0 }, 300);
+					} else if(data.type == 'succes') {
+					$('#messages').html('<h2 class="message-confirmation">'+data.message+'</h2>');
+					creeremploye.find('.infos-perso, .identifiants').find('input[type="text"], input[type="date"], input[type="password"], input[type="email"]').val('');
+					creeremploye.find('.identifiants').find('.employe-fonction:checked').prop('checked', false);
+					$('html, body').animate({ scrollTop:0 }, 300);
+					}
+					}
+				});
+			}
+			return false;
+			});
+
+			// Modifier un compte employé
+
+			$('#modifieremploye').submit(function() { 
+				var modifieremploye = $(this);
+				var id_personnel = $(modifieremploye).data('id_personnel');
+				var nom = $(modifieremploye).find('#nom').val();
+				var prenom = $(modifieremploye).find('#prenom').val();
+				var date_naissance = $(modifieremploye).find('#date_naissance').val();
+				var tel_fixe = $(modifieremploye).find('#tel_fixe').val();
+				var gsm = $(modifieremploye).find('#gsm').val();
+				var rue = $(modifieremploye).find('#rue').val();
+				var numero = $(modifieremploye).find('#numero').val();
+				var ville = $(modifieremploye).find('#ville').val();
+				var code_postal = $(modifieremploye).find('#code_postal').val();
+				var pays = $(modifieremploye).find('#pays').val();
+				var fonction = new Array();
+				$('.employe-fonction:checked').each(function() {
+				fonction.push($(this).val());
+				});
+				var email = $(modifieremploye).find('#email').val();
+				var email_actuelle = $(modifieremploye).find('#email').data('email');
+				var password = $(modifieremploye).find('#password').val();
+				var confirm_password = $(modifieremploye).find('#confirm_password').val();
+			
+				if(nom.length < 1 || prenom.length < 1 || date_naissance.length < 1 || email.length < 1 || rue.length < 1 || numero.length < 1 || code_postal.length < 1 || pays.length < 1 || tel_fixe.length < 1 && gsm.length < 1) {
+				$('#messages').html('<h2 class="message-erreur">Merci de remplir tous les champs</h2>');
+				$('html, body').animate({ scrollTop:0 }, 300);
+				} else {
+					$.ajax({
+						url:"ajax/modifieremploye.php",
+						method:"post",
+						dataType:"json",
+						data: {action:'modifier_employe', id_personnel:id_personnel, nom:nom, prenom:prenom, date_naissance:date_naissance, tel_fixe:tel_fixe, gsm:gsm, rue:rue, numero:numero, ville:ville, code_postal:code_postal, pays:pays, fonction:fonction, email:email, email_actuelle:email_actuelle, password:password, confirm_password:confirm_password},
+						success:function(data)
+						{
+						if(data.type == 'erreur') {
+						$('#messages').html('<h2 class="message-erreur">'+data.message+'</h2>');
+						$('html, body').animate({ scrollTop:0 }, 300);
+						} else if(data.type == 'succes') {
+						$('#messages').html('<h2 class="message-confirmation">'+data.message+'</h2>');
+						modifieremploye.find('input[type="password"]').val('');
+						$('html, body').animate({ scrollTop:0 }, 300);
+						}
+						}
+					});
+				}
+				return false;
+				});
 	
 		$('.creermenu-ajouter-produit').on('click', function() {
 			
