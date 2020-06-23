@@ -1,14 +1,5 @@
 <?php
 
-if(empty($_SESSION['id_personnel'])) {
-    header('location: connexion');
-    exit;
-}
-if(isset($_GET['deconnexion'])) {
-    session_destroy();
-    header('location: connexion');
-}
-
 $permissions = verif_permissions($personnel['id_personnel'], array('c_produit', 'g_produits', 'c_menu', 'g_menus', 'g_categ', 'c_employe', 'g_employe', 'g_fonctions', 'g_permissions', 'c_client', 'g_clients', 'c_commande', 'g_commandes', 'g_livraisons'));
 
 ?>
@@ -76,8 +67,7 @@ Pizza Royale
 <div class="dropdown">
 <a href="#">Mon compte</a>
 <div class="dropdown-child">
-<a href="">Gérer mes informations</a>
-<a href="?deconnexion">Déconnexion</a>
+<a href="deconnexion">Déconnexion</a>
 </div>
 </div>
 </div> 

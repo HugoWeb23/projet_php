@@ -3,6 +3,7 @@
 session_start();
 
 require('config.php');
+verif_connexion();
 
 if(isset($_POST["valider"])){
 $nom = isset($_POST['nom']) ? $_POST['nom'] : '';

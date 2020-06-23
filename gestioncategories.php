@@ -25,7 +25,7 @@ require('config.php');
 <h1>Gestion des catégories des produits</h1>
 <a id="creer_categorie" href="#">Créer une catégorie</a>
 </div>
-<table>
+<table class="gestioncategories">
 <thead>
 <tr>
 <th>Nom</th>
@@ -42,7 +42,7 @@ while($categ = $req->fetch()) {
 <tr>
 <td data-label="Nom"><?= $categ['nom']; ?></td>
 <td data-label="Description"><?= $categ['description']; ?></td>   
-<td data-label="Actions"><a class="editer" data-id="<?= $categ['id_categorie']; ?>" href="#">Éditer</a> - <a data-id="<?= $categ['id_categorie']; ?>" class="supprimer_categorie" href="#">Supprimer</a></td>  
+<td data-label="Actions"><a class="boutton-bleu editer" data-id="<?= $categ['id_categorie']; ?>" href="#">Éditer</a> - <a data-id="<?= $categ['id_categorie']; ?>" class="boutton-supprimer supprimer_categorie" href="#">Supprimer</a></td>  
 </tr>  
 </tbody>   
 <?php } ?>

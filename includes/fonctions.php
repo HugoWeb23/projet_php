@@ -1,5 +1,14 @@
 <?php
 
+// Vérification de la session de l'employé
+
+function verif_connexion() {
+if(empty($_SESSION['id_personnel']) || $_SESSION['id_personnel'] == null) {
+header('location: connexion');
+exit;
+}
+}
+
 // Hachage du mot de passe
 
 function mdp_hash($pass) {

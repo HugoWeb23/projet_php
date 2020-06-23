@@ -7,6 +7,62 @@ h2 {
 font-size: 1.4rem;
 }
 
+/* Bouttons */
+
+.boutton-supprimer {
+display: inline-block;
+padding: 5px;
+border: 2px solid #ae4545;
+background: #ae4545;
+color: #FFF;
+font-weight: bold;
+text-decoration: none;
+transition-duration: 0.3s;
+}
+
+.boutton-supprimer:hover {
+border: 2px solid #ae4545;
+background: #FFF;
+color: #ae4545;
+transition-duration: 0.3s;
+}
+
+.boutton-bleu {
+display: inline-block;
+padding: 5px;
+border: 2px solid #4c84b4;
+background: #4c84b4;
+color: #FFF;
+font-weight: bold;
+text-decoration: none;
+transition-duration: 0.3s;
+}
+
+.boutton-bleu:hover {
+border: 2px solid #4c84b4;
+background: #FFF;
+color: #4c84b4;
+transition-duration: 0.3s;
+}
+
+.boutton-vert {
+display: inline-block;
+padding: 5px;
+border: 2px solid #3f8521;
+background: #3f8521;
+color: #FFF;
+font-weight: bold;
+text-decoration: none;
+transition-duration: 0.3s;
+}
+
+.boutton-vert:hover {
+border: 2px solid #3f8521;
+background: #FFF;
+color: #3f8521;
+transition-duration: 0.3s;
+}
+
 /* Navigation */
 
 .nav {
@@ -447,6 +503,11 @@ text-align: center;
 line-height: 25px;
 }
 
+table textarea {
+max-width: 500px;
+max-height: 250px;
+}
+
 .recherche-employe {
 display: flex;
 justify-content: center;
@@ -516,8 +577,10 @@ position: absolute;
 right: 0;
 text-transform: uppercase;
 background: red;
+padding: 2px;
 color: #FFF;
 font-size: 0.8em;
+z-index: 5;
 }
 
 .details-produit {

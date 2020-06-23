@@ -3,6 +3,7 @@
 session_start();
 
 require('config.php');
+verif_connexion();
 
 ?>
 <!DOCTYPE html>
