@@ -35,7 +35,7 @@ require('config.php');
 <label for="nom">Nom : </label><input type="text" class="lol" name="nom" id="nom">
 </div>
 <div class="label-menu">
-<label for="prix">Prix : </label><input type="number" name="prix" id="prix">
+<label for="prix">Prix : </label><input type="number" name="prix" id="prix" step="0.01">
 </div>
 <div class="label-menu">
 <label for="etat">État : </label><input type="radio" name="etat" id="etat-1" value="1" checked><label for="etat-1">Actif</label><input type="radio" name="etat" id="etat-2" value="2"><label for="etat-2">Inactif</label>
@@ -82,7 +82,7 @@ $total_menu += $afficher['prix'] * $quantite;
 }
 ?>
 <div class="afficher-total">
-<div class="total">Total des produits : <span><?= $total_menu; ?> €</span></div>
+<div class="total">Total des produits : <span><?= $total_menu; ?></span> €</div>
 </div>
 </div>
 <div class="menu-categories">

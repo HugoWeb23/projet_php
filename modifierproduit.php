@@ -73,7 +73,7 @@ if(isset($_POST["modifier"])){
     if(!isset($message) == 2 || !isset($message) == 3 || !isset($message) == 4) {
     $req = $bdd->prepare('UPDATE produits SET libelle = :nom, prix = :prix WHERE id_produit = :id');
     $req->bindValue('nom', $nom, PDO::PARAM_STR);
-    $req->bindValue('prix', $prix, PDO::PARAM_INT);
+    $req->bindValue('prix', $prix, PDO::PARAM_STR);
     $req->bindValue('id', $id, PDO::PARAM_INT);
     $req->execute() or die(print_r($req->errorInfo(), TRUE));
     $req = $bdd->prepare('DELETE FROM produits_categories WHERE id_produit = :id_produit');
@@ -108,13 +108,6 @@ switch($message) {
 }
 }
 }
-if(isset($_POST['supprimer'])) {
-$req = $bdd->prepare('DELETE FROM produits WHERE id_produit = :id');
-$req->bindValue('id', $id, PDO::PARAM_INT);
-$req->execute();
-unlink($produit['photo']);
-header('location: gestionproduits.php');    
-}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -143,7 +136,7 @@ header('location: gestionproduits.php');
 <div class="infos-produit">
 <h2>Informations sur le produit</h2>
 <label for="nom">Nom :</label> <input type="text" name="nom" id="nom" value="<?= $produit['libelle']; ?>">
-<label for="prix">Prix :</label> <input type="text" name="prix" id="prix" value="<?= $produit['prix']; ?>">
+<label for="prix">Prix :</label> <input type="number" name="prix" id="prix" value="<?= $produit['prix']; ?>" step="0.01">
 <label for="photo">Image (laisser vide pour ne pas modifier)</label> <input type="file" name="photo" id="photo">
 </div>
 <div class="categories">
@@ -167,7 +160,7 @@ $checked = null;
 <input type="checkbox" name="categories[]" id="<?= $categ['id_categorie']; ?>" value="<?= $categ['id_categorie']; ?>"<?= $checked; ?>><label for="<?= $categ['id_categorie']; ?>"><?= $categ['nom']; ?></label>  
 </div>
 <?php } ?>
-<input class="boutton-delete" type="submit" name="supprimer" value="Supprimer le produit">
+<input class="boutton-delete" style="margin-top: 15px" id="supprimerproduit" data-id_produit="<?= $produit['id_produit']; ?>" data-photo="<?= $produit['photo']; ?>" type="button" value="Supprimer le produit">
 </div>
 </div>
 </div>

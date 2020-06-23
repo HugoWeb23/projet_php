@@ -140,6 +140,22 @@ display: block;
 position: fixed;
 }
 
+.burger.on .barre1 {
+transform: rotate(135deg);
+margin-top: 15px;
+width: 30px;
+}
+
+.burger.on .barre2 {
+opacity: 0;
+}
+
+.burger.on .barre3 {
+transform: rotate(-135deg);
+margin-top: -20px;
+width: 30px;
+}
+
 .menu {
 position: fixed;
 background: #b4a25e;
@@ -149,6 +165,7 @@ height: 100vh;
 left: 0;
 top: 0;
 transform: translateX(-100%);
+transition-duration: .2s;
 z-index: 8;
 }
 
@@ -547,10 +564,15 @@ width: 99%;
 }
 }
 
-.loader img {
+.loader {
 position: absolute;
-margin-left: 50%;
-top: 40px;
+left: 50%;
+top: 50%;
+transform: translate(-50%, -50%);
+}
+
+.form {
+position: relative;
 }
 
 .apercuproduit label {
@@ -973,10 +995,11 @@ padding-left: 160px;
 padding-right: 10px;
 position: relative;
 text-align: right;
-overflow-wrap: break-word;
+overflow-wrap: anywhere;
 }
 
 td::before {
+display: block;
 position: absolute;
 content: attr(data-label);
 padding: 10px;
@@ -990,7 +1013,6 @@ display: flex;
 align-items: center;
 font-weight: bold;
 font-size: 15px;
-overflow-wrap: break-word;
 }
 
 tbody:not(:last-child) {

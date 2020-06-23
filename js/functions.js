@@ -123,6 +123,8 @@ $(document).ready(function(){
 	$('#messages').html('<h2 class="message-erreur">Merci de remplir tous les champs</h2>');
 	$('html, body').animate({ scrollTop:0 }, 300);
 	} else {
+		$('.loader').show();
+		creerclient.css('opacity', '0.3');
 		$.ajax({
 			url:"ajax/creerclient.php",
 			method:"post",
@@ -138,6 +140,8 @@ $(document).ready(function(){
 			creerclient.find('.infos-perso').find('input[type="text"], input[type="date"]').val('');
 			$('html, body').animate({ scrollTop:0 }, 300);
 			}
+			$('.loader').hide();
+			creerclient.css('opacity', '0.3');
 			}
 		});
 	}
@@ -166,6 +170,8 @@ $(document).ready(function(){
 		$('#messages').html('<h2 class="message-erreur">Merci de remplir tous les champs</h2>');
 		$('html, body').animate({ scrollTop:0 }, 300);
 		} else {
+			$('.loader').show();
+			modifierclient.css('opacity', '0.3');
 			$.ajax({
 				url:"ajax/modifierclient.php",
 				method:"post",
@@ -180,6 +186,8 @@ $(document).ready(function(){
 				$('#messages').html('<h2 class="message-confirmation">'+data.message+'</h2>');
 				$('html, body').animate({ scrollTop:0 }, 300);
 				}
+				$('.loader').hide();
+				modifierclient.css('opacity', '1');
 				}
 			});
 		}
@@ -233,6 +241,8 @@ $(document).ready(function(){
 			$('#messages').html('<h2 class="message-erreur">Merci de remplir tous les champs</h2>');
 			$('html, body').animate({ scrollTop:0 }, 300);
 			} else {
+				$('.loader').show();
+				creeremploye.css('opacity', '0.3');
 				$.ajax({
 					url:"ajax/creeremploye.php",
 					method:"post",
@@ -249,6 +259,8 @@ $(document).ready(function(){
 					creeremploye.find('.identifiants').find('.employe-fonction:checked').prop('checked', false);
 					$('html, body').animate({ scrollTop:0 }, 300);
 					}
+					$('.loader').hide();
+					creeremploye.css('opacity', '1');
 					}
 				});
 			}
@@ -283,6 +295,8 @@ $(document).ready(function(){
 				$('#messages').html('<h2 class="message-erreur">Merci de remplir tous les champs</h2>');
 				$('html, body').animate({ scrollTop:0 }, 300);
 				} else {
+					$('.loader').show();
+					modifieremploye.css('opacity', '0.3');
 					$.ajax({
 						url:"ajax/modifieremploye.php",
 						method:"post",
@@ -298,10 +312,59 @@ $(document).ready(function(){
 						modifieremploye.find('input[type="password"]').val('');
 						$('html, body').animate({ scrollTop:0 }, 300);
 						}
+						$('.loader').hide();
+						modifieremploye.css('opacity', '1');
 						}
 					});
 				}
 				return false;
+				});
+
+				// Supprimer un compte employé
+
+				$('#supprimeremploye').click(function() {
+					var id_employe = $(this).data('id_employe');
+					if(confirm('Voulez-vous vraiment supprimer cet employé ?')) {
+						$.ajax({
+							url:"ajax/modifieremploye.php",
+							method:"post",
+							dataType:"json",
+							data: {action:'supprimer_employe', id_employe:id_employe},
+							success:function(data)
+							{
+							if(data.type == 'erreur') {
+							$('#messages').html('<h2 class="message-erreur">'+data.message+'</h2>');
+							} else if(data.type == 'succes') {
+							alert(data.message);
+							window.location = "gestionemployes";
+							}
+							}
+						});
+					}
+				});
+
+				// Supprimer un produit
+
+				$('#supprimerproduit').click(function() {
+					var id_produit = $(this).data('id_produit');
+					var photo = $(this).data('photo');
+					if(confirm('Voulez-vous vraiment supprimer ce produit ?')) {
+						$.ajax({
+							url:"ajax/supprimerproduit.php",
+							method:"post",
+							dataType:"json",
+							data: {action:'supprimer_produit', id_produit:id_produit, photo:photo},
+							success:function(data)
+							{
+							if(data.type == 'erreur') {
+							alert(data.message);
+							} else if(data.type == 'succes') {
+							alert(data.message);
+							window.location = "gestionproduits";
+							}
+							}
+						});
+					}
 				});
 	
 		$('.creermenu-ajouter-produit').on('click', function() {
@@ -419,7 +482,7 @@ $(document).ready(function(){
 						$('#modifierMenu').css('opacity', '1');
 						$('.loader').hide();
 						$('#modifier_menu').val('Modifier le menu');
-						$('#prix_menu span').text(prix+ ' €');
+						$('#prix_menu span').text(prix);
 						diffMenu();
 					}
 				}
@@ -1122,14 +1185,14 @@ $(document).ready(function(){
 			total_produit = (prix * quantite);
 			total_commande += total_produit;
 			});
-			$('.total span').text(total_commande+' €');
+			$('.total span').text(total_commande);
 			}
 
 			function diffMenu() {
-			var prix_menu = $('#prix_menu span').text().replace(/[^\d]/g, "");
-			var total_produits = $('.total span').text().replace(/[^\d]/g, "");
+			var prix_menu = $('#prix_menu span').text();
+			var total_produits = $('.total span').text();
 			var diff = total_produits - prix_menu;
-			$('#diff span').text(Math.abs(diff)+ ' €');
+			$('#diff span').text(Math.abs(diff));
 			}
 
 		$('.menu-apercu').on('click', '.commandeMenuQuantite', function() {

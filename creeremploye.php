@@ -26,7 +26,8 @@ require('config.php');
 <a href="gestionemployes">Gestion des employés</a>
 </div>
 <div id="messages"></div>
-<form id="creeremploye">
+<form id="creeremploye" class="form">
+<div class="loader" style="display: none"><img src="images/loader.gif"></div>
 <div class="contenu">
 <div class="employe-flex">   
 <div class="infos-perso">

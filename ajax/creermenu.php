@@ -29,7 +29,7 @@ break;
 }
 $req = $bdd->prepare('INSERT INTO menus (nom, prix, etat, date_creation) VALUES (:nom, :prix, :etat, :date_creation)');
 $req->bindValue('nom', $nom, PDO::PARAM_STR);
-$req->bindValue('prix', $prix, PDO::PARAM_INT);
+$req->bindValue('prix', $prix, PDO::PARAM_STR);
 $req->bindValue('etat', $etat, PDO::PARAM_INT);
 $req->bindValue('date_creation', date('Y-m-d'), PDO::PARAM_STR);
 $req->execute();

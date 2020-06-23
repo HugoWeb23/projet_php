@@ -51,9 +51,9 @@ if($req->rowCount() < 1) {
         <tbody>
         <tr><td data-label="Nom">'.$afficher['nom'].'</td>
         <td data-label="Prénom">'.$afficher['prenom'].'</td>
-        <td data-label="Date de naissance">'.$afficher['date_naissance'].'</td>
+        <td data-label="Naissance">'.$afficher['date_naissance'].'</td>
         <td data-label="Téléphone">'.$afficher['tel_fixe'].'</td>
-        <td data-label="Téléphone">'.$afficher['gsm'].'</td>
+        <td data-label="GSM">'.$afficher['gsm'].'</td>
         <td data-label="Email">'.$afficher['email'].'</td>
         <td data-label="Adresse">'.$condition.'</td>
         <td data-label="Actions"><a href="details_employes?id='.$afficher['id_personnel'].'">Détails</a></td></tr>

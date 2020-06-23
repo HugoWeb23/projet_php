@@ -33,7 +33,7 @@ function toggleSelect() {
 <a href="gestionclients">Gestion des clients</a>
 </div>
 <div id="messages"></div>
-<form id="creerclient">
+<form id="creerclient" class="form">
 <div class="contenu">
 <div class="employe-flex">   
 <div class="infos-perso">

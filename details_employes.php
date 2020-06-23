@@ -46,7 +46,8 @@ header('location: gestionemployess');
 <a href="gestionemployes">Gestion des employés</a>
 </div>
 <div id="messages"></div>
-<form id="modifieremploye" data-id_personnel="<?= $id; ?>">
+<form id="modifieremploye" data-id_personnel="<?= $id; ?>" class="form">
+<div class="loader" style="display: none"><img src="images/loader.gif"></div>
 <div class="contenu">
 <div class="employe-flex">   
 <div class="infos-perso">
@@ -91,7 +92,7 @@ $checked = null;
 <label for="email">Adresse email :</label> <input type="email" id="email" data-email="<?= $afficher['email']; ?>" name="email" value="<?= $afficher['email']; ?>" required>
 <label for="password">Nouveau mot de passe :</label> <input type="password" id="password" name="password" placeholder="Saisissez un nouveau mot de passe">
 <label for="confirm_password">Confirmation :</label> <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirmez le mot de passe">
-<input class="boutton-delete" type="submit" name="supprimer" value="Supprimer le compte">
+<input class="boutton-delete" type="button" id="supprimeremploye" data-id_employe="<?= $id; ?>" name="supprimer" value="Supprimer le compte">
 </div>
 </div>
 <input class="boutton-rouge" type="submit" name="valider" value="Appliquer les modifications">

@@ -93,7 +93,7 @@ if(isset($_GET['id'])) {
 <label for="nom">Nom : </label><input type="text" class="lol" name="nom" id="nom" value="<?= $menu['nom']; ?>">
 </div>
 <div class="label-menu">
-<label for="prix">Prix : </label><input type="number" name="prix" id="prix" value="<?= $menu['prix']; ?>">
+<label for="prix">Prix : </label><input type="number" name="prix" id="prix" value="<?= $menu['prix']; ?>" step="0.01">
 </div>
 <div class="label-menu">
 <label for="etat">État : </label><input type="radio" name="etat" id="etat-1" value="1" <?php if($menu['etat'] == 1) { echo 'checked'; } ?>><label for="etat-1">Actif</label><input type="radio" name="etat" id="etat-2" value="2" <?php if($menu['etat'] == 2) { echo 'checked'; } ?>><label for="etat-2">Inactif</label>
@@ -126,9 +126,9 @@ $total_menu += $afficher['prix'] * $afficher['quantite'];
 </div>
 <?php } ?>
 <div class="afficher-total">
-<div id="diff">Différence : <span><?= abs($total_menu -  $menu['prix']); ?> €</span></div>
-<div class="total">Total produits : <span><?= $total_menu; ?> €</span></div>
-<div id="prix_menu">Prix menu : <span><?= $menu['prix']; ?> €</span></div>
+<div id="diff">Différence : <span><?= abs($total_menu -  $menu['prix']); ?></span> €</div>
+<div class="total">Total produits : <span><?= $total_menu; ?></span> €</div>
+<div id="prix_menu">Prix menu : <span><?= $menu['prix']; ?></span> €</div>
 </div>
 </div>
 <div class="menu-categories">

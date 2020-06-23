@@ -4,97 +4,91 @@ session_start();
 
 require('config.php');
 
-
 if(isset($_POST["valider"])){
-    $nom = isset($_POST['nom']) ? $_POST['nom'] : '';
-    $prix = isset($_POST['prix']) ? $_POST['prix'] : '';
-    $categories = isset($_POST['categories']) ? $_POST['categories'] : '';
-
-    if(empty($nom) || empty($prix) || empty($categories)) {
-        $message = 1;
-    } else {
-
-      
-    if(isset($_FILES["photo"]) && $_FILES["photo"]["error"] == 0){
-    $allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "png" => "image/png");
-    $filename = $_FILES["photo"]["name"];
-    $filetype = $_FILES["photo"]["type"];
-    $filesize = $_FILES["photo"]["size"];
-    $ext = pathinfo($filename, PATHINFO_EXTENSION);
-    if(!array_key_exists($ext, $allowed)) {
-    $message = 2;
-    } else {
-
-       
-    $maxsize = 5 * 1024 * 1024;
-    if($filesize > $maxsize) {
-    $message = 3;
-    } else {
+$nom = isset($_POST['nom']) ? $_POST['nom'] : '';
+$prix = isset($_POST['prix']) ? $_POST['prix'] : '';
+$categories = isset($_POST['categories']) ? $_POST['categories'] : '';
+if(empty($nom) || empty($prix) || empty($categories)) {
+$message = 1;
+} else {
+  
+if(isset($_FILES["photo"]) && $_FILES["photo"]["error"] == 0){
+$allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "png" => "image/png");
+$filename = $_FILES["photo"]["name"];
+$filetype = $_FILES["photo"]["type"];
+$filesize = $_FILES["photo"]["size"];
+$ext = pathinfo($filename, PATHINFO_EXTENSION);
+if(!array_key_exists($ext, $allowed)) {
+$message = 2;
+} else {
+   
+$maxsize = 5 * 1024 * 1024;
+if($filesize > $maxsize) {
+$message = 3;
+} else {
 
        
-    if(in_array($filetype, $allowed)){
-
-    switch($filetype) {
-    case 'image/jpeg':
-    $filetype='jpeg';
-    break; 
-    case 'image/jpg':
-    $filetype='jpg';
-    break;
-    case 'image/png':
-    $filetype='png';
-    break;   
-    }
-    
-    $nom_image = nom_aleatoire().'.'.$filetype;
-          
-           
-    move_uploaded_file($_FILES["photo"]["tmp_name"], "uploads/" . $nom_image);
-    $req = $bdd->prepare('INSERT INTO produits (libelle, prix, photo) VALUES (:nom, :prix, :photo)');
-    $req->bindValue('nom', $nom, PDO::PARAM_STR);
-    $req->bindValue('prix', $prix, PDO::PARAM_INT);
-    $req->bindValue('photo','uploads/'.$nom_image, PDO::PARAM_STR);
-    $req->execute();
-    $lastid = $bdd->lastinsertid();
-    foreach ($categories as $categorie) {
-    $req = $bdd->prepare('INSERT INTO produits_categories (id_categorie, id_produit) VALUES (:id_categorie, :id_produit)');
-    $req->bindValue('id_categorie', $categorie, PDO::PARAM_INT);
-    $req->bindValue('id_produit', $lastid, PDO::PARAM_INT);
-    $req->execute();
-    }
-    $message = 6;        
-    } else {
-    $message = 4; 
-    }
-    }
+if(in_array($filetype, $allowed)){
+switch($filetype) {
+case 'image/jpeg':
+$filetype='jpeg';
+break; 
+case 'image/jpg':
+$filetype='jpg';
+break;
+case 'image/png':
+$filetype='png';
+break;   
 }
-    } else {
-       $message = 5;
-    }
+
+$nom_image = nom_aleatoire().'.'.$filetype;
+      
+       
+move_uploaded_file($_FILES["photo"]["tmp_name"], "uploads/" . $nom_image);
+$req = $bdd->prepare('INSERT INTO produits (libelle, prix, photo) VALUES (:nom, :prix, :photo)');
+$req->bindValue('nom', $nom, PDO::PARAM_STR);
+$req->bindValue('prix', $prix, PDO::PARAM_STR);
+$req->bindValue('photo','uploads/'.$nom_image, PDO::PARAM_STR);
+$req->execute();
+$lastid = $bdd->lastinsertid();
+foreach ($categories as $categorie) {
+$req = $bdd->prepare('INSERT INTO produits_categories (id_categorie, id_produit) VALUES (:id_categorie, :id_produit)');
+$req->bindValue('id_categorie', $categorie, PDO::PARAM_INT);
+$req->bindValue('id_produit', $lastid, PDO::PARAM_INT);
+$req->execute();
+}
+$message = 6;        
+} else {
+$message = 4; 
+}
+}
+}
+} else {
+$message = 5;
+}
 }
 
 switch($message) {
-    case 1:
-    $message = '<h2 class="message-erreur">Merci de remplir tous les champs</h2>';
-    break;
-    case 2:
-    $message = '<h2 class="message-erreur">Le format du fichier n\'est pas autorisé</h2>';
-    break;
-    case 3:
-    $message = '<h2 class="message-erreur">La taille du fichier est supérieure à la limite autorisée</h2>';
-    break;
-    case 4:
-    $message = '<h2 class="message-erreur">Il y a eu un problème de téléchargement de votre fichier. Veuillez réessayer</h2>';
-    break;
-    case 5:
-    $message = '<h2 class="message-erreur">Erreur avec la photo</h2>';
-    break;
-    case 6:
-    $message = '<h2 class="message-confirmation">Le produit a bien été ajouté</h2>';
-    break;    
+case 1:
+$message = '<h2 class="message-erreur">Merci de remplir tous les champs</h2>';
+break;
+case 2:
+$message = '<h2 class="message-erreur">Le format du fichier n\'est pas autorisé</h2>';
+break;
+case 3:
+$message = '<h2 class="message-erreur">La taille du fichier est supérieure à la limite autorisée</h2>';
+break;
+case 4:
+$message = '<h2 class="message-erreur">Il y a eu un problème de téléchargement de votre fichier. Veuillez réessayer</h2>';
+break;
+case 5:
+$message = '<h2 class="message-erreur">Erreur avec la photo</h2>';
+break;
+case 6:
+$message = '<h2 class="message-confirmation">Le produit a bien été ajouté</h2>';
+break;    
 }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -123,7 +117,7 @@ switch($message) {
 <div class="infos-produit">
 <h2>Informations sur le produit</h2>
 <label for="nom">Nom :</label> <input type="text" name="nom" id="nom">
-<label for="prix">Prix :</label> <input type="text" name="prix" id="prix">
+<label for="prix">Prix :</label> <input type="number" name="prix" id="prix" step="0.01">
 <label for="photo">Image :</label> <input type="file" name="photo" id="photo">
 </div>
 <div class="categories">

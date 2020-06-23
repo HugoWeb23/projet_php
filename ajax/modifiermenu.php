@@ -51,7 +51,7 @@ $message = array('type' => 'erreur', 'message' => 'Merci de compléter tous les 
 } else {
 $req = $bdd->prepare('UPDATE menus SET nom = :nom, prix = :prix, etat = :etat WHERE id_menu = :id_menu');
 $req->bindValue('nom', $nom, PDO::PARAM_STR);
-$req->bindValue('prix', $prix, PDO::PARAM_INT);
+$req->bindValue('prix', $prix, PDO::PARAM_STR);
 $req->bindValue('etat', $etat, PDO::PARAM_INT);
 $req->bindValue('id_menu', $id_menu, PDO::PARAM_INT);
 $req->execute();

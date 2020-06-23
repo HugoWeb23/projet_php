@@ -40,9 +40,9 @@ header('location: gestioncommandes');
 <div class="contenu">
 <div class="infos-menu">
 <div id="resultat-commande"></div>
-<div class="loader" style="display: none"><img src="images/loader.gif"></div>
 <span class="titre-menu">Informations commande</span>
-<form id="modifierCommande" data-id_commande="<?= $commande['id_commande']; ?>" action="" method="post">
+<form id="modifierCommande" data-id_commande="<?= $commande['id_commande']; ?>" class="form">
+<div class="loader" style="display: none"><img src="images/loader.gif"></div>
 <div class="commande-flex">
 <div class="commande-infos">
 <label for="client">Associer la commande  à un client : </label><input type="text" name="client" id="nom_client" placeholder="Tapez un nom, une adresse, ...">
@@ -143,7 +143,7 @@ $totaux_produits += $afficher['prix'] * $afficher['quantite'];
 }
 ?>
 <div class="afficher-total">
-<div class="total">Total commande : <span><?= $totaux_menus + $totaux_produits ?> €</span></div>
+<div class="total">Total commande : <span><?= $totaux_menus + $totaux_produits ?></span> €</div>
 </div>
 </div>
 <div class="menu-categories">

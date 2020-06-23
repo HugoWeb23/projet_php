@@ -122,4 +122,17 @@ break;
 echo json_encode($message);
 }
 
+if(isset($_POST['action']) && $_POST['action'] == 'supprimer_employe') {
+$id_employe = isset($_POST['id_employe']) ? $_POST['id_employe'] : '';
+if(empty($id_employe)) {
+$message = array("type" => "erreur", "message" => "L'ID de l'employé n'est pas valide");
+} else {
+$req = $bdd->prepare('DELETE FROM personnel WHERE id_personnel = :id_personnel');
+$req->bindValue('id_personnel', $id_employe, PDO::PARAM_INT);
+$req->execute();
+$message = array("type" => "succes", "message" => "Le compte employé a été supprimé");
+}
+echo json_encode($message);
+}
+
 ?>

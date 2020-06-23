@@ -63,7 +63,7 @@ if($req->rowCount() < 1) {
         <tbody>
         <tr><td data-label="Nom">'.$afficher['nom'].'</td>
         <td data-label="Prénom">'.$afficher['prenom'].'</td>
-        <td data-label="Date de naissance">'.$afficher['date_naissance'].'</td>
+        <td data-label="Naissance">'.$afficher['date_naissance'].'</td>
         <td data-label="Téléphone fixe">'.$telephone_fixe.'</td>
         <td data-label="GSM">'.$gsm.'</td>
         <td data-label="Email">'.$afficher['email'].'</td>
