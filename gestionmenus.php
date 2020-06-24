@@ -77,7 +77,7 @@ break;
     echo '
     <tbody>
     <tr><td data-label="Nom">'.$afficher['nom'].'</td>
-    <td data-label="Prix">'.$afficher['prix'].' €</td>
+    <td data-label="Prix">'.number_format($afficher['prix'], 2).' €</td>
     <td data-label="État">'.$etat.'</td>
     <td data-label="Date de création">'.$afficher['date_creation'].'</td>
     <td data-label="Actions"><a href="?id='.$afficher['id_menu'].'" class="boutton-bleu">Modifier</a> - <a href="#" data-id="'.$afficher['id_menu'].'" class="boutton-supprimer supprimer-menu">Supprimer</a></td></tr>
@@ -125,15 +125,15 @@ $total_menu += $afficher['prix'] * $afficher['quantite'];
 <input type="text" class="quantite_saisie" value="<?= $afficher['quantite']; ?>">
 </div>
 </div>
-<div class="prix" data-prix="<?= $afficher['prix']; ?>"><?= $afficher['prix']; ?> €</div>
+<div class="prix" data-prix="<?= $afficher['prix']; ?>"><?= number_format($afficher['prix'], 2); ?> €</div>
 <input type="button" class="boutton-quantite produit_quantite" data-produit="<?= $afficher['id']; ?>" data-menu="<?= $menu['id_menu']; ?>" value="Valider quantité">
 <input type="button" class="boutton-supprimer-produit supprimer_produit" data-produit="<?= $afficher['id']; ?>" data-menu="<?= $menu['id_menu']; ?>" value="Supprimer">
 </div>
 <?php } ?>
 <div class="afficher-total">
-<div id="diff">Différence : <span><?= abs($total_menu -  $menu['prix']); ?></span> €</div>
-<div class="total">Total produits : <span><?= $total_menu; ?></span> €</div>
-<div id="prix_menu">Prix menu : <span><?= $menu['prix']; ?></span> €</div>
+<div id="diff">Différence : <span><?= abs(number_format($total_menu -  $menu['prix'], 2)); ?></span> €</div>
+<div class="total">Total produits : <span><?= number_format($total_menu, 2); ?></span> €</div>
+<div id="prix_menu">Prix menu : <span><?= number_format($menu['prix'], 2); ?></span> €</div>
 </div>
 </div>
 <div class="menu-categories">
@@ -160,7 +160,7 @@ while($produit = $req2->fetch()) {
 <img src="<?= $produit['photo']; ?>">
 <div class="details-produit">
 <p>Nom : <span><?= $produit['libelle']; ?></span></p>
-<p>Prix : <span><?= $produit['prix']; ?></span> €</p>
+<p>Prix : <span><?= number_format($produit['prix'], 2); ?></span> €</p>
 <button data-id_produit="<?= $produit['id_produit']; ?>" data-id_menu="<?= $id_menu; ?>" class="boutton-produits modifiermenu-ajouter-produit">Ajouter</button>
 </div>
 </div>

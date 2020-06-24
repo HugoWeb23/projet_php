@@ -592,6 +592,11 @@ box-shadow: 2px 2px 5px;
 transition-duration: 0.1s;
 }
 
+.apercumenu:hover {
+box-shadow: 2px 2px 5px;
+transition-duration: 0.1s;
+}
+
 .apercuproduit img {
 position: relative;
 max-width: 100%; 

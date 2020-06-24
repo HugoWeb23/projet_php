@@ -46,7 +46,7 @@ echo '<div class="label-error">Aucune catégorie</div>';
 <img src="<?= $produit['photo']; ?>">
 <div class="details-produit">
 <p>Nom : <?= $produit['libelle']; ?></p>
-<p>Prix : <?= $produit['prix']; ?> €</p>
+<p>Prix : <?= number_format($produit['prix'], 2); ?> €</p>
 </div>
 <div class="modifier-produit">
 <a href="modifierproduit?id=<?= $produit['id_produit']; ?>"><img src="images/edit.png"></a>

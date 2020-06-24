@@ -10,6 +10,10 @@ Cette application permet aux employés d'une pizzeria de gérer les commandes du
 
 La base de données est disponible dans le dossier [BDD](https://github.com/HugoWeb23/projet_php/tree/master/BDD).
 
+### Connexion à la base de données
+
+La connexion à la base de données se configure dans le fichier [db.php](https://github.com/HugoWeb23/projet_php/tree/master/includes/db.php) qui se situe dans le dossier includes.
+
 ### Identifiants de connexion
 
 Adresse e-mail : __admin@admin.be__ Mot de passe : __admin1234__
@@ -62,7 +66,7 @@ Sur cette page la commande peut être entièrement modifiée (client, type, adre
 
 ### Gestion des livraisons
 
-Une fois qu'une commande de type livraison est clôturée, la livraison apparaît sur la page "gestion des livraisons". Les livreurs peuvent visualiser toutes les commandes actives et les commandes qu'ils prennent en charge. Une livraison n'est pas affectée automatiquement à un livreur, c'est lui qui doit cliquer sur l'otion "prendre en charge". Une fois prise en charge, la livraison se retrouve dans la section "mes livraisons". Une fois la livraison effectuée, le livreur clique sur l'option "livraison effectuée" pour terminer la livraison. La durée de livraison est alors calculée et visible dans la section "commandes clôturées".
+Une fois qu'une commande de type livraison est clôturée, la livraison apparaît sur la page "gestion des livraisons". Les livreurs peuvent visualiser toutes les commandes actives et les commandes qu'ils prennent en charge. Une livraison n'est pas affectée automatiquement à un livreur, c'est lui qui doit cliquer sur l'option "prendre en charge". Une fois prise en charge, la livraison se retrouve dans la section "mes livraisons". Dès que la livraison effectuée, le livreur clique sur l'option "livraison effectuée" pour terminer la livraison. La durée de livraison est alors calculée et visible dans la section "commandes clôturées".
 
 ### Création des menus
 

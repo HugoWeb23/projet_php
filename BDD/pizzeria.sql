@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mer. 03 juin 2020 à 23:55
+-- Généré le : mer. 24 juin 2020 à 20:46
 -- Version du serveur :  10.4.11-MariaDB
 -- Version de PHP : 7.4.4
 
@@ -41,28 +41,12 @@ CREATE TABLE `adresses` (
 --
 
 INSERT INTO `adresses` (`id_adresse`, `rue`, `numero`, `ville`, `code_postal`, `pays`) VALUES
-(156, 'Rue des sablessss', '52', 'Mouscron', 7700, 'France'),
-(173, 'Rue du jus', '89', 'Tournai', 7500, 'Belgique'),
-(174, 'rue de tournai', '89', 'Tournai', 7500, 'Belgique'),
-(175, 'rue albert 1er', '89', 'Tournai', 7500, 'Belgique'),
-(176, 'rue achile de backer', '89', 'Mouscron', 7700, 'Belgique'),
-(177, 'Rue des moulins', '56', 'Tournai', 7500, 'Belgique'),
-(181, 'Rue des sablessss', '53', 'Mouscron', 7700, 'France'),
-(182, 'Rue des sablessss', '55', 'Tournai', 7700, 'France'),
-(183, 'Rue des sablessss', '9999', 'Mouscron', 7700, 'Belgique'),
-(184, 'rue de tournai', '56', 'Tournai', 7500, 'Belgique'),
-(185, 'Rue des sablessss', '52', 'Mouscron', 7700, 'France'),
-(186, 'Rue des sablessss', '52', 'Mouscron', 7700, 'France'),
-(187, 'rue achile de backer', '56', 'Mouscron', 7700, 'Belgique'),
-(188, 'rue achile de backer', '1050', 'Mouscron', 7700, 'Belgique'),
-(189, 'Rue de test', '56', 'Dottignies', 7700, 'Belgique'),
-(190, 'Rue des sablessss', '56', 'Tournai', 7700, 'France'),
-(191, 'rue albert 1er', '59', 'Tournai', 7500, 'Belgique'),
-(192, 'rue achile de backer', '9999', 'Mouscron', 7700, 'Belgique'),
+(173, 'Rue du jus', '56', 'Tournai', 7500, 'Belgique'),
+(174, 'Rue de Tournai', '89', 'Tournai', 7500, 'Belgique'),
 (193, 'Rue du plavitout', '56', 'Luingne', 7700, 'Belgique'),
-(194, 'Rue moncul', '51', 'Mouscron', 7700, 'Belgique'),
-(195, 'Rue du plavitout', '57', 'Luingne', 7700, 'Belgique'),
-(196, 'Rue des sablessss', '54', 'Mouscron', 7700, 'France');
+(223, 'Rue Albert 1er', '51', 'Mouscron', 7700, 'Belgique'),
+(224, 'Rue de la Station', '100', 'Mouscron', 7700, 'Belgique'),
+(225, 'Rue Courte', '6', 'Luingne', 7700, 'Belgique');
 
 -- --------------------------------------------------------
 
@@ -74,18 +58,9 @@ CREATE TABLE `cartes_fidelite` (
   `id_carte` int(11) NOT NULL,
   `date_creation` date NOT NULL,
   `points` int(11) NOT NULL,
-  `expire` date NOT NULL DEFAULT current_timestamp(),
+  `expire` date NOT NULL,
   `id_client` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Déchargement des données de la table `cartes_fidelite`
---
-
-INSERT INTO `cartes_fidelite` (`id_carte`, `date_creation`, `points`, `expire`, `id_client`) VALUES
-(18, '2020-05-07', 25, '2022-05-19', 18),
-(19, '2020-05-09', 1, '2022-05-09', 5),
-(20, '2020-05-12', 5, '2021-05-12', 19);
 
 -- --------------------------------------------------------
 
@@ -104,7 +79,9 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id_categorie`, `nom`, `description`) VALUES
-(50, 'Pizzas', 'Les pizzas');
+(124, 'Desserts', 'Les desserts'),
+(127, 'Boissons', 'Les boissons'),
+(136, 'Pizzas', 'Les pizzas');
 
 -- --------------------------------------------------------
 
@@ -128,9 +105,8 @@ CREATE TABLE `clients` (
 --
 
 INSERT INTO `clients` (`id_client`, `nom`, `prenom`, `date_naissance`, `email`, `telephone_fixe`, `gsm`, `id_adresse`) VALUES
-(5, 'Jacquesd', 'Durand', '2021-02-03', 'jacques@jacques.fr', '056 48 12 45', '0477 45 82 32', 156),
-(18, 'Pierre', 'Dupont', '2020-05-14', 'pierredupont@gmail.com', '056 56 89', '', 173),
-(19, 'Thierry', 'Montoit', '1998-06-05', 'thierrymontoit@gmail.com', '056 89 74 12', '0478 56 12 56', 177);
+(5, 'Jacques', 'Durand', '1989-02-03', 'jacques@jacques.fr', '056 48 12 45', '0477 45 82 32', 173),
+(26, 'Jeannette', 'Bontoit', '1947-06-11', 'jeanne@free.frr', '045 56 23 56', '0489 56 23 11', 193);
 
 -- --------------------------------------------------------
 
@@ -147,26 +123,8 @@ CREATE TABLE `commandes` (
   `id_livraison` int(11) DEFAULT NULL,
   `type` enum('1','2','3') NOT NULL,
   `etat` int(11) NOT NULL,
-  `commentaire` varchar(255) NOT NULL
+  `commentaire` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Déchargement des données de la table `commandes`
---
-
-INSERT INTO `commandes` (`id_commande`, `date`, `id_personnel`, `id_table`, `id_client`, `id_livraison`, `type`, `etat`, `commentaire`) VALUES
-(1, '2020-06-02 17:26:34', 149, NULL, 5, 1, '1', 1, ''),
-(2, '2020-06-02 17:26:49', 149, NULL, 19, NULL, '3', 1, ''),
-(3, '2020-06-02 17:41:37', 149, NULL, 5, 2, '1', 1, ''),
-(4, '2020-06-03 02:15:59', 149, NULL, 5, 3, '1', 1, ''),
-(5, '2020-06-03 15:49:09', 149, NULL, 5, 4, '1', 1, '- Pas de champignons sur la pizza au poulet\n- Livraison : sonner longtemps'),
-(6, '2020-06-03 16:26:13', 149, NULL, 18, 5, '1', 1, ''),
-(7, '2020-06-03 16:53:56', 149, NULL, 19, 6, '1', 1, ''),
-(8, '2020-06-03 16:54:02', 149, NULL, 19, 7, '1', 1, ''),
-(9, '2020-06-03 21:29:12', 149, NULL, 5, 8, '1', 1, ''),
-(10, '2020-06-03 21:29:38', 149, NULL, 5, 9, '1', 1, ''),
-(11, '2020-06-03 21:33:44', 149, NULL, 5, 10, '1', 1, ''),
-(12, '2020-06-03 23:03:57', 149, NULL, 5, 11, '1', 1, '');
 
 -- --------------------------------------------------------
 
@@ -182,24 +140,6 @@ CREATE TABLE `commandes_contact` (
   `email` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Déchargement des données de la table `commandes_contact`
---
-
-INSERT INTO `commandes_contact` (`id`, `id_commande`, `tel_fixe`, `gsm`, `email`) VALUES
-(1, 1, '056 48 12 45', '0477 45 82 32', 'jacques@jacques.fr'),
-(2, 2, '056 89 74 12', '0478 56 12 56', 'thierrymontoit@gmail.com'),
-(3, 3, '056 48 12 45', '0477 45 82 32', 'jacques@jacques.fr'),
-(4, 4, '056 48 12 45', '0477 45 82 32', 'jacques@jacques.fr'),
-(5, 5, '056 48 12 45', '0477 45 82 32', 'jacques@jacques.fr'),
-(6, 6, '056 56 89', '', 'pierredupont@gmail.com'),
-(7, 7, '056 89 74 12', '0478 56 12 56', 'thierrymontoit@gmail.com'),
-(8, 8, '056 89 74 12', '0478 56 12 56', 'thierrymontoit@gmail.com'),
-(9, 9, '056 48 12 45', '0477 45 82 32', 'jacques@jacques.fr'),
-(10, 10, '056 48 12 45', '0477 45 82 32', 'jacques@jacques.fr'),
-(11, 11, '056 48 12 45', '0477 45 82 32', 'jacques@jacques.fr'),
-(12, 12, '056 48 12 45', '0477 45 82 32', 'jacques@jacques.fr');
-
 -- --------------------------------------------------------
 
 --
@@ -211,25 +151,8 @@ CREATE TABLE `commandes_menus` (
   `id_commande` int(11) DEFAULT NULL,
   `id_menu` int(11) DEFAULT NULL,
   `quantite` int(11) NOT NULL,
-  `etat` int(11) NOT NULL
+  `etat` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Déchargement des données de la table `commandes_menus`
---
-
-INSERT INTO `commandes_menus` (`id`, `id_commande`, `id_menu`, `quantite`, `etat`) VALUES
-(1, 1, 95, 1, 0),
-(2, 1, 96, 1, 0),
-(3, 4, 95, 1, 0),
-(4, 5, 80, 1, 0),
-(5, 6, 80, 1, 0),
-(6, 7, 96, 1, 0),
-(7, 7, 95, 1, 0),
-(8, 7, 80, 1, 0),
-(9, 7, 76, 1, 0),
-(10, 11, 96, 1, 0),
-(11, 11, 95, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -242,30 +165,8 @@ CREATE TABLE `commandes_produits` (
   `id_commande` int(11) DEFAULT NULL,
   `id_produit` int(11) DEFAULT NULL,
   `quantite` int(11) NOT NULL,
-  `etat` int(11) NOT NULL
+  `etat` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Déchargement des données de la table `commandes_produits`
---
-
-INSERT INTO `commandes_produits` (`id`, `id_commande`, `id_produit`, `quantite`, `etat`) VALUES
-(1, 1, 30, 5, 0),
-(2, 1, 26, 2, 0),
-(3, 2, 26, 1, 0),
-(4, 2, 20, 1, 0),
-(5, 3, 26, 1, 0),
-(6, 5, 29, 1, 1),
-(7, 5, 19, 1, 1),
-(8, 5, 20, 1, 1),
-(9, 5, 26, 1, 1),
-(10, 5, 30, 1, 1),
-(11, 8, 26, 1, 0),
-(12, 9, 20, 5, 0),
-(13, 10, 20, 1, 0),
-(14, 10, 26, 1, 0),
-(15, 12, 30, 1, 0),
-(16, 12, 26, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -284,10 +185,10 @@ CREATE TABLE `fonctions` (
 
 INSERT INTO `fonctions` (`id_fonction`, `nom`) VALUES
 (1, 'Gérant'),
-(7, 'Serveur'),
-(8, 'Cuisinier'),
-(9, 'Livreur'),
-(99, 'Homme d\'entretien');
+(2, 'Serveur'),
+(3, 'Cuisinier'),
+(4, 'Livreur'),
+(5, 'Homme d\'entretien');
 
 -- --------------------------------------------------------
 
@@ -306,10 +207,9 @@ CREATE TABLE `fonctions_personnel` (
 --
 
 INSERT INTO `fonctions_personnel` (`id`, `id_fonction`, `id_personnel`) VALUES
-(221, 1, 149),
-(222, 7, 149),
-(223, 8, 149),
-(224, 9, 149);
+(326, 1, 149),
+(327, 3, 154),
+(328, 1, 161);
 
 -- --------------------------------------------------------
 
@@ -319,29 +219,12 @@ INSERT INTO `fonctions_personnel` (`id`, `id_fonction`, `id_personnel`) VALUES
 
 CREATE TABLE `livraisons` (
   `id_livraison` int(11) NOT NULL,
-  `date_debut` datetime NOT NULL,
-  `date_fin` datetime NOT NULL,
+  `date_debut` datetime DEFAULT NULL,
+  `date_fin` datetime DEFAULT NULL,
   `etat` int(11) NOT NULL,
   `id_adresse` int(11) DEFAULT NULL,
   `id_livreur` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Déchargement des données de la table `livraisons`
---
-
-INSERT INTO `livraisons` (`id_livraison`, `date_debut`, `date_fin`, `etat`, `id_adresse`, `id_livreur`) VALUES
-(1, '2020-06-03 02:27:47', '2020-06-03 02:27:52', 3, 156, 149),
-(2, '2020-06-02 21:46:24', '2020-06-02 21:47:39', 3, 156, 149),
-(3, '2020-06-03 02:28:17', '2020-06-03 02:31:26', 3, 156, 149),
-(4, '2020-06-03 18:48:25', '2020-06-03 21:41:16', 3, 156, 149),
-(5, '2020-06-03 18:48:30', '2020-06-03 21:41:17', 3, 173, 149),
-(6, '2020-06-03 18:48:31', '2020-06-03 18:50:14', 3, 177, 149),
-(7, '2020-06-03 21:41:38', '0000-00-00 00:00:00', 2, 177, 149),
-(8, '2020-06-03 23:35:15', '2020-06-03 23:35:19', 3, 156, 149),
-(9, '2020-06-03 23:36:25', '0000-00-00 00:00:00', 2, 156, 149),
-(10, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, 156, NULL),
-(11, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, 156, NULL);
 
 -- --------------------------------------------------------
 
@@ -362,10 +245,9 @@ CREATE TABLE `menus` (
 --
 
 INSERT INTO `menus` (`id_menu`, `nom`, `prix`, `etat`, `date_creation`) VALUES
-(76, 'Menu de pâques', '16', 1, '2020-05-08'),
-(80, 'Menu spécial fêtes', '14', 1, '2020-05-19'),
-(95, 'menu test', '20', 1, '2020-05-28'),
-(96, 'Menu jean-jacques', '50', 1, '2020-05-28');
+(76, 'Menu de pâques', '25', 1, '2020-05-08'),
+(80, 'Menu spécial fêtes', '12.6', 1, '2020-05-19'),
+(97, 'Menu de la Saint-Valentin', '50.55', 1, '2020-06-06');
 
 -- --------------------------------------------------------
 
@@ -385,23 +267,50 @@ CREATE TABLE `menus_produits` (
 --
 
 INSERT INTO `menus_produits` (`id`, `id_menu`, `id_produit`, `quantite`) VALUES
-(4, 76, 30, 1),
-(5, 76, 19, 5),
-(6, 76, 26, 1),
+(1, 97, 40, 1),
+(2, 97, 19, 1),
+(3, 97, 29, 1),
+(4, 76, 39, 2),
+(5, 76, 32, 2),
+(6, 76, 31, 2),
 (7, 80, 29, 2),
-(8, 80, 31, 1),
-(9, 80, 26, 3),
-(62, 80, 20, 1),
-(63, 95, 29, 5),
-(64, 95, 20, 5),
-(65, 95, 26, 10),
-(66, 95, 30, 6),
-(67, 95, 19, 11),
-(68, 96, 29, 1),
-(69, 96, 19, 1),
-(70, 96, 20, 1),
-(71, 96, 26, 1),
-(72, 96, 30, 1);
+(8, 80, 32, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `permissions`
+--
+
+CREATE TABLE `permissions` (
+  `id_permission` int(11) NOT NULL,
+  `id_fonction` int(11) NOT NULL,
+  `c_produit` int(11) NOT NULL DEFAULT 0,
+  `g_produits` int(11) NOT NULL DEFAULT 0,
+  `c_menu` int(11) NOT NULL DEFAULT 1,
+  `g_menus` int(11) NOT NULL DEFAULT 1,
+  `g_categ` int(11) NOT NULL DEFAULT 0,
+  `c_employe` int(11) NOT NULL DEFAULT 0,
+  `g_employe` int(11) NOT NULL DEFAULT 0,
+  `g_fonctions` int(11) NOT NULL DEFAULT 0,
+  `g_permissions` int(11) NOT NULL DEFAULT 0,
+  `c_client` int(11) NOT NULL DEFAULT 1,
+  `g_clients` int(11) NOT NULL DEFAULT 1,
+  `c_commande` int(11) NOT NULL DEFAULT 1,
+  `g_commandes` int(11) NOT NULL DEFAULT 1,
+  `g_livraisons` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Déchargement des données de la table `permissions`
+--
+
+INSERT INTO `permissions` (`id_permission`, `id_fonction`, `c_produit`, `g_produits`, `c_menu`, `g_menus`, `g_categ`, `c_employe`, `g_employe`, `g_fonctions`, `g_permissions`, `c_client`, `g_clients`, `c_commande`, `g_commandes`, `g_livraisons`) VALUES
+(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0),
+(3, 3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0),
+(4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1),
+(5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -416,7 +325,8 @@ CREATE TABLE `personnel` (
   `email` varchar(255) NOT NULL,
   `pass` varchar(255) NOT NULL,
   `date_naissance` date NOT NULL,
-  `telephone` varchar(15) NOT NULL,
+  `tel_fixe` varchar(15) DEFAULT NULL,
+  `gsm` varchar(20) DEFAULT NULL,
   `id_adresse` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -424,8 +334,10 @@ CREATE TABLE `personnel` (
 -- Déchargement des données de la table `personnel`
 --
 
-INSERT INTO `personnel` (`id_personnel`, `nom`, `prenom`, `email`, `pass`, `date_naissance`, `telephone`, `id_adresse`) VALUES
-(149, 'Hourriez', 'Hugo', 'hugohourriez@live.be', '$2y$08$iTfPQYUV4opJLNUJdZVn..qnbcyl6LL3LaV7QbpbxylijM.2nVHXK', '1999-06-10', '0484 67 16 17', 177);
+INSERT INTO `personnel` (`id_personnel`, `nom`, `prenom`, `email`, `pass`, `date_naissance`, `tel_fixe`, `gsm`, `id_adresse`) VALUES
+(149, 'Hourriez', 'Hugo', 'hugohourriez@live.be', '$2y$08$iTfPQYUV4opJLNUJdZVn..qnbcyl6LL3LaV7QbpbxylijM.2nVHXK', '1999-06-10', '0484 67 16 17', '0484 671 617', 223),
+(154, 'Jacques', 'Pierre', 'jacquespierre@gmail.com', '$2y$08$W/cAa3uUMsHUuhv7XpLef.4KeXX6PDh4cPxZAYvewGaQ7vN.0v732', '1987-06-26', '06 56 45 78', '0478 45 12 33', 224),
+(161, 'Admin', 'Admin', 'admin@admin.be', '$2y$08$PxAw0F4osSU5GkTBApeL1uppVTvwtUHoP.JgZ1EKSrkKtzgyKraii', '1964-05-12', '056 45 12 56', '0489 56 12 56', 225);
 
 -- --------------------------------------------------------
 
@@ -445,12 +357,15 @@ CREATE TABLE `produits` (
 --
 
 INSERT INTO `produits` (`id_produit`, `libelle`, `prix`, `photo`) VALUES
-(19, 'Margherita', '9', 'uploads/7000ec3537e20.jpeg'),
-(20, 'Pizza viande', '15', 'uploads/1586098267.jpeg'),
-(26, 'Pizza au poulet', '12', 'uploads/ecd4c7346c50b.jpeg'),
+(19, 'Margherita', '9.5', 'uploads/7000ec3537e20.jpeg'),
+(20, 'Viande', '15', 'uploads/1586098267.jpeg'),
 (29, '4 fromages', '10', 'uploads/cec4203b0f527.jpeg'),
 (30, '6 fromages', '11', 'uploads/e066eebe0c375.jpeg'),
-(31, 'Napolitaine', '9', 'uploads/2603df01c35ec.jpeg');
+(31, 'Napolitaine', '9', 'uploads/2603df01c35ec.jpeg'),
+(32, 'Coca-Cola 33cl', '2.6', 'uploads/db5079ef5c41f.jpeg'),
+(33, 'Ice Tea 33cl', '2.5', 'uploads/56e5d19d1010f.jpeg'),
+(39, 'Tiramisu spéculoos', '5.50', 'uploads/8f0f8e95a2323.jpeg'),
+(40, 'Tarte aux fraises', '7.3', 'uploads/ebb9fd53e58a7.jpeg');
 
 -- --------------------------------------------------------
 
@@ -469,11 +384,15 @@ CREATE TABLE `produits_categories` (
 --
 
 INSERT INTO `produits_categories` (`id`, `id_categorie`, `id_produit`) VALUES
-(117, 50, 29),
-(118, 50, 19),
-(119, 50, 20),
-(120, 50, 26),
-(121, 50, 30);
+(160, 136, 19),
+(161, 136, 20),
+(162, 136, 29),
+(163, 136, 30),
+(164, 136, 31),
+(168, 124, 39),
+(169, 127, 32),
+(170, 127, 33),
+(171, 124, 40);
 
 -- --------------------------------------------------------
 
@@ -499,7 +418,8 @@ INSERT INTO `tables` (`id_table`, `nb_places`) VALUES
 (6, 1),
 (7, 2),
 (8, 2),
-(9, 4);
+(9, 4),
+(10, 8);
 
 --
 -- Index pour les tables déchargées
@@ -601,6 +521,13 @@ ALTER TABLE `menus_produits`
   ADD KEY `fk_produit3` (`id_produit`);
 
 --
+-- Index pour la table `permissions`
+--
+ALTER TABLE `permissions`
+  ADD PRIMARY KEY (`id_permission`),
+  ADD KEY `fk_fonction2` (`id_fonction`);
+
+--
 -- Index pour la table `personnel`
 --
 ALTER TABLE `personnel`
@@ -635,103 +562,109 @@ ALTER TABLE `tables`
 -- AUTO_INCREMENT pour la table `adresses`
 --
 ALTER TABLE `adresses`
-  MODIFY `id_adresse` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=197;
+  MODIFY `id_adresse` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=226;
 
 --
 -- AUTO_INCREMENT pour la table `cartes_fidelite`
 --
 ALTER TABLE `cartes_fidelite`
-  MODIFY `id_carte` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_carte` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT pour la table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id_categorie` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id_categorie` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=137;
 
 --
 -- AUTO_INCREMENT pour la table `clients`
 --
 ALTER TABLE `clients`
-  MODIFY `id_client` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_client` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT pour la table `commandes`
 --
 ALTER TABLE `commandes`
-  MODIFY `id_commande` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_commande` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `commandes_contact`
 --
 ALTER TABLE `commandes_contact`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `commandes_menus`
 --
 ALTER TABLE `commandes_menus`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `commandes_produits`
 --
 ALTER TABLE `commandes_produits`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `fonctions`
 --
 ALTER TABLE `fonctions`
-  MODIFY `id_fonction` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
+  MODIFY `id_fonction` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
 
 --
 -- AUTO_INCREMENT pour la table `fonctions_personnel`
 --
 ALTER TABLE `fonctions_personnel`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=225;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=329;
 
 --
 -- AUTO_INCREMENT pour la table `livraisons`
 --
 ALTER TABLE `livraisons`
-  MODIFY `id_livraison` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_livraison` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `menus`
 --
 ALTER TABLE `menus`
-  MODIFY `id_menu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
+  MODIFY `id_menu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
 
 --
 -- AUTO_INCREMENT pour la table `menus_produits`
 --
 ALTER TABLE `menus_produits`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT pour la table `permissions`
+--
+ALTER TABLE `permissions`
+  MODIFY `id_permission` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT pour la table `personnel`
 --
 ALTER TABLE `personnel`
-  MODIFY `id_personnel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
+  MODIFY `id_personnel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=162;
 
 --
 -- AUTO_INCREMENT pour la table `produits`
 --
 ALTER TABLE `produits`
-  MODIFY `id_produit` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id_produit` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT pour la table `produits_categories`
 --
 ALTER TABLE `produits_categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=172;
 
 --
 -- AUTO_INCREMENT pour la table `tables`
 --
 ALTER TABLE `tables`
-  MODIFY `id_table` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_table` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Contraintes pour les tables déchargées
@@ -741,7 +674,7 @@ ALTER TABLE `tables`
 -- Contraintes pour la table `cartes_fidelite`
 --
 ALTER TABLE `cartes_fidelite`
-  ADD CONSTRAINT `fk_client2` FOREIGN KEY (`id_client`) REFERENCES `clients` (`id_client`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_client2` FOREIGN KEY (`id_client`) REFERENCES `clients` (`id_client`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `clients`
@@ -798,6 +731,12 @@ ALTER TABLE `livraisons`
 ALTER TABLE `menus_produits`
   ADD CONSTRAINT `fk_menu` FOREIGN KEY (`id_menu`) REFERENCES `menus` (`id_menu`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_produit3` FOREIGN KEY (`id_produit`) REFERENCES `produits` (`id_produit`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `permissions`
+--
+ALTER TABLE `permissions`
+  ADD CONSTRAINT `fk_fonction2` FOREIGN KEY (`id_fonction`) REFERENCES `fonctions` (`id_fonction`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `personnel`
