@@ -68,7 +68,7 @@ if($req->rowCount() < 1) {
         <td data-label="GSM">'.$gsm.'</td>
         <td data-label="Email">'.$afficher['email'].'</td>
         <td data-label="Adresse">'.$adresse.'</td>
-        <td data-label="Actions"><a href="details_clients?id='.$afficher['id_client'].'">Détails</a></td></tr>
+        <td data-label="Actions"><a href="details_clients?id='.$afficher['id_client'].'" class="boutton-bleu">Détails</a></td></tr>
         </tbody>
         ';
             }

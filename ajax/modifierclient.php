@@ -35,19 +35,35 @@ if(isset($_POST['action']) && $_POST['action'] == 'modifier_client') {
             } 
         }    
         if($checkemail == true) {
-        $req = $bdd->prepare('UPDATE clients as a LEFT JOIN adresses as b ON a.id_adresse = b.id_adresse SET a.nom = :nom, a.prenom = :prenom, a.email = :email, a.date_naissance = :date_naissance, a.telephone_fixe = :telephone_fixe,
-        a.gsm = :gsm, b.rue = :rue, b.numero = :numero, b.ville = :ville, b.code_postal = :code_postal, b.pays = :pays WHERE a.id_client = :id');    
+        $req = $bdd->prepare('SELECT * FROM adresses WHERE rue = :rue AND numero = :numero AND ville = :ville AND code_postal = :code_postal AND pays = :pays');
+        $req->bindValue('rue', $rue, PDO::PARAM_STR);
+        $req->bindValue('numero', $numero, PDO::PARAM_STR);
+        $req->bindValue('ville', $ville, PDO::PARAM_STR);
+        $req->bindValue('code_postal', $code_postal, PDO::PARAM_STR);
+        $req->bindValue('pays', $pays, PDO::PARAM_STR);
+        $req->execute() or die(print_r($req->errorInfo(), TRUE));
+        $adresse = $req->fetch();
+        if($req->rowCount() > 0) {
+        $id_adresse = $adresse['id_adresse'];
+        } elseif($req->rowCount() == 0) {
+        $req = $bdd->prepare('INSERT INTO adresses (rue, numero, ville, code_postal, pays) VALUES (:rue, :numero, :ville, :code_postal, :pays)');
+        $req->bindValue('rue', $rue, PDO::PARAM_STR);
+        $req->bindValue('numero', $numero, PDO::PARAM_STR);
+        $req->bindValue('ville', $ville, PDO::PARAM_STR);
+        $req->bindValue('code_postal', $code_postal, PDO::PARAM_STR);
+        $req->bindValue('pays', $pays, PDO::PARAM_STR);
+        $req->execute() or die(print_r($req->errorInfo(), TRUE));
+        $id_adresse = $bdd->lastInsertId();
+        }
+        $req = $bdd->prepare('UPDATE clients SET nom = :nom, prenom = :prenom, email = :email, date_naissance = :date_naissance, telephone_fixe = :telephone_fixe,
+        gsm = :gsm, id_adresse = :id_adresse WHERE id_client = :id');    
         $req->bindValue('nom', $nom, PDO::PARAM_STR);
         $req->bindValue('prenom', $prenom, PDO::PARAM_STR);
         $req->bindValue('email', $email, PDO::PARAM_STR);
         $req->bindValue('date_naissance', $date_naissance, PDO::PARAM_STR);
         $req->bindValue('telephone_fixe', $telephone_fixe, PDO::PARAM_STR);
         $req->bindValue('gsm', $gsm, PDO::PARAM_STR);
-        $req->bindValue('rue', $rue, PDO::PARAM_STR);
-        $req->bindValue('numero', $numero, PDO::PARAM_STR);
-        $req->bindValue('ville', $ville, PDO::PARAM_STR);
-        $req->bindValue('code_postal', $code_postal, PDO::PARAM_INT);
-        $req->bindValue('pays', $pays, PDO::PARAM_STR);
+        $req->bindValue('id_adresse', $id_adresse, PDO::PARAM_INT);
         $req->bindValue('id', $id, PDO::PARAM_INT);
         $req->execute() or die(print_r($req->errorInfo(), TRUE));
         $type = 3;

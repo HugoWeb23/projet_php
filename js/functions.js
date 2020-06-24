@@ -573,7 +573,7 @@ $(document).ready(function(){
 					success:function()
 					{
 					supprimer.closest('.carte-fidelite').remove();
-					$('.identifiants h2').after('<div class="creer-carte"><p>Ce client ne possède pas de carte de fidélité</p><h3>Créer une carte :</h3><label for="points">Points :</label><input type="text" id="points" value="0"><label for="duree">Durée de validité</label><select id="duree"><option value="1">1 mois</option><option value="2">2 mois</option><option value="3">3 mois</option><option value="4">4 mois</option><option value="5">5 mois</option><option value="6" selected>6 mois</option><option value="12">1 an</option><option value="24">2 ans</option></select><input type="button" id="creerCarte" data-client="'+id_client+'" value="Créer la carte"></div>');
+					$('.identifiants h2').after('<div class="creer-carte"><p>Ce client ne possède pas de carte de fidélité</p><h3>Créer une carte :</h3><label for="points">Points :</label><input type="text" id="points" value="0"><label for="duree">Durée de validité</label><select id="duree"><option value="1">1 mois</option><option value="2">2 mois</option><option value="3">3 mois</option><option value="4">4 mois</option><option value="5">5 mois</option><option value="6" selected>6 mois</option><option value="12">1 an</option><option value="24">2 ans</option></select><input type="button" id="creerCarte" class="boutton-vert" data-client="'+id_client+'" value="Créer la carte"></div>');
 					}
 				});
 			}
@@ -587,7 +587,7 @@ $(document).ready(function(){
 					success:function(data)
 					{
 					creercarte.closest('.creer-carte').remove();
-					$('.identifiants h2').after('<div class="carte-fidelite"><div id="resultat"></div><p>Numéro : '+data.n_carte+'</p><p>Points : <span id="count" data-count="'+data.points+'">'+data.points+'</span> <a href="#" id="pointsUp">+</a> <a href="#" id="pointsDown">-</a></p><p id="expiration">Date d\'expiration : <span>'+data.expiration+'</span></p><p><label for="prolongerCarte">Prolonger :</label> <select name="mois" id="prolongerCarte"><option value="0">Non</option><option value="1">1 mois</option><option value="2">2 mois</option><option value="3">3 mois</option><option value="6">6 mois</option><option value="12">1 an</option><option value="24">2 ans</option></select><p><label for="supprimerCarteFidelite">Supprimer :</label><input type="button" data-id_client="'+data.id_client+'" data-id_carte="'+data.n_carte+'" id="supprimerCarteFidelite" value="Supprimer"></div>');
+					$('.identifiants h2').after('<div class="carte-fidelite"><div id="resultat"></div><p>Numéro : '+data.n_carte+'</p><p>Points : <span id="count" data-count="'+data.points+'">'+data.points+'</span> <a href="#" id="pointsUp">+</a> <a href="#" id="pointsDown">-</a></p><p id="expiration">Date d\'expiration : <span>'+data.expiration+'</span></p><p><label for="prolongerCarte">Prolonger :</label> <select name="mois" id="prolongerCarte"><option value="0">Non</option><option value="1">1 mois</option><option value="2">2 mois</option><option value="3">3 mois</option><option value="6">6 mois</option><option value="12">1 an</option><option value="24">2 ans</option></select><p><input type="button" data-id_client="'+data.id_client+'" class="boutton-supprimer" data-id_carte="'+data.n_carte+'" id="supprimerCarteFidelite" value="Supprimer"></div>');
 					}
 				});
 			}
@@ -782,7 +782,7 @@ $(document).ready(function(){
 			if(type == 'contact') {
 				$("#tel_fixe").prop("disabled", argument);
 				$("#gsm").prop("disabled", argument);
-				$("#email").prop("disabled", argument);
+				$("#e-mail").prop("disabled", argument);
 			}
 		   }
 
@@ -1133,7 +1133,7 @@ $(document).ready(function(){
 			var id_client = $(this).find('#user_id').val();
 			var tel_fixe = $(this).find('#tel_fixe').val();
 			var gsm = $(this).find('#gsm').val();
-			var email = $(this).find('#email').val();
+			var email = $(this).find('#e-mail').val();
 			var type_commande = $(this).find('input[name=type]:checked').val();
 			var table = $(this).find('#table').val();
 			var rue = $(this).find('#rue').val();
@@ -1188,7 +1188,7 @@ $(document).ready(function(){
 			total_produit = (prix * quantite);
 			total_commande += total_produit;
 			});
-			$('.total span').text(total_commande);
+			$('.total span').text(total_commande.toFixed(2));
 			}
 
 			function diffMenu() {

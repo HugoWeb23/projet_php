@@ -21,5 +21,11 @@ verif_connexion();
 </head>
 <body>
 <?php include('header.php'); ?>
+<div class="conteneur">
+<div class="titre-page">
+<h1>Bonjour, <?= $personnel['prenom']; ?></h1>
+</div>
+Bienvenue sur l'application de gestion des commandes de <?= $nom_site; ?>.
+</div>
 </body>
 </html>

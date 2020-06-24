@@ -4,6 +4,10 @@ session_start();
 
 require('config.php');
 verif_connexion();
+$permissions = verif_permissions($personnel['id_personnel'], array('c_commande'));
+if($permissions[0] == 0) {
+header('location: index');
+}
 
 ?>
 <!DOCTYPE html>
@@ -113,7 +117,7 @@ $totaux_menus += $menu['prix'] * $quantite;
 <input type="text" class="quantite_saisie" value="<?= $quantite ?>">
 </div>
 </div>
-<div class="prix" data-prix="<?= $menu['prix']; ?>"><?= $menu['prix']; ?> €</div>
+<div class="prix" data-prix="<?= $menu['prix']; ?>"><?= number_format($menu['prix'], 2); ?> €</div>
 <input type="button" class="boutton-quantite menuCommandeQuantite" data-produit="<?= $menu['id_menu']; ?>" value="Valider quantité">
 <input type="button" class="boutton-supprimer-produit supprimerMenuCommande" data-produit="<?= $menu['id_menu']; ?>" value="Supprimer">
 </div>
@@ -149,7 +153,7 @@ $totaux_produits += $afficher['prix'] * $quantite;
 <input type="text" class="quantite_saisie" value="<?= $quantite ?>">
 </div>
 </div>
-<div class="prix" data-prix="<?= $afficher['prix']; ?>"><?= $afficher['prix']; ?> €</div>
+<div class="prix" data-prix="<?= $afficher['prix']; ?>"><?= number_format($afficher['prix'], 2); ?> €</div>
 <input type="button" class="boutton-quantite commandeProduitQuantite" data-produit="<?= $afficher['id_produit']; ?>" value="Valider quantité">
 <input type="button" class="boutton-supprimer-produit commandeSupprimerProduit" data-produit="<?= $afficher['id_produit']; ?>" value="Supprimer">
 </div>
@@ -159,7 +163,7 @@ $totaux_produits += $afficher['prix'] * $quantite;
 }
 ?>
 <div class="afficher-total">
-<div class="total">Total commande : <span><?= $totaux_menus + $totaux_produits ?></span> €</div>
+<div class="total">Total commande : <span><?= number_format($totaux_menus + $totaux_produits, 2) ?></span> €</div>
 </div>
 </div>
 <div class="menu-categories">
@@ -172,11 +176,13 @@ $req = $bdd->prepare('SELECT * FROM menus WHERE etat = 1');
 $req->execute();
 while($menu = $req->fetch()) {
 ?>
-<div class="apercuproduit">
+<div class="apercumenu">
 <div class="details-produit">
 <p>Nom : <span><?= $menu['nom']; ?></span></p>
-<p>Prix : <span><?= $menu['prix']; ?></span> €</p>
+<p>Prix : <span><?= number_format($menu['prix'], 2); ?></span> €</p>
+<div class="ajouter-menu">
 <button data-menu_id="<?= $menu['id_menu']; ?>" class="boutton-produits commandeAjouterMenu">Ajouter</button>
+</div>
 </div>
 </div>
 <?php } ?>
@@ -205,7 +211,7 @@ while($produit = $req2->fetch()) {
 <img src="<?= $produit['photo']; ?>">
 <div class="details-produit">
 <p>Nom : <span><?= $produit['libelle']; ?></span></p>
-<p>Prix : <span><?= $produit['prix']; ?></span> €</p>
+<p>Prix : <span><?= number_format($produit['prix'], 2); ?></span> €</p>
 <button data-produit_id="<?= $produit['id_produit']; ?>" class="boutton-produits commandeAjouterProduit">Ajouter</button>
 </div>
 </div>

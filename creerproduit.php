@@ -4,6 +4,10 @@ session_start();
 
 require('config.php');
 verif_connexion();
+$permissions = verif_permissions($personnel['id_personnel'], array('c_produit'));
+if($permissions[0] == 0) {
+header('location: index');
+}
 
 if(isset($_POST["valider"])){
 $nom = isset($_POST['nom']) ? $_POST['nom'] : '';

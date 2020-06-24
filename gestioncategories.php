@@ -3,6 +3,11 @@
 session_start();
 
 require('config.php');
+verif_connexion();
+$permissions = verif_permissions($personnel['id_personnel'], array('g_categ'));
+if($permissions[0] == 0) {
+header('location: index');
+}
 
 ?>
 <!DOCTYPE html>

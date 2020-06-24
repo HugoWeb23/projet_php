@@ -4,6 +4,10 @@ session_start();
 
 require('config.php');
 verif_connexion();
+$permissions = verif_permissions($personnel['id_personnel'], array('c_menu'));
+if($permissions[0] == 0) {
+header('location: index');
+}
 
 ?>
 <!DOCTYPE html>
@@ -77,7 +81,7 @@ $total_menu += $afficher['prix'] * $quantite;
 <input type="text" class="quantite_saisie" value="<?= $quantite ?>">
 </div>
 </div>
-<div class="prix" data-prix="<?= $afficher['prix']; ?>"><?= $afficher['prix']; ?> €</div>
+<div class="prix" data-prix="<?= $afficher['prix']; ?>"><?= number_format($afficher['prix'], 2); ?> €</div>
 <input type="button" class="boutton-quantite validerQuantite" data-produit="<?= $afficher['id_produit']; ?>" value="Valider quantité">
 <input type="button" class="boutton-supprimer-produit supprimer" data-produit="<?= $afficher['id_produit']; ?>" value="Supprimer">
 </div>
@@ -87,7 +91,7 @@ $total_menu += $afficher['prix'] * $quantite;
 }
 ?>
 <div class="afficher-total">
-<div class="total">Total des produits : <span><?= $total_menu; ?></span> €</div>
+<div class="total">Total des produits : <span><?= number_format($total_menu, 2); ?></span> €</div>
 </div>
 </div>
 <div class="menu-categories">
@@ -115,7 +119,7 @@ while($produit = $req2->fetch()) {
 <img src="<?= $produit['photo']; ?>">
 <div class="details-produit">
 <p>Nom : <span><?= $produit['libelle']; ?></span></p>
-<p>Prix : <span><?= $produit['prix']; ?></span> €</p>
+<p>Prix : <span><?= number_format($produit['prix'], 2); ?></span> €</p>
 <button data-id="<?= $produit['id_produit']; ?>" class="boutton-produits creermenu-ajouter-produit">Ajouter</button>
 </div>
 </div>

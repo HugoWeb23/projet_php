@@ -4,6 +4,10 @@ session_start();
 
 require('config.php');
 verif_connexion();
+$permissions = verif_permissions($personnel['id_personnel'], array('g_employe'));
+if($permissions[0] == 0) {
+header('location: index');
+}
 
 if(isset($_GET['id'])) {
 $id = $_GET['id'];

@@ -52,6 +52,38 @@ L'employé doit compléter les informations de contact du client.
 
 La méthode d'ajout de produits/menus à la commande reste la même pour les trois types de commande. Un simple clic sur le boutton "ajouter" et le produit/menu se retrouve dans la colonne "détails de la commande". La quantité par défaut est définie à 1, si le boutton "ajouter" est enclenché plusieurs fois, la quantité du produit va augmenter (+1). Pour aller plus vite, l'employé a la possibilité de saisir un chiffre dans le champ "quantité" et de cliquer sur "valider quantité".
 
+### Gestion des commandes
+
+Une fois la commande créée, elle se retrouve dans la section "gestion des commandes". Cette section permet de visualiser toutes les commandes actives ainsi que les commandes clôturées. Dans les commandes actives, nous retrouvons le numéro de la commande, le type, le contenu ainsi que les fonctions clôturer et modifier.
+
+### Modification des commandes
+
+Sur cette page la commande peut être entièrement modifiée (client, type, adresse, infomations de contact, produits, quantités).
+
+### Gestion des livraisons
+
+Une fois qu'une commande de type livraison est clôturée, la livraison apparaît sur la page "gestion des livraisons". Les livreurs peuvent visualiser toutes les commandes actives et les commandes qu'ils prennent en charge. Une livraison n'est pas affectée automatiquement à un livreur, c'est lui qui doit cliquer sur l'otion "prendre en charge". Une fois prise en charge, la livraison se retrouve dans la section "mes livraisons". Une fois la livraison effectuée, le livreur clique sur l'option "livraison effectuée" pour terminer la livraison. La durée de livraison est alors calculée et visible dans la section "commandes clôturées".
+
+### Création des menus
+
+Un menu est composé de produits. La personne qui se charge de la création des menus peut sélectionner les produits et définir les quantités. Elle doit également choisir un nom et un prix pour le menu et définir l'état (actif, inactif).
+
+### Gestion des menus
+
+Cette page permet de modifier ou de supprimer des menus, elle se comporte de la même manière que la page de création de menus.
+
+### Création des clients
+
+Un compte client permet au client de posséder une carte de fidélité électronique. Il joue également le rôle raccourci pour la création et la gestion des commandes car l'application connaît déjà l'adresse du client.
+
+### Création des employés
+
+Un employé doit obligatoirement posséder un compte pour utiliser l'application.
+
 ### Responsive
 
 L'application étant destinée à être utilisée sur des tablettes et téléphones, elle est entièrement responsive. En réduisant votre écran, vous verrez le contenu s'adapter et le menu horizontal disparaître pour laisser place à l'icône "burger" qui fera apparaître le menu vertical.
+
+## Technologies utilisées
+
+Cette application utilise de l'HTML, du CSS, du JavaScript (via la bibliothèque jQuery) ainsi que du PHP. La plupart des actions sont réalisées via de l'Ajax et des manipulations du DOM.

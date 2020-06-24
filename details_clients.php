@@ -4,6 +4,10 @@ session_start();
 
 require('config.php');
 verif_connexion();
+$permissions = verif_permissions($personnel['id_personnel'], array('g_clients'));
+if($permissions[0] == 0) {
+header('location: index');
+}
 
 if(isset($_GET['id'])) {
 $id = $_GET['id'];
@@ -82,7 +86,7 @@ if($req->rowCount() == 0) {
 <option value="12">1 an</option>
 <option value="24">2 ans</option>
 </select>
-<input type="button" id="creerCarte" data-client="<?= $id; ?>" value="Créer la carte">
+<input type="button" id="creerCarte" class="boutton-vert" data-client="<?= $id; ?>" value="Créer la carte">
 </div>
 <?php
 } else {
@@ -95,7 +99,7 @@ while($carte = $req->fetch()) {
 <p>Date d'expiration : <?= $carte['expire']; ?></p>
 <p><label for="prolongerCarte">Prolonger :</label> <select name="mois" id="prolongerCarte"><option value="0">Non</option><option value="1">1 mois</option><option value="2">2 mois</option><option value="3">3 mois</option>
 <option value="6">6 mois</option><option value="12">1 an</option><option value="24">2 ans</option></select>
-<p><label for="supprimerCarteFidelite">Supprimer :</label> <input type="button" id="supprimerCarteFidelite" data-id_client="<?= $id; ?>" data-id_carte = "<?= $carte['id_carte']; ?>" value="Supprimer">
+<p><input type="button" id="supprimerCarteFidelite" class="boutton-supprimer" data-id_client="<?= $id; ?>" data-id_carte = "<?= $carte['id_carte']; ?>" value="Supprimer">
 </div>
 <?php
 }

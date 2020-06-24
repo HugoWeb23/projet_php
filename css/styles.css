@@ -18,6 +18,7 @@ color: #FFF;
 font-weight: bold;
 text-decoration: none;
 transition-duration: 0.3s;
+cursor: pointer;
 }
 
 .boutton-supprimer:hover {
@@ -36,6 +37,7 @@ color: #FFF;
 font-weight: bold;
 text-decoration: none;
 transition-duration: 0.3s;
+cursor: pointer;
 }
 
 .boutton-bleu:hover {
@@ -54,6 +56,7 @@ color: #FFF;
 font-weight: bold;
 text-decoration: none;
 transition-duration: 0.3s;
+cursor: pointer;
 }
 
 .boutton-vert:hover {
@@ -562,6 +565,28 @@ margin-bottom: 15px;
 z-index: auto;
 }
 
+.apercumenu {
+position: relative;    
+width: 159px;
+height: 150px;    
+border: 2px solid #dadada;
+margin-right: 10px;
+margin-bottom: 15px;
+padding: 5px;
+box-sizing: border-box;
+z-index: auto;
+}
+
+.apercumenu .ajouter-menu {
+position: absolute;
+bottom: 0;
+left: 3px;
+}
+
+.apercumenu .boutton-produits {
+width: 155px;
+}
+
 .apercuproduit:hover {
 box-shadow: 2px 2px 5px;
 transition-duration: 0.1s;
@@ -583,7 +608,7 @@ font-size: 0.8em;
 z-index: 5;
 }
 
-.details-produit {
+.apercuproduit .details-produit {
 position: absolute;
 left: 3px;
 bottom: 0;  
@@ -774,6 +799,14 @@ width: 146px;
 
 .boutton-produits {
 width: 146px;
+}
+
+.apercumenu {       
+width: 146px;    
+}
+
+.apercumenu .boutton-produits {
+width: 142px;  
 }
 }
 

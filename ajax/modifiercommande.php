@@ -29,7 +29,7 @@ if($type_commande == 1) {
 if($rue != $commande['rue'] || $numero != $commande['numero'] || $code_postal != $commande['code_postal'] || $ville != $commande['ville'] || $pays != $commande['pays']) {
 $req = $bdd->prepare('SELECT * FROM adresses WHERE rue = :rue AND numero = :numero AND ville = :ville AND code_postal = :code_postal AND pays = :pays');
 $req->bindValue('rue', $rue, PDO::PARAM_STR);
-$req->bindValue('numero', $numero, PDO::PARAM_INT);
+$req->bindValue('numero', $numero, PDO::PARAM_STR);
 $req->bindValue('ville', $ville, PDO::PARAM_STR);
 $req->bindValue('code_postal', $code_postal, PDO::PARAM_STR);
 $req->bindValue('pays', $pays, PDO::PARAM_STR);
@@ -247,6 +247,4 @@ $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
 $req->bindValue('id_produit', $id_produit, PDO::PARAM_INT);
 $req->execute();
 }
-
-
 ?>

@@ -4,6 +4,10 @@ session_start();
 
 require('config.php');
 verif_connexion();
+$permissions = verif_permissions($personnel['id_personnel'], array('g_menus'));
+if($permissions[0] == 0) {
+header('location: index');
+}
 
 if(isset($_GET['id'])) {
 
@@ -76,7 +80,7 @@ break;
     <td data-label="Prix">'.$afficher['prix'].' €</td>
     <td data-label="État">'.$etat.'</td>
     <td data-label="Date de création">'.$afficher['date_creation'].'</td>
-    <td data-label="Actions"><a href="?id='.$afficher['id_menu'].'">Modifier</a> - <a href="#" data-id="'.$afficher['id_menu'].'" class="supprimer-menu">Supprimer</a></td></tr>
+    <td data-label="Actions"><a href="?id='.$afficher['id_menu'].'" class="boutton-bleu">Modifier</a> - <a href="#" data-id="'.$afficher['id_menu'].'" class="boutton-supprimer supprimer-menu">Supprimer</a></td></tr>
     </tbody>
     ';
 }

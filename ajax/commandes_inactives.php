@@ -122,9 +122,12 @@ $req = $bdd->prepare('SELECT * FROM commandes as a LEFT JOIN livraisons as b ON 
 $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
 $req->execute();
 $commande = $req->fetch();
+$req2 = $bdd->prepare('SELECT nom, prenom FROM personnel WHERE id_personnel = :id_employe');
+$req2->bindValue('id_employe', $commande['id_livreur'], PDO::PARAM_INT);
+$req2->execute();
+$infos_livreur = $req2->fetch();
 $temps_livraison = minutes_dates($commande['date_debut'], $commande['date_fin']);
-$resultat = array("date_commande" => $commande['date'], "duree_livraison" => $temps_livraison.' minutes', "date_debut" => $commande['date_debut'], "livreur" => $commande['id_livreur'], "date_fin" => $commande['date_fin']);
+$resultat = array("date_commande" => $commande['date'], "duree_livraison" => $temps_livraison.' minutes', "date_debut" => $commande['date_debut'], "livreur" => $infos_livreur['prenom']. ' ' .$infos_livreur['nom'], "date_fin" => $commande['date_fin']);
 echo json_encode($resultat);
 }
-
 ?>
