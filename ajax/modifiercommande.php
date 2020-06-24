@@ -180,18 +180,29 @@ $req->execute() or die(print_r($req->errorInfo(), TRUE));
 }
 }
 
+// Modification de la quantité d'un menu
+
 if(isset($_POST['action']) && $_POST['action'] == 'commande_quantite_menu') {
 $id_commande = $_POST['id_commande'];
 $id_menu = $_POST['id_menu'];
 $quantite = $_POST['quantite'];
 
+if($quantite > 0) {
 $req = $bdd->prepare('UPDATE commandes_menus SET quantite = :quantite, etat = 0 WHERE id_commande = :id_commande AND id_menu = :id_menu');
 $req->bindValue('quantite', $quantite, PDO::PARAM_INT);
 $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
 $req->bindValue('id_menu', $id_menu, PDO::PARAM_INT);
 $req->execute();
 echo '<h2 class="validation-menu">La quantité a été modifée</h2>';
+} elseif ($quantite < 1) {
+$req = $bdd->prepare('DELETE FROM commandes_menus WHERE id_menu = :id_menu AND id_commande = :id_commande');
+$req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
+$req->bindValue('id_menu', $id_menu, PDO::PARAM_INT);
+$req->execute();
 }
+}
+
+// Supprimer un menu
 
 if(isset($_POST['action']) && $_POST['action'] == 'commande_supprimer_menu') {
 $id_commande = $_POST['id_commande'];
@@ -203,18 +214,29 @@ $req->bindValue('id_menu', $id_menu, PDO::PARAM_INT);
 $req->execute();
 }
 
+// Modification de la quantité d'un produit
+
 if(isset($_POST['action']) && $_POST['action'] == 'commande_quantite_produit') {
 $id_commande = $_POST['id_commande'];
 $id_produit = $_POST['id_produit'];
 $quantite = $_POST['quantite'];
-    
+
+if($quantite > 0) {
 $req = $bdd->prepare('UPDATE commandes_produits SET quantite = :quantite, etat = 0 WHERE id_commande = :id_commande AND id_produit = :id_produit');
 $req->bindValue('quantite', $quantite, PDO::PARAM_INT);
 $req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
 $req->bindValue('id_produit', $id_produit, PDO::PARAM_INT);
 $req->execute();
 echo '<h2 class="validation-menu">La quantité a été modifée</h2>';
+} elseif($quantite < 1) {
+$req = $bdd->prepare('DELETE FROM commandes_produits WHERE id_produit = :id_produit AND id_commande = :id_commande');
+$req->bindValue('id_commande', $id_commande, PDO::PARAM_INT);
+$req->bindValue('id_produit', $id_produit, PDO::PARAM_INT);
+$req->execute();
 }
+}
+
+// Supprimer un produit
     
 if(isset($_POST['action']) && $_POST['action'] == 'commande_supprimer_produit') {
 $id_commande = $_POST['id_commande'];

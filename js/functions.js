@@ -387,19 +387,19 @@ $(document).ready(function(){
 		});
 
 	$('.menu-apercu').on('click', '.validerQuantite', function(){
-		
-			var produit = $(this).data('produit');
-			var quantite_saisie = $(this).parent().find('.quantite_saisie').val();
+
+			var boutton = $(this);
+			var produit = $(boutton).data('produit');
+			var quantite_saisie = $(boutton).parent().find('.quantite_saisie').val();
   
-		
 			$.ajax({
 				url:"ajax/modifierquantite.php",
 				method:"post",
 				data: {produit:produit, quantite_saisie:quantite_saisie},
 				success:function(data)
 				{
-					if(quantite_saisie == 0) {
-					$('.validerQuantite').parent().parent().fadeOut(0);
+					if(quantite_saisie < 1) {
+					$(boutton).closest('.apercu-produits').fadeOut(0);
 					}
 					$('#resultat').html(data).fadeIn('slow');
 					$('#resultat').delay(2000).fadeOut('slow');
@@ -628,10 +628,11 @@ $(document).ready(function(){
 		});
 
 		$('.menu-apercu').on('click', '.produit_quantite', function(){
-		
-			var produit = $(this).data('produit');
-			var id_menu = $(this).data('menu');
-			var quantite_saisie = $(this).parent().find('.quantite_saisie').val();
+			
+			var boutton = $(this);
+			var produit = $(boutton).data('produit');
+			var id_menu = $(boutton).data('menu');
+			var quantite_saisie = $(boutton).parent().find('.quantite_saisie').val();
   
 			$.ajax({
 				url:"ajax/modifiermenu.php",
@@ -640,6 +641,7 @@ $(document).ready(function(){
 				success:function(data)
 				{
 					if(quantite_saisie == 0) {
+					boutton.closest('.apercu-produits').fadeOut(0);
 					}
 					$('#resultat').html(data).fadeIn('slow');
 					$('#resultat').delay(2000).fadeOut('slow');
@@ -915,10 +917,10 @@ $(document).ready(function(){
 		});
 
 		   $('.menu-apercu').on('click', '.menuCommandeQuantite', function(){
-		
-			var menu = $(this).data('produit');
-			var quantite_saisie = $(this).parent().find('.quantite_saisie').val();
-  
+			
+			var boutton = $(this);
+			var menu = $(boutton).data('produit');
+			var quantite_saisie = $(boutton).parent().find('.quantite_saisie').val();
 		
 			$.ajax({
 				url:"ajax/creercommande.php",
@@ -926,8 +928,8 @@ $(document).ready(function(){
 				data: {action:'menu_quantite', menu:menu, quantite_saisie:quantite_saisie},
 				success:function(data)
 				{
-					if(quantite_saisie == 0) {
-					$('.menuCommandeQuantite').parent().parent().fadeOut(0);
+					if(quantite_saisie < 1) {
+					$(boutton).closest('.apercu-menus').fadeOut(0);
 					}
 					$('#resultat').html(data).fadeIn('slow');
 					$('#resultat').delay(2000).fadeOut('slow');
@@ -938,8 +940,9 @@ $(document).ready(function(){
 
 		$('.menu-apercu').on('click', '.commandeProduitQuantite', function(){
 		
-			var id_produit = $(this).data('produit');
-			var quantite_saisie = $(this).parent().find('.quantite_saisie').val();
+			var boutton = $(this);
+			var id_produit = $(boutton).data('produit');
+			var quantite_saisie = $(boutton).parent().find('.quantite_saisie').val();
 
 		$.ajax({
 			url:"ajax/creercommande.php",
@@ -947,8 +950,8 @@ $(document).ready(function(){
 			data: {action:'produit_quantite', id_produit:id_produit, quantite_saisie:quantite_saisie},
 			success:function(data)
 			{
-				if(quantite_saisie == 0) {
-				$('.commandeProduitQuantite').parent().parent().fadeOut(0);
+				if(quantite_saisie < 1) {
+				$(boutton).closest('.apercu-produits').fadeOut(0);
 				}
 				$('#resultat').html(data).fadeIn('slow');
 				$('#resultat').delay(2000).fadeOut('slow');
@@ -1192,19 +1195,23 @@ $(document).ready(function(){
 			var prix_menu = $('#prix_menu span').text();
 			var total_produits = $('.total span').text();
 			var diff = total_produits - prix_menu;
-			$('#diff span').text(Math.abs(diff));
+			$('#diff span').text(Math.abs(diff.toFixed(2)));
 			}
 
 		$('.menu-apercu').on('click', '.commandeMenuQuantite', function() {
-			var id_menu = $(this).data('menu');
-			var id_commande = $(this).data('commande');
-			var quantite = $(this).parent().find('.quantite_saisie').val();
+			var boutton = $(this);
+			var id_menu = $(boutton).data('menu');
+			var id_commande = $(boutton).data('commande');
+			var quantite = $(boutton).parent().find('.quantite_saisie').val();
 			$.ajax({
 				url:"ajax/modifiercommande.php",
 				method:"post",
 				data:{action:'commande_quantite_menu', id_menu:id_menu, id_commande:id_commande, quantite:quantite},
 				success:function(data)
 				{
+					if(quantite < 1) {
+					boutton.closest('.apercu-menus').fadeOut(0);
+					}
 					$('#resultat').html(data).fadeIn('slow');
 					$('#resultat').delay(2000).fadeOut('slow');
 					totalCommande();
@@ -1225,15 +1232,19 @@ $(document).ready(function(){
 		});
 
 		$('.menu-apercu').on('click', '.modifProduitQuantite', function() {
-			var id_produit = $(this).data('produit');
-			var id_commande = $(this).data('commande');
-			var quantite = $(this).parent().find('.quantite_saisie').val();
+			var boutton = $(this);
+			var id_produit = $(boutton).data('produit');
+			var id_commande = $(boutton).data('commande');
+			var quantite = $(boutton).parent().find('.quantite_saisie').val();
 			$.ajax({
 				url:"ajax/modifiercommande.php",
 				method:"post",
 				data:{action:'commande_quantite_produit', id_produit:id_produit, id_commande:id_commande, quantite:quantite},
 				success:function(data)
 				{
+					if(quantite < 1) {
+					boutton.closest('.apercu-produits').fadeOut(0);
+					}
 					$('#resultat').html(data).fadeIn('slow');
 					$('#resultat').delay(2000).fadeOut('slow');
 					totalCommande();

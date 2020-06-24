@@ -35,8 +35,7 @@ $req->bindValue('date_creation', date('Y-m-d'), PDO::PARAM_STR);
 $req->execute();
 $id_menu = $bdd->lastInsertId();
 $req = $bdd->prepare('INSERT INTO menus_produits (id_menu, id_produit, quantite) VALUES (:id_menu, :id_produit, :quantite)');
-$count = array_count_values($_SESSION['menu']);
-foreach($count as $key => $value) {
+foreach($_SESSION['menu'] as $key => $value) {
 $req->bindValue('id_menu', $id_menu, PDO::PARAM_INT);   
 $req->bindValue('id_produit', $key, PDO::PARAM_INT);
 $req->bindValue('quantite', $value, PDO::PARAM_INT);   

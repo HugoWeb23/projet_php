@@ -57,10 +57,14 @@ unset($_SESSION['menu']);
 $in = str_repeat('?,', count($_SESSION['menu']) - 1) . '?';
 $sql = "SELECT id_produit, libelle, prix FROM produits WHERE id_produit IN ($in)";
 $req = $bdd->prepare($sql);
-$req->execute($_SESSION['menu']) or die(print_r($req->errorInfo(), TRUE));
+$i = 1;
+foreach($_SESSION['menu'] as $j => $k) {
+$req->bindValue($i, $j, PDO::PARAM_INT);
+$i++;
+}
+$req->execute() or die(print_r($req->errorInfo(), TRUE));
 while($afficher = $req->fetch()) {
-$count = array_count_values($_SESSION['menu']);
-foreach($count as $j => $k) {
+foreach($_SESSION['menu'] as $j => $k) {
 if($afficher['id_produit'] == $j) {
 $quantite = $k;
 $total_menu += $afficher['prix'] * $quantite;
