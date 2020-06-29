@@ -107,7 +107,7 @@ echo '<option value="'.$table['id_table'].'" '.$selected.'>Table '.$table['id_ta
 <h3>Détails commande</h3>
 <div id="resultat"></div>
 <?php
-$req = $bdd->prepare('SELECT b.quantite, b.id_menu as id_menu, a.nom, a.prix as prix FROM menus as a INNER JOIN commandes_menus as b ON a.id_menu = b.id_menu WHERE b.id_commande = :id GROUP BY id_menu ORDER BY id_menu ASC');
+$req = $bdd->prepare('SELECT b.quantite, b.id_menu as id_menu, a.nom, a.prix as prix FROM menus as a INNER JOIN commandes_menus as b ON a.id_menu = b.id_menu WHERE b.id_commande = :id ORDER BY id_menu ASC');
 $req->bindValue('id', $id_commande, PDO::PARAM_INT);
 $req->execute();
 $totaux_menus = 0;
@@ -127,7 +127,7 @@ $totaux_menus += $menu['prix'] * $menu['quantite'];
 
 <?php } ?>
 <?php
-$req = $bdd->prepare('SELECT b.id_commande, b.quantite, b.id_produit, a.libelle as libelle, a.prix as prix FROM produits as a INNER JOIN commandes_produits as b ON a.id_produit = b.id_produit WHERE b.id_commande = :id GROUP BY b.id_produit ORDER BY id ASC');
+$req = $bdd->prepare('SELECT b.id_commande, b.quantite, b.id_produit, a.libelle as libelle, a.prix as prix FROM produits as a INNER JOIN commandes_produits as b ON a.id_produit = b.id_produit WHERE b.id_commande = :id ORDER BY id ASC');
 $req->bindValue('id', $id_commande, PDO::PARAM_INT);
 $req->execute();
 $totaux_produits = 0;

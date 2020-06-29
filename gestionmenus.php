@@ -113,7 +113,7 @@ if(isset($_GET['id'])) {
 <div id="resultat"></div>
 <?php
 $total_menu = 0;
-$req = $bdd->prepare('SELECT b.quantite, b.id_produit as id, a.libelle as libelle, a.prix as prix FROM produits as a INNER JOIN menus_produits as b ON a.id_produit = b.id_produit WHERE b.id_menu = :id GROUP BY b.id_produit ORDER BY id ASC');
+$req = $bdd->prepare('SELECT b.quantite, b.id_produit as id, a.libelle as libelle, a.prix as prix FROM produits as a INNER JOIN menus_produits as b ON a.id_produit = b.id_produit WHERE b.id_menu = :id ORDER BY id ASC');
 $req->bindValue('id', $id_menu, PDO::PARAM_INT);
 $req->execute();
 while($afficher = $req->fetch()) {
