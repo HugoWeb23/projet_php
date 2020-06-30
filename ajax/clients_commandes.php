@@ -49,7 +49,7 @@ if(isset($_POST['action']) && $_POST['action'] == 1){
 
     $rue = $_POST['rue'];
 
-    $req = $bdd->prepare('SELECT * FROM adresses WHERE rue LIKE :rue GROUP BY rue, ville, pays');
+    $req = $bdd->prepare('SELECT MIN(id_adresse) as id_adresse, rue, code_postal, ville, pays FROM adresses WHERE rue LIKE :rue GROUP BY rue, code_postal, ville, pays');
     $req->bindValue('rue', '%'.$rue.'%', PDO::PARAM_STR);
     $req->execute() or die(print_r($req->errorInfo(), TRUE));
 
