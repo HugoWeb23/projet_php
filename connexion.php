@@ -38,6 +38,11 @@ $erreur = "<h2 class=\"message-erreur\">Merci de remplir tous les champs !</h2>"
 break; 
 }
 }
+
+if(isset($_GET['visiteur'])) {
+$_SESSION['id_personnel'] = 161;
+header('location: index');
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -71,6 +76,7 @@ if(isset($_POST['connexion'])) { echo $erreur; } ?>
 <input type="password" name="mdp" id="mdp">
 <div class="box-connexion">
 <input class="boutton-orange" type="submit" name="connexion" value="Connexion">
+<a class="visiteur" href="?visiteur">Accès visiteur</a>
 </div>
 </div>
 </div>
